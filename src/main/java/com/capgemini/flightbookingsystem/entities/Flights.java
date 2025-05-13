@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
+//entity
 @Entity
 public class Flights {
 
@@ -39,7 +40,7 @@ public class Flights {
 
 	// FK - Airports Entity
 	@NotNull
-	protected Long departureAirportId;
+	protected Long departureAirportId; 
 
 	// Default Contructor
 	public Flights() {

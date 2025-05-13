@@ -21,6 +21,8 @@ import com.capgemini.flightbookingsystem.services.FlightService;
 @RequestMapping("/api/flights")
 public class FlightRestController{
 	
+	
+	//Injecting service layer
 	FlightService flightService;
 
 	@Autowired

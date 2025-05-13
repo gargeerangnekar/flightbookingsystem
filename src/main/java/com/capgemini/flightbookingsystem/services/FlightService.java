@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.capgemini.flightbookingsystem.entities.Flights;
 
+//service interface
 public interface FlightService {
 
 	List<Flights> getAllFlights();

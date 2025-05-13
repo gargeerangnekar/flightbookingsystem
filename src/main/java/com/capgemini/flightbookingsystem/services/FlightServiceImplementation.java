@@ -12,6 +12,7 @@ import com.capgemini.flightbookingsystem.repositories.FlightRepository;
 @Service
 public class FlightServiceImplementation implements FlightService {
 	
+	//Injecting repository
 	FlightRepository flightRepository;
 	
 	@Autowired
