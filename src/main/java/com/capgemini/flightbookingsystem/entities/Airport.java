@@ -17,22 +17,22 @@ import jakarta.validation.constraints.NotNull;
 public class Airport {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull
+	@NotNull(message = "airport id is mandatory")
 	@Column(name = "airport_id")
 	private Long airportId;
 
+	@NotBlank(message = "airport name is mandatory")
 	@Column(name = "airport_name")
 	private String airportName;
 
-	@NotBlank
+	@NotBlank(message = "airport city is mandatory")
 	@Column(name = "city")
 	private String city;
 
-	@NotNull
+	@NotNull(message = "airport contact is mandatory")
 	@Column(name = "contact")
 	private Integer contact;
 
-	@NotNull
 	@OneToMany(mappedBy = "airport")
 	private List<Flights> flights;
 
