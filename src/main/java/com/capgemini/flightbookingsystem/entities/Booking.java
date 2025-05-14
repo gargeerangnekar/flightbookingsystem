@@ -1,40 +1,65 @@
 package com.capgemini.flightbookingsystem.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "booking_table")
 public class Booking {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long bookingId;
+	@Column(name = "booking_id")
+	private Integer bookingId;
 
+	@Column(name = "seat_number")
+	@NotBlank(message = "Seat number cannot be empty")
 	private String seatNumber;
+
+	@Column(name = "seat_class")
+	@NotBlank(message = "Seat Class cannot be empty")
 	private String seatClass;
-	private LocalDate bookingDate;
+
+	@Column(name = "booking_time")
+	@NotBlank(message = "Booking time cannot be empty")
 	private LocalDateTime bookingTime;
+
+	@Column(name = "status")
+	@NotBlank(message = "Booking Status cannot be empty")
 	private String status;
+
+	@Column(name = "amount")
+	@NotNull(message = "Booking amount cannot be empty")
 	private Long amount;
-	private Long userId;
-	private Long flightId;
-	
-	@ManyToOne(cascade = CascadeType.PERSIST)
+
 	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "userId")
+	private User users;
+
+//	@Column(name = "user_id")
+//	@NotNull(message = "User Id cannot be empty")
+//	private Long userId;
+
+//	@Column(name = "flight_id")
+//	@NotNull(message = "Flight Id cannot be empty")
+//	private Long flightId;
+
+	@JsonBackReference
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "flightId")
 	private Flights flights;
 
@@ -42,38 +67,27 @@ public class Booking {
 
 	}
 
-	public Booking(Long bookingId, String seatNumber, String seatClass, LocalDate bookingDate,
-			LocalDateTime bookingTime, String status, Long amount, Long userId, Long flightId) {
+	public Booking(Integer bookingId, @NotBlank(message = "Seat number cannot be empty") String seatNumber,
+			@NotBlank(message = "Seat Class cannot be empty") String seatClass,
+			@NotBlank(message = "Booking time cannot be empty") LocalDateTime bookingTime,
+			@NotBlank(message = "Booking Status cannot be empty") String status,
+			@NotNull(message = "Booking amount cannot be empty") Long amount, User users, Flights flights) {
 		super();
 		this.bookingId = bookingId;
 		this.seatNumber = seatNumber;
 		this.seatClass = seatClass;
-		this.bookingDate = bookingDate;
 		this.bookingTime = bookingTime;
 		this.status = status;
 		this.amount = amount;
-		this.userId = userId;
-		this.flightId = flightId;
+		this.users = users;
+		this.flights = flights;
 	}
 
-	public Booking(String seatNumber, String seatClass, LocalDate bookingDate, LocalDateTime bookingTime,
-			String status, Long amount, Long userId, Long flightId) {
-		super();
-		this.seatNumber = seatNumber;
-		this.seatClass = seatClass;
-		this.bookingDate = bookingDate;
-		this.bookingTime = bookingTime;
-		this.status = status;
-		this.amount = amount;
-		this.userId = userId;
-		this.flightId = flightId;
-	}
-
-	public Long getBookingId() {
+	public Integer getBookingId() {
 		return bookingId;
 	}
 
-	public void setBookingId(Long bookingId) {
+	public void setBookingId(Integer bookingId) {
 		this.bookingId = bookingId;
 	}
 
@@ -91,14 +105,6 @@ public class Booking {
 
 	public void setSeatClass(String seatClass) {
 		this.seatClass = seatClass;
-	}
-
-	public LocalDate getBookingDate() {
-		return bookingDate;
-	}
-
-	public void setBookingDate(LocalDate bookingDate) {
-		this.bookingDate = bookingDate;
 	}
 
 	public LocalDateTime getBookingTime() {
@@ -125,37 +131,26 @@ public class Booking {
 		this.amount = amount;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public User getUsers() {
+		return users;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUsers(User users) {
+		this.users = users;
 	}
-
-	public Long getFlightId() {
-		return flightId;
-	}
-
-	public void setFlightId(Long flightId) {
-		this.flightId = flightId;
-	}
-	
-	
 
 	public Flights getFlights() {
 		return flights;
 	}
 
 	public void setFlights(Flights flights) {
-		this.flights = flights;
+		flights = flights;
 	}
 
 	@Override
 	public String toString() {
 		return "Bookings [bookingId=" + bookingId + ", seatNumber=" + seatNumber + ", seatClass=" + seatClass
-				+ ", bookingDate=" + bookingDate + ", bookingTime=" + bookingTime + ", status=" + status + ", userId="
-				+ userId + ", flightId=" + flightId + "]";
+				+ ", bookingTime=" + bookingTime + ", status=" + status + "]";
 	}
 
 }
