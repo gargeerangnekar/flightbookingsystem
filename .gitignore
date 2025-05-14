@@ -1,32 +1,84 @@
-HELP.md
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+
+### Maven ###
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-
-.springBeans
-.sts4-cache
+### Gradle ###
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+**/build/
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
+out/
+.idea_modules/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+### Eclipse ###
+.project
+.classpath
+.settings/
+.apt_generated/
+.factorypath
+.springBeans
 
 ### VS Code ###
 .vscode/
+
+### Logs and Reports ###
+logs/
+*.log
+hs_err_pid*
+test-output/
+surefire-reports/
+jacoco.exec
+
+### Operating System Files ###
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+### Environment and Security Files ###
+.env
+*.key
+*.pem
+*.crt
+application.properties
+application.yml
+application-*.properties
+application-*.yml
+
+### Temporary and Backup Files ###
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+### Spring Boot Specific ###
+spring.log
+
+### Node (if frontend involved) ###
+node_modules/
+dist/
+build/
+
+### Database ###
+*.h2.db
+*.mv.db
+*.db
