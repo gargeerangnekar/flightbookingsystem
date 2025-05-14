@@ -1,6 +1,7 @@
 package com.capgemini.flightbookingsystem.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,9 +69,9 @@ public class Flights {
 	@NotNull
 	protected Integer departureAirportId; 
 	
-	@OneToMany(mappedBy = "flights")
+	@OneToMany(mappedBy = "flights", cascade = CascadeType.ALL)
 	@JsonManagedReference
-	List<Booking> bookings;
+	List<Booking> bookings = new ArrayList<>();
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "airportId")
@@ -190,6 +191,24 @@ public class Flights {
 
 	public void setDepartureAirportId(Integer departureAirportId) {
 		this.departureAirportId = departureAirportId;
+	}
+	
+
+	
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	public Airport getAirport() {
+		return airport;
+	}
+
+	public void setAirport(Airport airport) {
+		this.airport = airport;
 	}
 
 	@Override
