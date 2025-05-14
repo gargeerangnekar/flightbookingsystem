@@ -9,11 +9,11 @@ public interface FlightService {
 
 	List<Flights> getAllFlights();
 	
-	Flights getFlightById(Long flightId);
+	Flights getFlightById(Integer flightId);
 	
 	Flights createNewFlight(Flights flight);
 	
-	Flights updateFlightById(Long flightId, Flights flight);
+	Flights updateFlightById(Integer flightId, Flights flight);
 	
-	void deleteFlight(Long flightId);
+	void deleteFlight(Integer flightId);
 }
