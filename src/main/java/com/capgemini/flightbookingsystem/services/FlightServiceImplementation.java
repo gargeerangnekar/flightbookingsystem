@@ -26,7 +26,7 @@ public class FlightServiceImplementation implements FlightService {
 	}
 
 	@Override
-	public Flights getFlightById(Long flightId) {
+	public Flights getFlightById(Integer flightId) {
 		return flightRepository.findById(flightId)
 				.orElseThrow(()-> new FlightNotFoundException("Flight with Id "+flightId+" is not available"));
 	}
@@ -37,7 +37,7 @@ public class FlightServiceImplementation implements FlightService {
 	}
 
 	@Override
-	public Flights updateFlightById(Long flightId, Flights flight) {
+	public Flights updateFlightById(Integer flightId, Flights flight) {
 		Flights existingFlight = flightRepository.findById(flightId)
 				.orElseThrow(()-> new FlightNotFoundException("Flight with Id "+flightId+" is not available"));
 		
@@ -72,7 +72,7 @@ public class FlightServiceImplementation implements FlightService {
 	}
 
 	@Override
-	public void deleteFlight(Long flightId) {
+	public void deleteFlight(Integer flightId) {
 		Flights existingFlight = flightRepository.findById(flightId)
 				.orElseThrow(()-> new FlightNotFoundException("Flight with Id "+flightId+" not found"));
 		

@@ -36,7 +36,7 @@ public class FlightRestController{
 	}
 	
 	@GetMapping("/{flightId}")
-	public ResponseEntity<Flights> getFlightById(@PathVariable Long flightId){
+	public ResponseEntity<Flights> getFlightById(@PathVariable Integer flightId){
 		return ResponseEntity.status(HttpStatus.OK).body(flightService.getFlightById(flightId));
 	}
 	
@@ -46,12 +46,12 @@ public class FlightRestController{
 	}
 	
 	@PutMapping("/{flightId}")
-	public ResponseEntity<Flights> updateFlight(@PathVariable Long flightId ,@RequestBody Flights flight){
+	public ResponseEntity<Flights> updateFlight(@PathVariable Integer flightId ,@RequestBody Flights flight){
 		return ResponseEntity.status(HttpStatus.OK).body(flightService.updateFlightById(flightId, flight));
 	}
 	
 	@DeleteMapping("/{flightId}")
-	public ResponseEntity<Flights> deleteFlight(@PathVariable Long flightId){
+	public ResponseEntity<Flights> deleteFlight(@PathVariable Integer flightId){
 		flightService.deleteFlight(flightId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
