@@ -1,15 +1,16 @@
 package com.capgemini.flightbookingsystem.services;
 
+import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
+import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
-import com.capgemini.flightbookingsystem.entities.*;
-
 public interface AirLineAdminService {
-    List<AirLineAdmin> getAllAdmins();
-    AirLineAdmin getAdminById(Integer id);
+    List<AirLineAdmin> getAllAirlineAdmins();
+    AirLineAdmin getAirlineAdminById(Integer id);
     AirLineAdmin createAdmin(AirLineAdmin admin);
     AirLineAdmin updateAdmin(Integer id, AirLineAdmin admin);
-    boolean deleteAdmin(Integer id);
-    boolean existsByAirlineEmail(String airlineEmail);
+    ResponseEntity<String> deleteAdmin(Integer id);
+    boolean existsByAirlineEmail(String email);
     boolean existsByContactNumber(String contactNumber);
 }
