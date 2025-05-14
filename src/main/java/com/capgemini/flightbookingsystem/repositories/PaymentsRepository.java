@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import com.capgemini.flightbookingsystem.entities.Payments;
 
 
-public interface PaymentsRepository extends JpaRepository<Payments, Long> {
+public interface PaymentsRepository extends JpaRepository<Payments, Integer> {
 
     @Query("SELECT p FROM Payments p JOIN FETCH p.user u WHERE p.userId = :userId")
     List<Payments> findByUserIdWithUserDetails(@Param("userId") Long userId);
