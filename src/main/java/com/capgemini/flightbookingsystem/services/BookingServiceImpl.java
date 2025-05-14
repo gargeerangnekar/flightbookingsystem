@@ -34,25 +34,24 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public Booking updateBooking(Long bookingId, Booking booking) {
+	public Booking updateBooking(Integer bookingId, Booking booking) {
 		Booking existing = bookingRepository.findById(bookingId)
 				.orElseThrow(() -> new RuntimeException("Booking not found with ID :" + bookingId));
 
-		existing.setBookingDate(booking.getBookingDate());
 		existing.setAmount(booking.getAmount());
 		existing.setBookingTime(booking.getBookingTime());
-		existing.setFlightId(booking.getFlightId());
 		existing.setSeatClass(booking.getSeatClass());
 		existing.setSeatNumber(booking.getSeatNumber());
 		existing.setStatus(booking.getStatus());
-		existing.setUserId(booking.getUserId());
+		existing.setFlights(booking.getFlights());
+		existing.setUsers(booking.getUsers());
 
 		return bookingRepository.save(existing);
 
 	}
 
 	@Override
-	public Booking getBookingById(Long bookingId) {
+	public Booking getBookingById(Integer bookingId) {
 		return bookingRepository.findById(bookingId).orElseThrow();
 	}
 
