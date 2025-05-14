@@ -1,56 +1,74 @@
 package com.capgemini.flightbookingsystem.entities;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 //entity
 @Entity
+@Table(name = "flight_table")
 public class Flights {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "flight_id")
 	@NotNull
-	protected Long flightId;
+	protected Integer flightId;
+
+	@Column(name = "flight_number")
+	@NotNull
+	protected String flightNumber;
 
 	@NotNull
-	protected Long flightNumber;
+	@Column(name = "departure_time")
+	protected LocalDateTime departureTime;
+	
+	@NotNull
+	@Column(name = "arrival_time")
+	protected LocalDateTime arrivalTime;
 
-	protected LocalTime departureTime;
-
-	protected LocalTime arrivalTime;
-
+	@NotNull
+	@Column(name = "status")
 	protected String status;
 
+	@NotNull
+	@Column(name = "aircraft_model")
 	protected String aircraftModel;
 
-	protected String capacity;
-
 	@NotNull
-	protected Long airlineAdminId;
+	@Column(name = "capacity")
+	protected Integer capacity;
+
+	@Column(name = "airline_admin_id")
+	@NotNull
+	protected Integer airlineAdminId;
 
 	// FK - Airports Entity
+	@Column(name = "arrival_airport_id")
 	@NotNull
-	protected Long arrivalAirportId;
+	protected Integer arrivalAirportId;
 
 	// FK - Airports Entity
+	@Column(name = "departure_airport_id")
 	@NotNull
-	protected Long departureAirportId; 
+	protected Integer departureAirportId; 
 
 	// Default Contructor
 	public Flights() {
 		super();
 	}
 
-	// Constructor with Primary Key
-	public Flights(@NotNull Long flightId, @NotNull Long flightNumber, LocalTime departureTime, LocalTime arrivalTime,
-			String status, String aircraftModel, String capacity, @NotNull Long airlineAdminId,
-			@NotNull Long arrivalAirportId, @NotNull Long departureAirportId) {
+	public Flights(@NotNull Integer flightId, @NotNull String flightNumber, @NotNull LocalDateTime departureTime,
+			@NotNull LocalDateTime arrivalTime, @NotNull String status, @NotNull String aircraftModel,
+			@NotNull Integer capacity, @NotNull Integer airlineAdminId, @NotNull Integer arrivalAirportId,
+			@NotNull Integer departureAirportId) {
 		this.flightId = flightId;
 		this.flightNumber = flightNumber;
 		this.departureTime = departureTime;
@@ -63,10 +81,10 @@ public class Flights {
 		this.departureAirportId = departureAirportId;
 	}
 
-	// Constructor without Primary Key
-	public Flights(@NotNull Long flightNumber, LocalTime departureTime, LocalTime arrivalTime, String status,
-			String aircraftModel, String capacity, @NotNull Long airlineAdminId, @NotNull Long arrivalAirportId,
-			@NotNull Long departureAirportId) {
+	public Flights(@NotNull String flightNumber, @NotNull LocalDateTime departureTime,
+			@NotNull LocalDateTime arrivalTime, @NotNull String status, @NotNull String aircraftModel,
+			@NotNull Integer capacity, @NotNull Integer airlineAdminId, @NotNull Integer arrivalAirportId,
+			@NotNull Integer departureAirportId) {
 		this.flightNumber = flightNumber;
 		this.departureTime = departureTime;
 		this.arrivalTime = arrivalTime;
@@ -78,35 +96,35 @@ public class Flights {
 		this.departureAirportId = departureAirportId;
 	}
 
-	public Long getFlightId() {
+	public Integer getFlightId() {
 		return flightId;
 	}
 
-	public void setFlightId(Long flightId) {
+	public void setFlightId(Integer flightId) {
 		this.flightId = flightId;
 	}
 
-	public Long getFlightNumber() {
+	public String getFlightNumber() {
 		return flightNumber;
 	}
 
-	public void setFlightNumber(Long flightNumber) {
+	public void setFlightNumber(String flightNumber) {
 		this.flightNumber = flightNumber;
 	}
 
-	public LocalTime getDepartureTime() {
+	public LocalDateTime getDepartureTime() {
 		return departureTime;
 	}
 
-	public void setDepartureTime(LocalTime departureTime) {
+	public void setDepartureTime(LocalDateTime departureTime) {
 		this.departureTime = departureTime;
 	}
 
-	public LocalTime getArrivalTime() {
+	public LocalDateTime getArrivalTime() {
 		return arrivalTime;
 	}
 
-	public void setArrivalTime(LocalTime arrivalTime) {
+	public void setArrivalTime(LocalDateTime arrivalTime) {
 		this.arrivalTime = arrivalTime;
 	}
 
@@ -126,69 +144,38 @@ public class Flights {
 		this.aircraftModel = aircraftModel;
 	}
 
-	public String getCapacity() {
+	public Integer getCapacity() {
 		return capacity;
 	}
 
-	public void setCapacity(String capacity) {
+	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
 
-	public Long getAirlineAdminId() {
+	public Integer getAirlineAdminId() {
 		return airlineAdminId;
 	}
 
-	public void setAirlineAdminId(Long airlineAdminId) {
+	public void setAirlineAdminId(Integer airlineAdminId) {
 		this.airlineAdminId = airlineAdminId;
 	}
 
-	public Long getArrivalAirportId() {
+	public Integer getArrivalAirportId() {
 		return arrivalAirportId;
 	}
 
-	public void setArrivalAirportId(Long arrivalAirportId) {
+	public void setArrivalAirportId(Integer arrivalAirportId) {
 		this.arrivalAirportId = arrivalAirportId;
 	}
 
-	public Long getDepartureAirportId() {
+	public Integer getDepartureAirportId() {
 		return departureAirportId;
 	}
 
-	public void setDepartureAirportId(Long departureAirportId) {
+	public void setDepartureAirportId(Integer departureAirportId) {
 		this.departureAirportId = departureAirportId;
 	}
 
-	@Override
-	public String toString() {
-		return "Flights [flightId=" + flightId + ", flightNumber=" + flightNumber + ", departureTime=" + departureTime
-				+ ", arrivalTime=" + arrivalTime + ", status=" + status + ", aircraftModel=" + aircraftModel
-				+ ", capacity=" + capacity + ", airlineAdminId=" + airlineAdminId + ", arrivalAirportId="
-				+ arrivalAirportId + ", departureAirportId=" + departureAirportId + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(aircraftModel, airlineAdminId, arrivalAirportId, arrivalTime, capacity, departureAirportId,
-				departureTime, flightId, flightNumber, status);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Flights other = (Flights) obj;
-		return Objects.equals(aircraftModel, other.aircraftModel)
-				&& Objects.equals(airlineAdminId, other.airlineAdminId)
-				&& Objects.equals(arrivalAirportId, other.arrivalAirportId)
-				&& Objects.equals(arrivalTime, other.arrivalTime) && Objects.equals(capacity, other.capacity)
-				&& Objects.equals(departureAirportId, other.departureAirportId)
-				&& Objects.equals(departureTime, other.departureTime) && Objects.equals(flightId, other.flightId)
-				&& Objects.equals(flightNumber, other.flightNumber) && Objects.equals(status, other.status);
-	}
-
+	
 	
 }
