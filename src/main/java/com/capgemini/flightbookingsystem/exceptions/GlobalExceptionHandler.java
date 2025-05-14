@@ -32,6 +32,14 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 		
 	}
+	@ExceptionHandler(AirlineAdminNotFoundException.class)
+	public ResponseEntity<Object> handleAirlineAdminNotFound(AirlineAdminNotFoundException ex) {
+	    Map<String, Object> error = new HashMap<>();
+	    error.put("Timestamp:", LocalDateTime.now());
+	    error.put("Status:", HttpStatus.NOT_FOUND.value());
+	    error.put("Description:", ex.getMessage());
+	    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
 	
 	
 	@ExceptionHandler(EmailAlreadyExist.class)
