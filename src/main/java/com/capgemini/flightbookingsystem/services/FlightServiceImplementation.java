@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.FlightRepository;
@@ -59,9 +60,6 @@ public class FlightServiceImplementation implements FlightService {
 	    if (flight.getCapacity() != null)
 	        existingFlight.setCapacity(flight.getCapacity());
 
-	    if (flight.getAirlineAdminId() != null)
-	        existingFlight.setAirlineAdminId(flight.getAirlineAdminId());
-
 	    if (flight.getArrivalAirportId() != null)
 	        existingFlight.setArrivalAirportId(flight.getArrivalAirportId());
 
@@ -77,6 +75,15 @@ public class FlightServiceImplementation implements FlightService {
 				.orElseThrow(()-> new FlightNotFoundException("Flight with Id "+flightId+" not found"));
 		
 		flightRepository.delete(existingFlight);
+	}
+
+	@Override
+	public Booking createBookingForFlight(Integer flightId, Booking booking) {
+		Flights flight = flightRepository.findById(flightId).orElseThrow(() -> new FlightNotFoundException("Flight with Id "+flightId+" not found"));
+		booking.setFlights(flight);
+		flight.getBookings().add(booking);
+		flightRepository.save(flight);
+		return booking;
 	}
 
 }
