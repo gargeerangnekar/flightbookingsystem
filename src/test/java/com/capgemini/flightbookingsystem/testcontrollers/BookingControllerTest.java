@@ -1,4 +1,4 @@
-package com.capgemini.flightbookingsystem.controllers;
+package com.capgemini.flightbookingsystem.testcontrollers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
+import com.capgemini.flightbookingsystem.controllers.BookingController;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.services.BookingService;
