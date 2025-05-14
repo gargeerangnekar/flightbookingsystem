@@ -8,11 +8,11 @@ public interface BookingService {
 
 	Booking saveBooking(Booking booking);
 
-	Booking getBookingById(Long bookingId);
+	Booking getBookingById(Integer bookingId);
 
 	List<Booking> getAllBookings();
 
-	Booking updateBooking(Long bookingId, Booking booking);
+	Booking updateBooking(Integer bookingId, Booking booking);
 
 	void deleteBooking(Integer bookingId);
 
