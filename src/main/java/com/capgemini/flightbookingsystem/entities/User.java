@@ -41,6 +41,7 @@ public class User {
 		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.passportNumber = passportNumber;
+		
 	}
 
 	public Long getUserId() {
