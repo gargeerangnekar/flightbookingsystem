@@ -1,0 +1,40 @@
+<!-- list.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flights</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <h2>Available Flights</h2>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Flight No</th>
+                <th>Aircraft</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Status</th>
+                <th>Capacity</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Airline Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="flight : ${flights}">
+                <td th:text="${flight.flightNumber}">FL123</td>
+                <td th:text="${flight.aircraftModel}">Boeing 737</td>
+                <td th:text="${flight.departureTime}">10:30</td>
+                <td th:text="${flight.arrivalTime}">12:45</td>
+                <td th:text="${flight.status}">Scheduled</td>
+                <td th:text="${flight.capacity}">180</td>
+                <td th:text="${flight.departureAirportId}">Mumbai</td>
+                <td th:text="${flight.arrivalAirportId}">Delhi</td>
+                <td th:text="${flight.airlineAdminId}">IndiGo Admin</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
