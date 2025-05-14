@@ -2,11 +2,20 @@ package com.capgemini.flightbookingsystem.entities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Booking {
@@ -23,6 +32,11 @@ public class Booking {
 	private Long amount;
 	private Long userId;
 	private Long flightId;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JsonBackReference
+	@JoinColumn(name = "flightId")
+	private Flights flights;
 
 	public Booking() {
 
@@ -125,6 +139,16 @@ public class Booking {
 
 	public void setFlightId(Long flightId) {
 		this.flightId = flightId;
+	}
+	
+	
+
+	public Flights getFlights() {
+		return flights;
+	}
+
+	public void setFlights(Flights flights) {
+		this.flights = flights;
 	}
 
 	@Override
