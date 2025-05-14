@@ -17,11 +17,10 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	public boolean deleteBooking(Long bookingId) {
+	public void deleteBooking(Integer bookingId) {
 		Booking newBooking = bookingRepository.findById(bookingId)
 				.orElseThrow(() -> new RuntimeException("Booking not found with ID :" + bookingId));
 		bookingRepository.delete(newBooking);
-		return true;
 	}
 
 	@Override
