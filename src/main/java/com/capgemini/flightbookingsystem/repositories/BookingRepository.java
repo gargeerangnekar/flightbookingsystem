@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.capgemini.flightbookingsystem.entities.Booking;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking, Long>{
+public interface BookingRepository extends JpaRepository<Booking, Integer>{
 
 }
