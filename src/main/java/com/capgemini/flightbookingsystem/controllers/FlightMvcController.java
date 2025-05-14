@@ -29,13 +29,13 @@ public class FlightMvcController {
 	}
 	
 	@GetMapping("/{flightId}")
-	public String listFlightById(@PathVariable Long flightId,Model model) {
+	public String listFlightById(@PathVariable Integer flightId,Model model) {
 		model.addAttribute("flight", flightService.getFlightById(flightId));
 		return "flights/detail";
 	}
 	
 	@GetMapping("/delete/{id}")
-    public String deleteFlight(@PathVariable Long id) {
+    public String deleteFlight(@PathVariable Integer id) {
         flightService.deleteFlight(id);
         return "redirect:/flights";
     }
