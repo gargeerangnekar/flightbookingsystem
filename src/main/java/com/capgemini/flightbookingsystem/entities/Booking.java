@@ -1,96 +1,65 @@
 package com.capgemini.flightbookingsystem.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "booking_table")
 public class Booking {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "booking_id")
-	private Integer bookingId;
+	private Long bookingId;
 
-	@Column(name = "seat_number")
-	@NotBlank(message = "Seat number cannot be empty")
 	private String seatNumber;
-
-	@Column(name = "seat_class")
-	@NotBlank(message = "Seat Class cannot be empty")
 	private String seatClass;
-
-	@Column(name = "booking_time")
-	@NotBlank(message = "Booking time cannot be empty")
+	private LocalDate bookingDate;
 	private LocalDateTime bookingTime;
-
-	@Column(name = "status")
-	@NotBlank(message = "Booking Status cannot be empty")
 	private String status;
-
-	@Column(name = "amount")
-	@NotNull(message = "Booking amount cannot be empty")
 	private Long amount;
-
-	@JsonBackReference
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "userId")
-	private User user;
-
-//	@Column(name = "user_id")
-//	@NotNull(message = "User Id cannot be empty")
-//	private Long userId;
-
-//	@Column(name = "flight_id")
-//	@NotNull(message = "Flight Id cannot be empty")
-//	private Long flightId;
-
-	@JsonBackReference
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "flightId")
-	private Flights Flights;
+	private Long userId;
+	private Long flightId;
 
 	public Booking() {
 
 	}
-	
 
-	public Booking(Integer bookingId, @NotBlank(message = "Seat number cannot be empty") String seatNumber,
-			@NotBlank(message = "Seat Class cannot be empty") String seatClass,
-			@NotBlank(message = "Booking time cannot be empty") LocalDateTime bookingTime,
-			@NotBlank(message = "Booking Status cannot be empty") String status,
-			@NotNull(message = "Booking amount cannot be empty") Long amount, User user,
-			com.capgemini.flightbookingsystem.entities.Flights flights) {
+	public Booking(Long bookingId, String seatNumber, String seatClass, LocalDate bookingDate,
+			LocalDateTime bookingTime, String status, Long amount, Long userId, Long flightId) {
 		super();
 		this.bookingId = bookingId;
 		this.seatNumber = seatNumber;
 		this.seatClass = seatClass;
+		this.bookingDate = bookingDate;
 		this.bookingTime = bookingTime;
 		this.status = status;
 		this.amount = amount;
-		this.user = user;
-		Flights = flights;
+		this.userId = userId;
+		this.flightId = flightId;
 	}
 
+	public Booking(String seatNumber, String seatClass, LocalDate bookingDate, LocalDateTime bookingTime,
+			String status, Long amount, Long userId, Long flightId) {
+		super();
+		this.seatNumber = seatNumber;
+		this.seatClass = seatClass;
+		this.bookingDate = bookingDate;
+		this.bookingTime = bookingTime;
+		this.status = status;
+		this.amount = amount;
+		this.userId = userId;
+		this.flightId = flightId;
+	}
 
-	public Integer getBookingId() {
+	public Long getBookingId() {
 		return bookingId;
 	}
 
-	public void setBookingId(Integer bookingId) {
+	public void setBookingId(Long bookingId) {
 		this.bookingId = bookingId;
 	}
 
@@ -108,6 +77,14 @@ public class Booking {
 
 	public void setSeatClass(String seatClass) {
 		this.seatClass = seatClass;
+	}
+
+	public LocalDate getBookingDate() {
+		return bookingDate;
+	}
+
+	public void setBookingDate(LocalDate bookingDate) {
+		this.bookingDate = bookingDate;
 	}
 
 	public LocalDateTime getBookingTime() {
@@ -134,10 +111,27 @@ public class Booking {
 		this.amount = amount;
 	}
 
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public Long getFlightId() {
+		return flightId;
+	}
+
+	public void setFlightId(Long flightId) {
+		this.flightId = flightId;
+	}
+
 	@Override
 	public String toString() {
 		return "Bookings [bookingId=" + bookingId + ", seatNumber=" + seatNumber + ", seatClass=" + seatClass
-				+ ", bookingTime=" + bookingTime + ", status=" + status + "]";
+				+ ", bookingDate=" + bookingDate + ", bookingTime=" + bookingTime + ", status=" + status + ", userId="
+				+ userId + ", flightId=" + flightId + "]";
 	}
 
 }

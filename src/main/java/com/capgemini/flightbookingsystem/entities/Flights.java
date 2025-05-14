@@ -1,13 +1,21 @@
 package com.capgemini.flightbookingsystem.entities;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -59,8 +67,16 @@ public class Flights {
 	@Column(name = "departure_airport_id")
 	@NotNull
 	protected Integer departureAirportId; 
+	
+	@OneToMany(mappedBy = "flights")
+	@JsonManagedReference
+	List<Booking> bookings;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "airportId")
+	@JsonBackReference
+	Airport airport;
 
-	// Default Contructor
 	public Flights() {
 		super();
 	}
@@ -175,6 +191,16 @@ public class Flights {
 	public void setDepartureAirportId(Integer departureAirportId) {
 		this.departureAirportId = departureAirportId;
 	}
+
+	@Override
+	public String toString() {
+		return "Flights [flightId=" + flightId + ", flightNumber=" + flightNumber + ", departureTime=" + departureTime
+				+ ", arrivalTime=" + arrivalTime + ", status=" + status + ", aircraftModel=" + aircraftModel
+				+ ", capacity=" + capacity + ", airlineAdminId=" + airlineAdminId + ", arrivalAirportId="
+				+ arrivalAirportId + ", departureAirportId=" + departureAirportId + ", bookings=" + bookings + "]";
+	}
+
+	
 
 	
 	

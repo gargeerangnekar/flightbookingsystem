@@ -8,12 +8,12 @@ public interface BookingService {
 
 	Booking saveBooking(Booking booking);
 
-	Booking getBookingById(Integer bookingId);
+	Booking getBookingById(Long bookingId);
 
 	List<Booking> getAllBookings();
 
-	Booking updateBooking(Integer bookingId, Booking booking);
+	Booking updateBooking(Long bookingId, Booking booking);
 
-	boolean deleteBooking(Integer bookingId);
+	boolean deleteBooking(Long bookingId);
 
 }
