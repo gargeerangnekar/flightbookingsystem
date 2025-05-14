@@ -7,6 +7,6 @@ import com.capgemini.flightbookingsystem.entities.Flights;
 
 //repository layer
 @Repository
-public interface FlightRepository extends JpaRepository<Flights, Long> {
+public interface FlightRepository extends JpaRepository<Flights, Integer> {
 
 }
