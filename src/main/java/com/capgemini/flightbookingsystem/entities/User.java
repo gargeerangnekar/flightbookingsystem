@@ -1,32 +1,42 @@
 package com.capgemini.flightbookingsystem.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "user_table")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
 	private Long userId;
 
 	@NotBlank(message = "User name is mendentory.")
+	@Column(name = "name")
 	private String name;
 
 	@Email(message = "Enter valid email")
+	@Column(name = "email",unique = true)
+	@NotBlank(message = "Email is mandatory")
 	private String email;
 
 	@NotBlank(message = "Enter valid password")
+	@Column(name = "password")
 	private String password;
 
 	@NotBlank(message = "This field is compulsary.")
+	@Column(name="phone_number")
 	private String phoneNumber;
 
-	@NotNull(message = "Passport number is mandatory.")
+	@NotBlank(message = "Passport number is mandatory.")
+	@Column(name = "passport_number")
 	private String passportNumber;
 
 	public User() {
@@ -40,7 +50,7 @@ public class User {
 		this.password = password;
 		this.phoneNumber = phoneNumber;
 		this.passportNumber = passportNumber;
-		
+
 	}
 
 	public Long getUserId() {
