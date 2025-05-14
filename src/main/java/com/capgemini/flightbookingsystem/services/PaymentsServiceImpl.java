@@ -4,11 +4,12 @@ import java.util.List;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Payments;
 import com.capgemini.flightbookingsystem.repositories.PaymentsRepository;
 
-
+@Service
 public class PaymentsServiceImpl implements PaymentsService {
 	
 	private PaymentsRepository paymentRepo;
