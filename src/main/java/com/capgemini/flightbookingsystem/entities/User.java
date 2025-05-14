@@ -27,13 +27,12 @@ public class User {
 	private String phoneNumber;
 
 	@NotNull(message = "Passport number is mandatory.")
-	private Long passportNumber;
+	private String passportNumber;
 
 	public User() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public User(Long userId, String name, String email, String password, String phoneNumber, Long passportNumber) {
+	public User(Long userId, String name, String email, String password, String phoneNumber, String passportNumber) {
 		super();
 		this.userId = userId;
 		this.name = name;
@@ -84,11 +83,11 @@ public class User {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Long getPassportNumber() {
+	public String getPassportNumber() {
 		return passportNumber;
 	}
 
-	public void setPassportNumber(Long passportNumber) {
+	public void setPassportNumber(String passportNumber) {
 		this.passportNumber = passportNumber;
 	}
 
