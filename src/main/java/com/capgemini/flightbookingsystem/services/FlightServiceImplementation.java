@@ -60,9 +60,6 @@ public class FlightServiceImplementation implements FlightService {
 	    if (flight.getCapacity() != null)
 	        existingFlight.setCapacity(flight.getCapacity());
 
-	    if (flight.getAirlineAdminId() != null)
-	        existingFlight.setAirlineAdminId(flight.getAirlineAdminId());
-
 	    if (flight.getArrivalAirportId() != null)
 	        existingFlight.setArrivalAirportId(flight.getArrivalAirportId());
 
