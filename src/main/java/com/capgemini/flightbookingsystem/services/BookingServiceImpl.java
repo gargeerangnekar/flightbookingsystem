@@ -39,7 +39,6 @@ public class BookingServiceImpl implements BookingService {
 		Booking existing = bookingRepository.findById(bookingId)
 				.orElseThrow(() -> new RuntimeException("Booking not found with ID :" + bookingId));
 
-		existing.setBookingDate(booking.getBookingDate());
 		existing.setAmount(booking.getAmount());
 		existing.setBookingTime(booking.getBookingTime());
 		existing.setFlightId(booking.getFlightId());
