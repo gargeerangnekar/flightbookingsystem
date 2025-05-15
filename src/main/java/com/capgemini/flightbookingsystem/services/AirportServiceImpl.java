@@ -10,6 +10,7 @@ import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.AirportNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.AirportRepository;
 
+//8
 @Service
 public class AirportServiceImpl implements AirportService{
 
@@ -22,7 +23,7 @@ public class AirportServiceImpl implements AirportService{
 	    }
 
 	    @Override
-	    public Airport getAirportById(Long airportId) {
+	    public Airport getAirportById(Integer airportId) {
 	        return airportRepository.findById(airportId)
 	                .orElseThrow(() -> new AirportNotFoundException("Airport ID not found :"+airportId));
 	    }
@@ -32,10 +33,6 @@ public class AirportServiceImpl implements AirportService{
 	        return airportRepository.findAll();
 	    }
 	    
-	    @Override
-	    public List<Flights> getFlightsByAirport(Long airportId) {
-	    	return airportRepository.findByAirportAirportId(airportId);
-	    }
 
 	    @Override
 	    public Airport updateAirport(Airport airport) {
@@ -50,7 +47,7 @@ public class AirportServiceImpl implements AirportService{
 	    }
 
 	    @Override
-	    public void deleteAirport(Long airportId) {
+	    public void deleteAirport(Integer airportId) {
 	        
 	        if (!airportRepository.existsById(airportId)) {
 	            throw new AirportNotFoundException("Airport ID not found :"+airportId);
