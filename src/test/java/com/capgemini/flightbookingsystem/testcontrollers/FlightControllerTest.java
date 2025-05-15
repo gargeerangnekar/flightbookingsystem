@@ -46,8 +46,7 @@ class FlightControllerTest {
                 "Boeing 737",
                 180,
                 1,
-                3,
-                2
+                3
         );
 
         Mockito.when(flightService.createNewFlight(Mockito.any())).thenReturn(flight);
@@ -92,8 +91,7 @@ class FlightControllerTest {
                 "Boeing 737",
                 180,
                 1,
-                3,
-                2
+                3
         );
 
         Mockito.when(flightService.getFlightById(1)).thenReturn(flight);
@@ -118,8 +116,7 @@ class FlightControllerTest {
                 "Boeing 737",
                 180,
                 1,
-                3,
-                2
+                3
         );
 
         Mockito.when(flightService.updateFlightById(Mockito.eq(1), Mockito.any())).thenReturn(updatedFlight);
