@@ -35,13 +35,14 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(AirlineAdminNotFoundException.class)
-	public ResponseEntity<Object> handleAirlineAdminNotFound(AirlineAdminNotFoundException ex) {
-		Map<String, Object> error = new HashMap<>();
-		error.put("Timestamp:", LocalDateTime.now());
-		error.put("Status:", HttpStatus.NOT_FOUND.value());
-		error.put("Description:", ex.getMessage());
-		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-	}
+    public ResponseEntity<Object> handleAirlineAdminNotFound(AirlineAdminNotFoundException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("timestamp", LocalDateTime.now());
+        error.put("status", HttpStatus.NOT_FOUND.value());
+        error.put("error", "Not Found");
+        error.put("message", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
