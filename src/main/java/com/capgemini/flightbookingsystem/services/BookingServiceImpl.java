@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.exceptions.BookingNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 
 @Service
@@ -19,7 +20,7 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public void deleteBooking(Integer bookingId) {
 		Booking newBooking = bookingRepository.findById(bookingId)
-				.orElseThrow(() -> new RuntimeException("Booking not found with ID :" + bookingId));
+				.orElseThrow(() -> new BookingNotFoundException("Booking not found with ID:" + bookingId));
 		bookingRepository.delete(newBooking);
 	}
 
@@ -36,7 +37,7 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public Booking updateBooking(Integer bookingId, Booking booking) {
 		Booking existing = bookingRepository.findById(bookingId)
-				.orElseThrow(() -> new RuntimeException("Booking not found with ID :" + bookingId));
+				.orElseThrow(() -> new BookingNotFoundException("Booking not found with ID :" + bookingId));
 
 		existing.setAmount(booking.getAmount());
 		existing.setBookingTime(booking.getBookingTime());
@@ -52,7 +53,8 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public Booking getBookingById(Integer bookingId) {
-		return bookingRepository.findById(bookingId).orElseThrow();
+		return bookingRepository.findById(bookingId)
+				.orElseThrow(() -> new BookingNotFoundException("Booking not found with ID :" + bookingId));
 	}
 
 }
