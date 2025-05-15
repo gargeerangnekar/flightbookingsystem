@@ -14,8 +14,8 @@ import jakarta.persistence.Table;
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    @Column(name = "airport_id")
 	    private Long airportId;
-	    @Column(name = "airport_name", length = 255)
 	    
+	    @Column(name = "airport_name", length = 255)
 	    private String airportName;
 
 	    @Column(name = "city", length = 255)
