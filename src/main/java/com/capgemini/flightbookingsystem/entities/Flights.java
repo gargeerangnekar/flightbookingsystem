@@ -69,7 +69,6 @@ public class Flights {
 	@NotNull(message = "Arrival airport ID is required")
 	@Positive(message = "Arrival airport ID must be a positive integer")
 	@Column(name = "arrival_airport_id")
-	@NotNull
 	protected Integer arrivalAirportId;
 
 	// FK - Airports Entity
@@ -81,19 +80,14 @@ public class Flights {
 	
 	// 1. Flight to Booking
 	@OneToMany(mappedBy = "flights", cascade = CascadeType.ALL)
-	@JsonManagedReference
+	@JsonManagedReference("flight-booking")
 	List<Booking> bookings = new ArrayList<>();
 	
-//	// 2. Airport to Flight
-//	@ManyToOne(cascade = CascadeType.PERSIST)
-//	@JoinColumn(name = "airportId")
-//	@JsonBackReference
-//	Airport airport;
 	
 	// 3. Airline Admin to Flight
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "airline_admin_id")
-	@JsonBackReference
+	@JsonBackReference("airline")
 	AirLineAdmin airlineAdmin;
 
 	public Flights() {
@@ -270,6 +264,15 @@ public class Flights {
 
 	public void setBookings(List<Booking> bookings) {
 		this.bookings = bookings;
+	}
+	
+
+	public AirLineAdmin getAirlineAdmin() {
+		return airlineAdmin;
+	}
+
+	public void setAirlineAdmin(AirLineAdmin airlineAdmin) {
+		this.airlineAdmin = airlineAdmin;
 	}
 
 	@Override

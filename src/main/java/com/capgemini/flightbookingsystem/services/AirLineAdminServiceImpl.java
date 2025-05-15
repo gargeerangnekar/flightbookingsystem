@@ -1,64 +1,80 @@
 package com.capgemini.flightbookingsystem.services;
 
 import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
+import com.capgemini.flightbookingsystem.exceptions.AirlineAdminNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-//19
 @Service
+@Slf4j
 public class AirLineAdminServiceImpl implements AirLineAdminService {
 
-    @Autowired
-    private AirLineAdminRepository airLineAdminRepository;
+	private final AirLineAdminRepository airLineAdminRepository;
 
-    @Override
-    public List<AirLineAdmin> getAllAirlineAdmins() {
-        return airLineAdminRepository.findAll();
-    }
+	@Autowired
+	public AirLineAdminServiceImpl(AirLineAdminRepository airLineAdminRepository) {
+		this.airLineAdminRepository = airLineAdminRepository;
+	}
 
-    @Override
-    public AirLineAdmin getAirlineAdminById(Integer id) {
-        return airLineAdminRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Admin not found with ID: " + id));
-    }
+	@Override
+	public List<AirLineAdmin> getAllAirlineAdmins() {
+		return airLineAdminRepository.findAll();
+	}
 
-    @Override
-    public AirLineAdmin createAdmin(AirLineAdmin admin) {
-        return airLineAdminRepository.save(admin);
-    }
+	@Override
+	public AirLineAdmin getAirlineAdminById(Integer id) {
+		return airLineAdminRepository.findById(id)
+				.orElseThrow(() -> new AirlineAdminNotFoundException("Admin not found with ID: " + id));
+	}
 
-    @Override
-    public AirLineAdmin updateAdmin(Integer id, AirLineAdmin admin) {
-        AirLineAdmin existingAdmin = getAirlineAdminById(id);
-        existingAdmin.setAirlineAdminName(admin.getAirlineAdminName());
-        existingAdmin.setPassword(admin.getPassword());
-        existingAdmin.setContactNumber(admin.getContactNumber());
-        existingAdmin.setAirlineEmail(admin.getAirlineEmail());
-        return airLineAdminRepository.save(existingAdmin);
-    }
+	@Override
+	public AirLineAdmin createAdmin(AirLineAdmin admin) {
+		// Add any extra validation or business logic here if needed
+		return airLineAdminRepository.save(admin);
+	}
 
-    @Override
-    public ResponseEntity<String> deleteAdmin(Integer id) {
-        if (airLineAdminRepository.existsById(id)) {
-            airLineAdminRepository.deleteById(id);
-            return ResponseEntity.ok("Airline admin deleted successfully");
-        } else {
-            return ResponseEntity.status(404).body("Admin not found");
-        }
-    }
+	@Override
+	public AirLineAdmin updateAdmin(Integer id, AirLineAdmin admin) {
+		AirLineAdmin existingAdmin = airLineAdminRepository.findById(id)
+				.orElseThrow(() -> new AirlineAdminNotFoundException("Admin not found with ID: " + id));
 
-    @Override
-    public boolean existsByAirlineEmail(String email) {
-        return airLineAdminRepository.existsByAirlineEmail(email);
-    }
+		// Update fields
+		existingAdmin.setAirlineAdminName(admin.getAirlineAdminName());
+		existingAdmin.setPassword(admin.getPassword());
+		existingAdmin.setContactNumber(admin.getContactNumber());
+		existingAdmin.setAirlineEmail(admin.getAirlineEmail());
+		// Optionally update other properties
 
-    @Override
-    public boolean existsByContactNumber(String contactNumber) {
-        return airLineAdminRepository.existsByContactNumber(contactNumber);
-    }
+		return airLineAdminRepository.save(existingAdmin);
+	}
+
+	@Override
+	public void deleteAdmin(Integer id) {
+		AirLineAdmin existingAdmin = airLineAdminRepository.findById(id)
+				.orElseThrow(() -> new AirlineAdminNotFoundException("Admin not found with ID: " + id));
+		airLineAdminRepository.delete(existingAdmin);
+	}
+
+	@Override
+	public boolean existsByAirlineEmail(String email) {
+		return airLineAdminRepository.existsByAirlineEmail(email);
+	}
+
+	@Override
+	public boolean existsByContactNumber(String contactNumber) {
+		return airLineAdminRepository.existsByContactNumber(contactNumber);
+	}
+
+	@Override
+	public AirLineAdmin findByAirlineEmail(String email) {
+		AirLineAdmin admin = airLineAdminRepository.findByAirlineEmail(email)
+				.orElseThrow(() -> new AirlineAdminNotFoundException("User doesn't exist with email :" + email));
+		return admin;
+	}
+
 }

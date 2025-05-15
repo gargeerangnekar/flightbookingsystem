@@ -1,7 +1,9 @@
 package com.capgemini.flightbookingsystem.testcontrollers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -21,6 +23,7 @@ import org.springframework.validation.BindingResult;
 
 import com.capgemini.flightbookingsystem.controllers.BookingController;
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.exceptions.BookingNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
@@ -46,6 +49,8 @@ class BookingControllerTest {
 	@Test
 	@DisplayName("Should fetch number of bookings done")
 	void testGetAllBookings() {
+		booking1 = new Booking(1, "A1", "Economy", LocalDateTime.now(), "Confirmed", 5000.0, null, null);
+		booking2 = new Booking(2, "B2", "Business", LocalDateTime.now(), "Pending", 10000.0, null, null);
 		List<Booking> bookings = Arrays.asList(booking1, booking2);
 		when(bookingService.getAllBookings()).thenReturn(bookings);
 
@@ -84,9 +89,10 @@ class BookingControllerTest {
 	@DisplayName("Updating the booking and updated will be shown")
 	void testUpdateBooking() {
 		Booking updatedBooking = new Booking(3, "A1", "Business", LocalDateTime.now(), "Confirmed", 6000.0, null, null);
+		BindingResult bindingResult = mock(BindingResult.class);
 		when(bookingService.updateBooking(3, updatedBooking)).thenReturn(updatedBooking);
 
-		ResponseEntity<Booking> response = bookingController.updateBooking(updatedBooking, 3);
+		ResponseEntity<Booking> response = bookingController.updateBooking(updatedBooking, 3, bindingResult);
 
 		assertEquals(200, response.getStatusCode().value());
 		assertEquals(updatedBooking, response.getBody());
@@ -101,6 +107,16 @@ class BookingControllerTest {
 		ResponseEntity<Booking> response = bookingController.deleteBooking(1);
 
 		assertEquals(204, response.getStatusCode().value());
-//		assertEquals("Booking deleted successfully", response.getBody());
 	}
+
+	@Test
+	@DisplayName("Should throw the error for Booking not found exception")
+	void testBookingNotFoundException() {
+		when(bookingService.getBookingById(2))
+				.thenThrow(new BookingNotFoundException("Booking not found with ID: " + 2));
+
+		assertThrows(BookingNotFoundException.class, () -> bookingController.getBookingById(2));
+
+	}
+
 }
