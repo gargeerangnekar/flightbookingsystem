@@ -9,4 +9,5 @@ import com.capgemini.flightbookingsystem.entities.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
 	boolean existsByEmail(String email);
+	
 }

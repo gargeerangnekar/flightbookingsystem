@@ -37,7 +37,7 @@ public class UserController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<User> getUser(@PathVariable Integer id) {
+	public ResponseEntity<User> getUserById(@PathVariable Integer id) {
 		User user = userService.getUserById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(user);
 	}
@@ -50,7 +50,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<User> updateUserRegister(@PathVariable Integer id, @RequestBody User newUser) {
+	public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User newUser) {
 		User updated = userService.putUser(id, newUser);
 		return ResponseEntity.status(HttpStatus.OK).body(updated);
 	}
@@ -62,7 +62,7 @@ public class UserController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+	public ResponseEntity<User> deleteUser(@PathVariable Integer id) {
 		userService.deleteUser(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
