@@ -1,7 +1,9 @@
 package com.capgemini.flightbookingsystem.testcontrollers;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -21,6 +23,7 @@ import org.springframework.validation.BindingResult;
 
 import com.capgemini.flightbookingsystem.controllers.BookingController;
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.exceptions.BookingNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
@@ -104,10 +107,15 @@ class BookingControllerTest {
 
 		assertEquals(204, response.getStatusCode().value());
 	}
-//	
-//	@Test
-//	@DisplayName("Should throw the error for Booking not found exception")
-	
-	
-	
+
+	@Test
+	@DisplayName("Should throw the error for Booking not found exception")
+	void testBookingNotFoundException() {
+		when(bookingService.getBookingById(2))
+				.thenThrow(new BookingNotFoundException("Booking not found with ID: " + 2));
+
+		assertThrows(BookingNotFoundException.class, () -> bookingController.getBookingById(2));
+
+	}
+
 }
