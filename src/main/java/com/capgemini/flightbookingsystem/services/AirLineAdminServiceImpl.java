@@ -16,13 +16,14 @@ import java.util.List;
 @Slf4j
 public class AirLineAdminServiceImpl implements AirLineAdminService {
 
-	private AirLineAdminRepository airLineAdminRepository;
+    @Autowired
+    private AirLineAdminRepository airLineAdminRepository;
 
-	@Autowired
-	public AirLineAdminServiceImpl(AirLineAdminRepository airLineAdminRepository) {
-		super();
-		this.airLineAdminRepository = airLineAdminRepository;
-	}
+    @Override
+    public List<AirLineAdmin> getAllAirlineAdmins() {
+        return airLineAdminRepository.findAll();
+    }
+
     @Override
     public AirLineAdmin getAirlineAdminById(Integer id) {
         return airLineAdminRepository.findById(id)
@@ -57,24 +58,13 @@ public class AirLineAdminServiceImpl implements AirLineAdminService {
         airLineAdminRepository.delete(existingAdmin);
     }
 
+    @Override
+    public boolean existsByAirlineEmail(String email) {
+        return airLineAdminRepository.existsByAirlineEmail(email);
+    }
 
-	@Override
-	public ResponseEntity<String> deleteAdmin(Integer id) {
-		if (airLineAdminRepository.existsById(id)) {
-			airLineAdminRepository.deleteById(id);
-			return ResponseEntity.ok("Airline admin deleted successfully");
-		} else {
-			return ResponseEntity.status(404).body("Admin not found");
-		}
-	}
-
-	@Override
-	public boolean existsByAirlineEmail(String email) {
-		return airLineAdminRepository.existsByAirlineEmail(email);
-	}
-
-	@Override
-	public boolean existsByContactNumber(String contactNumber) {
-		return airLineAdminRepository.existsByContactNumber(contactNumber);
-	}
+    @Override
+    public boolean existsByContactNumber(String contactNumber) {
+        return airLineAdminRepository.existsByContactNumber(contactNumber);
+    }
 }
