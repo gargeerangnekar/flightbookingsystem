@@ -8,10 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.capgemini.flightbookingsystem.entities.Airport;
+import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.services.AirportService;
 
 @RestController
-@RequestMapping("/api/airports")
+@RequestMapping("/airports")
 public class AirportController {
 
 	private final AirportService airportService;
@@ -30,14 +31,20 @@ public class AirportController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Airport> getAirport(@PathVariable Long id) {
 		Airport airport = airportService.getAirportById(id);
-		return ResponseEntity.ok(airport);
+		return ResponseEntity.status(HttpStatus.OK).body(airport);
 	}
 
 	@GetMapping
 	public ResponseEntity<List<Airport>> getAllAirports() {
 		List<Airport> airports = airportService.getAllAirports();
-		return ResponseEntity.ok(airports);
+		return ResponseEntity.status(HttpStatus.OK).body(airports);
 	}
+	
+//	@GetMapping
+//	public ResponseEntity<List<Flights>> getAllFlightsByAirport(){
+//		List<Flights> flights = airportService.getAllFlightsByAirport();
+//		return flights;
+//	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Airport> updateAirport(@PathVariable Long id, @RequestBody Airport airportDetails) {
