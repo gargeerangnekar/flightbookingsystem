@@ -15,6 +15,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "booking_table")
@@ -27,6 +30,7 @@ public class Booking {
 
 	@Column(name = "seat_number")
 	@NotBlank(message = "Seat number cannot be empty")
+	@Size(max = 3)
 	private String seatNumber;
 
 	@Column(name = "seat_class")
@@ -35,6 +39,7 @@ public class Booking {
 
 	@Column(name = "booking_time")
 	@NotBlank(message = "Booking time cannot be empty")
+	@PastOrPresent(message = "Booking must not in future time")
 	private LocalDateTime bookingTime;
 
 	@Column(name = "status")
@@ -43,24 +48,17 @@ public class Booking {
 
 	@Column(name = "amount")
 	@NotNull(message = "Booking amount cannot be empty")
+	@Positive(message = "Amount must be positive")
 	private Long amount;
 
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "userId")
+	@JoinColumn(name = "user_id")
 	private User users;
-
-//	@Column(name = "user_id")
-//	@NotNull(message = "User Id cannot be empty")
-//	private Long userId;
-
-//	@Column(name = "flight_id")
-//	@NotNull(message = "Flight Id cannot be empty")
-//	private Long flightId;
 
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "flightId")
+	@JoinColumn(name = "flight_id")
 	private Flights flights;
 
 	public Booking() {
