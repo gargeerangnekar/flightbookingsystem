@@ -46,8 +46,7 @@ class FlightControllerTest {
                 "Boeing 737",
                 180,
                 1,
-                3,
-                2
+                3
         );
 
         Mockito.when(flightService.createNewFlight(Mockito.any())).thenReturn(flight);
@@ -92,8 +91,7 @@ class FlightControllerTest {
                 "Boeing 737",
                 180,
                 1,
-                3,
-                2
+                3
         );
 
         Mockito.when(flightService.getFlightById(1)).thenReturn(flight);
@@ -118,8 +116,7 @@ class FlightControllerTest {
                 "Boeing 737",
                 180,
                 1,
-                3,
-                2
+                3
         );
 
         Mockito.when(flightService.updateFlightById(Mockito.eq(1), Mockito.any())).thenReturn(updatedFlight);
@@ -134,9 +131,8 @@ class FlightControllerTest {
                           "status": "Delayed",
                           "aircraftModel": "Boeing 737",
                           "capacity": 180,
-                          "airlineAdminId": 1,
-                          "arrivalAirportId": 3,
-                          "departureAirportId": 2
+                          "arrivalAirportId": 1,
+                          "departureAirportId": 3
                         }
                         """))
                 .andExpect(status().isOk())
