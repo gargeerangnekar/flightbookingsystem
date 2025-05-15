@@ -8,7 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +20,6 @@ import jakarta.validation.constraints.NotNull;
 public class Airport {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull(message = "airport id is mandatory")
 	@Column(name = "airport_id")
 	private Integer airportId;
 
@@ -36,14 +35,12 @@ public class Airport {
 	@Column(name = "contact")
 	private Integer contact;
 
-//	@OneToMany(mappedBy = "airport")
-//	private List<Flights> flights;
 
 	public Airport() {
 		super();
 	}
 
-	public Airport(@NotNull Integer airportId, String airportName, @NotBlank String city, @NotNull Integer contact) {
+	public Airport(Integer airportId, String airportName, @NotBlank String city, @NotNull Integer contact) {
 		super();
 		this.airportId = airportId;
 		this.airportName = airportName;
