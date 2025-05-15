@@ -22,34 +22,36 @@ public class GlobalExceptionHandler {
 		error.put("Description:", ex.getMessage());
 		return new ResponseEntity<Object>(error, HttpStatus.NOT_FOUND);
 	}
+
 	@ExceptionHandler(FlightNotFoundException.class)
-	public ResponseEntity<Object> handleFlightNotFound(FlightNotFoundException flightExcp, HttpServletRequest request){
+	public ResponseEntity<Object> handleFlightNotFound(FlightNotFoundException flightExcp, HttpServletRequest request) {
 		Map<String, Object> errorDetails = new HashMap<>();
 		errorDetails.put("timestamp", LocalDateTime.now());
 		errorDetails.put("message", flightExcp.getMessage());
 		errorDetails.put("status", HttpStatus.NOT_FOUND.value());
 		errorDetails.put("instance", request.getRequestURI());
 		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
-		
+
 	}
+
 	@ExceptionHandler(AirlineAdminNotFoundException.class)
 	public ResponseEntity<Object> handleAirlineAdminNotFound(AirlineAdminNotFoundException ex) {
-	    Map<String, Object> error = new HashMap<>();
-	    error.put("Timestamp:", LocalDateTime.now());
-	    error.put("Status:", HttpStatus.NOT_FOUND.value());
-	    error.put("Description:", ex.getMessage());
-	    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		Map<String, Object> error = new HashMap<>();
+		error.put("Timestamp:", LocalDateTime.now());
+		error.put("Status:", HttpStatus.NOT_FOUND.value());
+		error.put("Description:", ex.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
-	
+
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
-	    Map<String, Object> error = new HashMap<>();
-	    error.put("Timestamp:", LocalDateTime.now());
-	    error.put("Status:", HttpStatus.NOT_FOUND.value());
-	    error.put("Description:", ex.getMessage());
-	    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+		Map<String, Object> error = new HashMap<>();
+		error.put("Timestamp:", LocalDateTime.now());
+		error.put("Status:", HttpStatus.NOT_FOUND.value());
+		error.put("Description:", ex.getMessage());
+		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
-	
+
 	@ExceptionHandler(EmailAlreadyExist.class)
 	public ResponseEntity<Object> handleEmailAlreadyExist(EmailAlreadyExist ex) {
 		Map<String, Object> errorDetails = new HashMap<>();
@@ -58,9 +60,27 @@ public class GlobalExceptionHandler {
 		errorDetails.put("status", HttpStatus.CONFLICT.value());
 		return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
 	}
-	
+
 	@ExceptionHandler(UserNotFoundException.class)
 	public ResponseEntity<Object> handleUserNotFound(UserNotFoundException ex) {
+		Map<String, Object> errorDetails = new HashMap<>();
+		errorDetails.put("timestamp", LocalDateTime.now());
+		errorDetails.put("message", ex.getMessage());
+		errorDetails.put("status", HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(AirportNotFoundException.class)
+	public ResponseEntity<Object> handleAirportNotFound(AirportNotFoundException ex) {
+		Map<String, Object> errorDetails = new HashMap<>();
+		errorDetails.put("timestamp", LocalDateTime.now());
+		errorDetails.put("message", ex.getMessage());
+		errorDetails.put("status", HttpStatus.NOT_FOUND.value());
+		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(PaymentNotFoundException.class)
+	public ResponseEntity<Object> PaymentNotFound(PaymentNotFoundException ex) {
 		Map<String, Object> errorDetails = new HashMap<>();
 		errorDetails.put("timestamp", LocalDateTime.now());
 		errorDetails.put("message", ex.getMessage());
