@@ -131,9 +131,8 @@ class FlightControllerTest {
                           "status": "Delayed",
                           "aircraftModel": "Boeing 737",
                           "capacity": 180,
-                          "airlineAdminId": 1,
-                          "arrivalAirportId": 3,
-                          "departureAirportId": 2
+                          "arrivalAirportId": 1,
+                          "departureAirportId": 3
                         }
                         """))
                 .andExpect(status().isOk())
