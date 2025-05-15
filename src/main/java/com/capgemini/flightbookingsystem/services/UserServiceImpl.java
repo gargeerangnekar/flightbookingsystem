@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.User;
 import com.capgemini.flightbookingsystem.exceptions.EmailAlreadyExist;
+import com.capgemini.flightbookingsystem.exceptions.EmailNotFoundException;
 import com.capgemini.flightbookingsystem.exceptions.UserNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.UserRepository;
 
@@ -36,11 +37,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserById(Integer id) {
 		log.info("Fetching user with ID: {}", id);
-		return userRepository.findById(id)
-				.orElseThrow(() -> {
-					log.warn("User not found with ID: {}", id);
-					return new UserNotFoundException("Get : User not found with ID : " + id);
-				});
+		return userRepository.findById(id).orElseThrow(() -> {
+			log.warn("User not found with ID: {}", id);
+			return new UserNotFoundException("Get : User not found with ID : " + id);
+		});
 	}
 
 	@Override
@@ -58,11 +58,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User putUser(Integer id, @Valid User user) {
 		log.info("Updating user (full update) with ID: {}", id);
-		User existing = userRepository.findById(id)
-				.orElseThrow(() -> {
-					log.warn("User not found for full update with ID: {}", id);
-					return new UserNotFoundException("Update : User not found with Id : " + id);
-				});
+		User existing = userRepository.findById(id).orElseThrow(() -> {
+			log.warn("User not found for full update with ID: {}", id);
+			return new UserNotFoundException("Update : User not found with Id : " + id);
+		});
 
 		existing.setName(user.getName());
 		existing.setEmail(user.getEmail());
@@ -78,11 +77,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User patchUser(Integer id, @Valid User patch) {
 		log.info("Patching user with ID: {}", id);
-		User existing = userRepository.findById(id)
-				.orElseThrow(() -> {
-					log.warn("User not found for patch with ID: {}", id);
-					return new UserNotFoundException("Patch : User not found with Id : " + id);
-				});
+		User existing = userRepository.findById(id).orElseThrow(() -> {
+			log.warn("User not found for patch with ID: {}", id);
+			return new UserNotFoundException("Patch : User not found with Id : " + id);
+		});
 
 		if (patch.getName() != null) {
 			existing.setName(patch.getName());
@@ -109,7 +107,7 @@ public class UserServiceImpl implements UserService {
 		log.debug("User with ID {} patched successfully", id);
 		return updated;
 	}
-	
+
 	@Override
 	public void deleteUser(Integer id) {
 		log.info("Attempting to delete user with ID: {}", id);
@@ -121,5 +119,19 @@ public class UserServiceImpl implements UserService {
 			log.warn("Delete failed. User not found with ID: {}", id);
 			throw new UserNotFoundException("Cannot delete. User not found with ID: " + id);
 		}
+	}
+
+	@Override
+	public User findByEmail(String email) {
+		log.info("Request to fetch user from eamil");
+		return userRepository.findByEmail(email).orElseThrow(() -> {
+			log.warn("Email not found");
+			throw new EmailNotFoundException("Email not found");
+		});
+	}
+	
+	@Override
+	public boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
 	}
 }
