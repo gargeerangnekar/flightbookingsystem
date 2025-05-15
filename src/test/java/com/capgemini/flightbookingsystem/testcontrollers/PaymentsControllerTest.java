@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class PaymentsControllerTest {
+class PaymentsControllerTest {
 
     @Mock
     private PaymentsService paymentsService;
@@ -27,7 +27,7 @@ public class PaymentsControllerTest {
     private Payments samplePayment;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
 
         samplePayment = new Payments();
@@ -39,7 +39,7 @@ public class PaymentsControllerTest {
     }
 
     @Test
-    public void testGetAllPayments() {
+    void testGetAllPayments() {
         when(paymentsService.getAllPayments()).thenReturn(List.of(samplePayment));
 
         ResponseEntity<List<Payments>> response = paymentsController.getAllPayments();
@@ -50,7 +50,7 @@ public class PaymentsControllerTest {
     }
 
     @Test
-    public void testGetPaymentById() {
+    void testGetPaymentById() {
         when(paymentsService.getPaymentById(1)).thenReturn(samplePayment);
 
         ResponseEntity<Payments> response = paymentsController.getPaymentById(1);
@@ -60,7 +60,7 @@ public class PaymentsControllerTest {
     }
 
     @Test
-    public void testSavePayments() {
+    void testSavePayments() {
         when(paymentsService.savePayments(samplePayment)).thenReturn(samplePayment);
 
         ResponseEntity<Payments> response = paymentsController.createPayments(samplePayment);
@@ -70,7 +70,7 @@ public class PaymentsControllerTest {
     }
 
     @Test
-    public void testUpdatePayments() {
+    void testUpdatePayments() {
         when(paymentsService.updatePayments(eq(1), any(Payments.class))).thenReturn(samplePayment);
 
         ResponseEntity<Payments> response = paymentsController.updatePayments(1, samplePayment);
@@ -80,7 +80,7 @@ public class PaymentsControllerTest {
     }
 
     @Test
-    public void testDeletePayments() {
+    void testDeletePayments() {
         doNothing().when(paymentsService).deletePayments(1);
 
         ResponseEntity<Void> response = paymentsController.deletePayments(1);
