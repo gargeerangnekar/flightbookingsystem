@@ -19,6 +19,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+//3
 @Entity
 @Table(name = "booking_table")
 public class Booking {
@@ -49,7 +50,7 @@ public class Booking {
 	@Column(name = "amount")
 	@NotNull(message = "Booking amount cannot be empty")
 	@Positive(message = "Amount must be positive")
-	private Long amount;
+	private Double amount;
 
 	@JsonBackReference
 	@ManyToOne(cascade = CascadeType.PERSIST)
@@ -69,7 +70,7 @@ public class Booking {
 			@NotBlank(message = "Seat Class cannot be empty") String seatClass,
 			@NotBlank(message = "Booking time cannot be empty") LocalDateTime bookingTime,
 			@NotBlank(message = "Booking Status cannot be empty") String status,
-			@NotNull(message = "Booking amount cannot be empty") Long amount, User users, Flights flights) {
+			@NotNull(message = "Booking amount cannot be empty") Double amount, User users, Flights flights) {
 		super();
 		this.bookingId = bookingId;
 		this.seatNumber = seatNumber;
@@ -121,11 +122,11 @@ public class Booking {
 		this.status = status;
 	}
 
-	public Long getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Long amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
@@ -142,7 +143,7 @@ public class Booking {
 	}
 
 	public void setFlights(Flights flights) {
-		flights = flights;
+		this.flights = flights;
 	}
 
 	@Override

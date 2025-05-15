@@ -12,13 +12,13 @@ import com.capgemini.flightbookingsystem.entities.Payments;
 
 public interface PaymentsRepository extends JpaRepository<Payments, Integer> {
 
-    @Query("SELECT p FROM Payments p JOIN FETCH p.user u WHERE p.userId = :userId")
-    List<Payments> findByUserIdWithUserDetails(@Param("userId") Long userId);
-
-    @Query("SELECT p FROM Payments p JOIN FETCH p.booking b WHERE p.bookingId = :bookingId")
-    List<Payments> findByBookingIdWithBookingDetails(@Param("bookingId") Long bookingId);
-    
-    @Query("SELECT p FROM Payments p JOIN FETCH p.booking b WHERE p.paymentId = :paymentId")
-    Payments findByIdWithBookingDetails(@Param("paymentId") Long paymentId);
+//    @Query("SELECT p FROM Payments p JOIN FETCH p.user u WHERE p.userId = :userId")
+//    List<Payments> findByUserIdWithUserDetails(@Param("userId") Long userId);
+//
+//    @Query("SELECT p FROM Payments p JOIN FETCH p.booking b WHERE p.bookingId = :bookingId")
+//    List<Payments> findByBookingIdWithBookingDetails(@Param("bookingId") Long bookingId);
+//    
+//    @Query("SELECT p FROM Payments p JOIN FETCH p.booking b WHERE p.paymentId = :paymentId")
+//    Payments findByIdWithBookingDetails(@Param("paymentId") Long paymentId);
 	
 }

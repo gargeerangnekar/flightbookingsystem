@@ -1,5 +1,6 @@
 package com.capgemini.flightbookingsystem.services;
 
+//12
 import com.capgemini.flightbookingsystem.entities.Payments;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface PaymentsService {
 	List<Payments> getAllPayments();
 
 	Payments savePayments(Payments payment);
-	
+
 	Payments updatePayments(Integer paymentId, Payments user);
 
 	void deletePayments(Integer paymentId);
