@@ -27,19 +27,19 @@ public class Booking {
 	private Integer bookingId;
 
 	@Column(name = "seat_number")
-	@NotBlank(message = "Seat number cannot be empty")
+	@NotNull(message = "Seat number cannot be empty")
 	private String seatNumber;
 
 	@Column(name = "seat_class")
-	@NotBlank(message = "Seat Class cannot be empty")
+	@NotNull(message = "Seat Class cannot be empty")
 	private String seatClass;
 
 	@Column(name = "booking_time")
-	@NotBlank(message = "Booking time cannot be empty")
+	@NotNull(message = "Booking time cannot be empty")
 	private LocalDateTime bookingTime;
 
 	@Column(name = "status")
-	@NotBlank(message = "Booking Status cannot be empty")
+	@NotNull(message = "Booking Status cannot be empty")
 	private String status;
 
 	@Column(name = "amount")
@@ -59,7 +59,7 @@ public class Booking {
 //	@NotNull(message = "Flight Id cannot be empty")
 //	private Long flightId;
 
-	@JsonBackReference
+	@JsonBackReference("flight-booking")
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "flightId")
 	private Flights flights;
