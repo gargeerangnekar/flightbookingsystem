@@ -3,6 +3,7 @@ package com.capgemini.flightbookingsystem.testcontrollers;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 
 import com.capgemini.flightbookingsystem.controllers.BookingController;
 import com.capgemini.flightbookingsystem.entities.Booking;
@@ -56,10 +58,12 @@ class BookingControllerTest {
 	@Test
 	@DisplayName("Should add and return the added booking")
 	void testAddBooking() {
+		BindingResult bindingResult = mock(BindingResult.class);
+		when(bindingResult.hasErrors()).thenReturn(false);
 
 		when(bookingService.saveBooking(booking1)).thenReturn(booking1);
 
-		ResponseEntity<Booking> response = bookingController.addBooking(booking1);
+		ResponseEntity<Booking> response = bookingController.addBooking(booking1, bindingResult);
 
 		assertEquals(201, response.getStatusCode().value());
 		assertEquals(booking1, response.getBody());
