@@ -4,7 +4,7 @@ import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-
+//18
 public interface AirLineAdminService {
     List<AirLineAdmin> getAllAirlineAdmins();
     AirLineAdmin getAirlineAdminById(Integer id);
