@@ -92,7 +92,7 @@ public class Flights {
 	
 	// 3. Airline Admin to Flight
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "airlineAdminId")
+	@JoinColumn(name = "airline_admin_id")
 	@JsonBackReference
 	AirLineAdmin airlineAdmin;
 
@@ -124,6 +124,26 @@ public class Flights {
 		this.airlineAdmin = airlineAdmin;
 	}
 	
+	// Constructor with flight ID (PK)
+		public Flights(@NotNull Integer flightId,
+				@NotNull(message = "Flight number is required") @Size(min = 2, max = 10, message = "Flight number must be between 2 and 10 characters") String flightNumber,
+				@NotNull(message = "Departure time is required") @FutureOrPresent(message = "Departure time must be in the present or future") LocalDateTime departureTime,
+				@NotNull(message = "Arrival time is required") @Future(message = "Arrival time must be in the future") LocalDateTime arrivalTime,
+				@NotNull(message = "Status is required") String status,
+				@NotNull(message = "Aircraft model is required") String aircraftModel,
+				@NotNull(message = "Capacity is required") @Min(value = 1, message = "Capacity must be at least 1") @Max(value = 1000, message = "Capacity cannot exceed 1000") Integer capacity,
+				@NotNull(message = "Arrival airport ID is required") @Positive(message = "Arrival airport ID must be a positive integer") @NotNull Integer arrivalAirportId,
+				@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId) {
+			this.flightId = flightId;
+			this.flightNumber = flightNumber;
+			this.departureTime = departureTime;
+			this.arrivalTime = arrivalTime;
+			this.status = status;
+			this.aircraftModel = aircraftModel;
+			this.capacity = capacity;
+			this.arrivalAirportId = arrivalAirportId;
+			this.departureAirportId = departureAirportId;
+		}
 	
 	// Constructor without flight ID (PK)
 	public Flights(

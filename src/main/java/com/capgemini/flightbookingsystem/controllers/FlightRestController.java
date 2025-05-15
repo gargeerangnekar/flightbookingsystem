@@ -19,7 +19,7 @@ import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.services.FlightService;
 
 @RestController
-@RequestMapping("/api/flights")
+@RequestMapping("/flights")
 public class FlightRestController{
 	
 	
