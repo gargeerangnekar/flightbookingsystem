@@ -3,12 +3,14 @@ package com.capgemini.flightbookingsystem.testcontrollers;
 import com.capgemini.flightbookingsystem.controllers.PaymentsController;
 import com.capgemini.flightbookingsystem.entities.Payments;
 import com.capgemini.flightbookingsystem.services.PaymentsService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-//10
 class PaymentsControllerTest {
 
     @Mock
@@ -61,23 +62,47 @@ class PaymentsControllerTest {
     }
 
     @Test
-    void testSavePayments() {
+    void testSavePayments_WithValidInput() {
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
         when(paymentsService.savePayments(samplePayment)).thenReturn(samplePayment);
 
-        ResponseEntity<Payments> response = paymentsController.createPayments(samplePayment);
+        ResponseEntity<?> response = paymentsController.createPayments(samplePayment, bindingResult);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(samplePayment, response.getBody());
     }
 
     @Test
-    void testUpdatePayments() {
+    void testSavePayments_WithValidationErrors() {
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        ResponseEntity<?> response = paymentsController.createPayments(samplePayment, bindingResult);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void testUpdatePayments_WithValidInput() {
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
         when(paymentsService.updatePayments(eq(1), any(Payments.class))).thenReturn(samplePayment);
 
-        ResponseEntity<Payments> response = paymentsController.updatePayments(1, samplePayment);
+        ResponseEntity<?> response = paymentsController.updatePayments(1, samplePayment, bindingResult);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(samplePayment, response.getBody());
+    }
+
+    @Test
+    void testUpdatePayments_WithValidationErrors() {
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        ResponseEntity<?> response = paymentsController.updatePayments(1, samplePayment, bindingResult);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
