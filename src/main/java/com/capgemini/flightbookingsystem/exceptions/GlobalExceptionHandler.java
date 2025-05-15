@@ -20,104 +20,79 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(BookingNotFoundException.class)
-    public ResponseEntity<Object> handleBookingNotFound(BookingNotFoundException ex, HttpServletRequest request) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now());
-        error.put("status", HttpStatus.NOT_FOUND.value());
-        error.put("message", ex.getMessage());
-        error.put("instance", request.getRequestURI());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+    // Reusable error response builder
+    private Map<String, Object> buildErrorDetails(String message, int status, String uri) {
         Map<String, Object> errorDetails = new HashMap<>();
         errorDetails.put("timestamp", LocalDateTime.now());
-        errorDetails.put("status", status.value());
+        errorDetails.put("status", status);
+        errorDetails.put("message", message);
+        errorDetails.put("instance", uri);
+        return errorDetails;
+    }
 
-        Map<String, String> fieldErrors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors()
-                .forEach(error -> fieldErrors.put(error.getField(), error.getDefaultMessage()));
-
-        errorDetails.put("errors", fieldErrors);
-
-        // Cast WebRequest to ServletWebRequest to get URI
-        if (request instanceof ServletWebRequest servletWebRequest) {
-            errorDetails.put("instance", servletWebRequest.getRequest().getRequestURI());
-        }
-
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(BookingNotFoundException.class)
+    public ResponseEntity<Object> handleBookingNotFound(BookingNotFoundException ex, HttpServletRequest request) {
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.NOT_FOUND.value(), request.getRequestURI()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(FlightNotFoundException.class)
     public ResponseEntity<Object> handleFlightNotFound(FlightNotFoundException ex, HttpServletRequest request) {
-        Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
-        errorDetails.put("message", ex.getMessage());
-        errorDetails.put("status", HttpStatus.NOT_FOUND.value());
-        errorDetails.put("instance", request.getRequestURI());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.NOT_FOUND.value(), request.getRequestURI()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AirlineAdminNotFoundException.class)
     public ResponseEntity<Object> handleAirlineAdminNotFound(AirlineAdminNotFoundException ex, HttpServletRequest request) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now());
-        error.put("status", HttpStatus.NOT_FOUND.value());
-        error.put("message", ex.getMessage());
-        error.put("instance", request.getRequestURI());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.NOT_FOUND.value(), request.getRequestURI()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
-        Map<String, Object> error = new HashMap<>();
-        error.put("timestamp", LocalDateTime.now());
-        error.put("status", HttpStatus.BAD_REQUEST.value());
-        error.put("message", ex.getMessage());
-        error.put("instance", request.getRequestURI());
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), request.getRequestURI()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(EmailAlreadyExist.class)
     public ResponseEntity<Object> handleEmailAlreadyExist(EmailAlreadyExist ex, HttpServletRequest request) {
-        Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
-        errorDetails.put("message", ex.getMessage());
-        errorDetails.put("status", HttpStatus.CONFLICT.value());
-        errorDetails.put("instance", request.getRequestURI());
-        return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.CONFLICT.value(), request.getRequestURI()), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFound(UserNotFoundException ex, HttpServletRequest request) {
-        Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
-        errorDetails.put("message", ex.getMessage());
-        errorDetails.put("status", HttpStatus.NOT_FOUND.value());
-        errorDetails.put("instance", request.getRequestURI());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.NOT_FOUND.value(), request.getRequestURI()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AirportNotFoundException.class)
     public ResponseEntity<Object> handleAirportNotFound(AirportNotFoundException ex, HttpServletRequest request) {
-        Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
-        errorDetails.put("message", ex.getMessage());
-        errorDetails.put("status", HttpStatus.NOT_FOUND.value());
-        errorDetails.put("instance", request.getRequestURI());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.NOT_FOUND.value(), request.getRequestURI()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(PaymentNotFoundException.class)
     public ResponseEntity<Object> handlePaymentNotFound(PaymentNotFoundException ex, HttpServletRequest request) {
-        Map<String, Object> errorDetails = new HashMap<>();
-        errorDetails.put("timestamp", LocalDateTime.now());
-        errorDetails.put("message", ex.getMessage());
-        errorDetails.put("status", HttpStatus.NOT_FOUND.value());
-        errorDetails.put("instance", request.getRequestURI());
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.NOT_FOUND.value(), request.getRequestURI()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EmailNotFoundException.class)
+    public ResponseEntity<Object> handleEmailNotFound(EmailNotFoundException ex, HttpServletRequest request) {
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.NOT_FOUND.value(), request.getRequestURI()), HttpStatus.NOT_FOUND);
+    }
+
+    // Catch-all for unhandled exceptions
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleAllExceptions(Exception ex, HttpServletRequest request) {
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), request.getRequestURI()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // Validation error handler (useful if you're validating request bodies with @Valid)
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                  HttpHeaders headers,
+                                                                  HttpStatusCode status,
+                                                                  WebRequest request) {
+        String errorMessage = ex.getBindingResult().getFieldError() != null
+                ? ex.getBindingResult().getFieldError().getDefaultMessage()
+                : "Validation error";
+
+        String uri = ((ServletWebRequest) request).getRequest().getRequestURI();
+
+        return new ResponseEntity<>(buildErrorDetails(errorMessage, HttpStatus.BAD_REQUEST.value(), uri), HttpStatus.BAD_REQUEST);
     }
 }
