@@ -36,8 +36,8 @@ public class BookingControllerTest {
 	@BeforeEach
 	void setUpBooking() {
 		MockitoAnnotations.openMocks(this);
-		booking1 = new Booking(1, "A1", "Economy", LocalDateTime.now(), "Confirmed", 5000L, null, null);
-		booking2 = new Booking(2, "B2", "Business", LocalDateTime.now(), "Pending", 10000L, null, null);
+		booking1 = new Booking(1, "A1", "Economy", LocalDateTime.now(), "Confirmed", 5000.0, null, null);
+		booking2 = new Booking(2, "B2", "Business", LocalDateTime.now(), "Pending", 10000.0, null, null);
 	}
 
 	@Test
@@ -78,7 +78,7 @@ public class BookingControllerTest {
 	@Test
 	@DisplayName("Updating the booking and updated will be shown")
 	void testUpdateBooking() {
-		Booking updatedBooking = new Booking(3, "A1", "Business", LocalDateTime.now(), "Confirmed", 6000L, null, null);
+		Booking updatedBooking = new Booking(3, "A1", "Business", LocalDateTime.now(), "Confirmed", 6000.0, null, null);
 		when(bookingService.updateBooking(3, updatedBooking)).thenReturn(updatedBooking);
 
 		ResponseEntity<Booking> response = bookingController.updateBooking(updatedBooking, 3);
