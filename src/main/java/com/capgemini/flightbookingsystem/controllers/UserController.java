@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @Slf4j
 public class UserController {
 	private final UserService userService;
@@ -80,7 +80,6 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(updated);
 	}
 
-
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> patchUser(@PathVariable Integer id, @Valid @RequestBody User patch, BindingResult result) {
 	    if (result.hasErrors()) {
@@ -94,13 +93,11 @@ public class UserController {
 	    return ResponseEntity.status(HttpStatus.OK).body(updated);
 	}
 
-
 	@DeleteMapping("/{id}")
 	public ResponseEntity<User> deleteUser(@PathVariable Integer id) {
 		log.info("Deleting user with ID: {}", id);
 		userService.deleteUser(id);
 		log.debug("User with ID {} deleted successfully", id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-
 	}
 }
