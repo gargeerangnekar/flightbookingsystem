@@ -37,17 +37,17 @@ public class BookingController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Booking> getBookingById(@PathVariable("id") Long bookingId) {
+	public ResponseEntity<Booking> getBookingById(@PathVariable("id") Integer bookingId) {
 		return ResponseEntity.status(HttpStatus.OK).body(bookingService.getBookingById(bookingId));
 	}
 
 	@PutMapping("/update-booking/{id}")
-	public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking, @PathVariable("id") Long bookingId) {
+	public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking, @PathVariable("id") Integer bookingId) {
 		return ResponseEntity.status(HttpStatus.OK).body(bookingService.updateBooking(bookingId, booking));
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Booking> deleteBooking(@PathVariable Long bookingId) {
+	public ResponseEntity<Booking> deleteBooking(@PathVariable Integer bookingId) {
 		bookingService.deleteBooking(bookingId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

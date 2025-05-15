@@ -1,8 +1,8 @@
 package com.capgemini.flightbookingsystem.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -54,10 +54,6 @@ public class Flights {
 	@Column(name = "capacity")
 	protected Integer capacity;
 
-	@Column(name = "airline_admin_id")
-	@NotNull
-	protected Integer airlineAdminId;
-
 	// FK - Airports Entity
 	@Column(name = "arrival_airport_id")
 	@NotNull
@@ -68,14 +64,23 @@ public class Flights {
 	@NotNull
 	protected Integer departureAirportId; 
 	
-	@OneToMany(mappedBy = "flights")
-	@JsonManagedReference
-	List<Booking> bookings;
 	
+	// 1. Flight to Booking
+	@OneToMany(mappedBy = "flights", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	List<Booking> bookings = new ArrayList<>();
+	
+//	// 2. Airport to Flight
+//	@ManyToOne(cascade = CascadeType.PERSIST)
+//	@JoinColumn(name = "airportId")
+//	@JsonBackReference
+//	Airport airport;
+	
+	// 3. Airline Admin to Flight
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "airportId")
+	@JoinColumn(name = "airlineAdminId")
 	@JsonBackReference
-	Airport airport;
+	AirLineAdmin airlineAdmin;
 
 	public Flights() {
 		super();
@@ -83,7 +88,7 @@ public class Flights {
 
 	public Flights(@NotNull Integer flightId, @NotNull String flightNumber, @NotNull LocalDateTime departureTime,
 			@NotNull LocalDateTime arrivalTime, @NotNull String status, @NotNull String aircraftModel,
-			@NotNull Integer capacity, @NotNull Integer airlineAdminId, @NotNull Integer arrivalAirportId,
+			@NotNull Integer capacity, @NotNull Integer arrivalAirportId,
 			@NotNull Integer departureAirportId) {
 		this.flightId = flightId;
 		this.flightNumber = flightNumber;
@@ -92,7 +97,6 @@ public class Flights {
 		this.status = status;
 		this.aircraftModel = aircraftModel;
 		this.capacity = capacity;
-		this.airlineAdminId = airlineAdminId;
 		this.arrivalAirportId = arrivalAirportId;
 		this.departureAirportId = departureAirportId;
 	}
@@ -107,7 +111,6 @@ public class Flights {
 		this.status = status;
 		this.aircraftModel = aircraftModel;
 		this.capacity = capacity;
-		this.airlineAdminId = airlineAdminId;
 		this.arrivalAirportId = arrivalAirportId;
 		this.departureAirportId = departureAirportId;
 	}
@@ -168,13 +171,6 @@ public class Flights {
 		this.capacity = capacity;
 	}
 
-	public Integer getAirlineAdminId() {
-		return airlineAdminId;
-	}
-
-	public void setAirlineAdminId(Integer airlineAdminId) {
-		this.airlineAdminId = airlineAdminId;
-	}
 
 	public Integer getArrivalAirportId() {
 		return arrivalAirportId;
@@ -191,12 +187,22 @@ public class Flights {
 	public void setDepartureAirportId(Integer departureAirportId) {
 		this.departureAirportId = departureAirportId;
 	}
+	
+
+	
+	public List<Booking> getBookings() {
+		return bookings;
+	}
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
+	}
 
 	@Override
 	public String toString() {
 		return "Flights [flightId=" + flightId + ", flightNumber=" + flightNumber + ", departureTime=" + departureTime
 				+ ", arrivalTime=" + arrivalTime + ", status=" + status + ", aircraftModel=" + aircraftModel
-				+ ", capacity=" + capacity + ", airlineAdminId=" + airlineAdminId + ", arrivalAirportId="
+				+ ", capacity=" + capacity + ", arrivalAirportId="
 				+ arrivalAirportId + ", departureAirportId=" + departureAirportId + ", bookings=" + bookings + "]";
 	}
 

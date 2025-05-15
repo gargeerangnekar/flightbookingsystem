@@ -2,6 +2,7 @@ package com.capgemini.flightbookingsystem.services;
 
 import java.util.List;
 
+import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 
 //service interface
@@ -16,4 +17,6 @@ public interface FlightService {
 	Flights updateFlightById(Integer flightId, Flights flight);
 	
 	void deleteFlight(Integer flightId);
+	
+	Booking createBookingForFlight(Integer flightId, Booking booking);
 }
