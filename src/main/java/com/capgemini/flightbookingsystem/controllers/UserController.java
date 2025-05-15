@@ -21,9 +21,9 @@ import com.capgemini.flightbookingsystem.services.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
-
+//5
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @Slf4j
 public class UserController {
 	private final UserService userService;

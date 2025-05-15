@@ -12,12 +12,12 @@ public class AirportEntityTest {
 	@Test
 	public void testAirportFieldAssignment() {
 		Airport airport = new Airport();
-		airport.setAirportId(1L);
+		airport.setAirportId(1);
 		airport.setAirportName("Dubai International");
 		airport.setCity("Dubai");
 		airport.setContact(1234567890);
 
-		assertEquals(1L, airport.getAirportId());
+		assertEquals(1, airport.getAirportId());
 		assertEquals("Dubai International", airport.getAirportName());
 		assertEquals("Dubai", airport.getCity());
 		assertEquals(1234567890, airport.getContact());
