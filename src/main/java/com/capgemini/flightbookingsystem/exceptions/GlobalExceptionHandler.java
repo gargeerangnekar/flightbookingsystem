@@ -41,6 +41,14 @@ public class GlobalExceptionHandler {
 	    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+	    Map<String, Object> error = new HashMap<>();
+	    error.put("Timestamp:", LocalDateTime.now());
+	    error.put("Status:", HttpStatus.NOT_FOUND.value());
+	    error.put("Description:", ex.getMessage());
+	    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
 	
 	@ExceptionHandler(EmailAlreadyExist.class)
 	public ResponseEntity<Object> handleEmailAlreadyExist(EmailAlreadyExist ex) {
