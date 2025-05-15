@@ -46,6 +46,8 @@ class BookingControllerTest {
 	@Test
 	@DisplayName("Should fetch number of bookings done")
 	void testGetAllBookings() {
+		booking1 = new Booking(1, "A1", "Economy", LocalDateTime.now(), "Confirmed", 5000.0, null, null);
+		booking2 = new Booking(2, "B2", "Business", LocalDateTime.now(), "Pending", 10000.0, null, null);
 		List<Booking> bookings = Arrays.asList(booking1, booking2);
 		when(bookingService.getAllBookings()).thenReturn(bookings);
 
@@ -101,6 +103,11 @@ class BookingControllerTest {
 		ResponseEntity<Booking> response = bookingController.deleteBooking(1);
 
 		assertEquals(204, response.getStatusCode().value());
-//		assertEquals("Booking deleted successfully", response.getBody());
 	}
+//	
+//	@Test
+//	@DisplayName("Should throw the error for Booking not found exception")
+	
+	
+	
 }
