@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Airport;
+import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.AirportNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.AirportRepository;
 
@@ -29,6 +30,11 @@ public class AirportServiceImpl implements AirportService{
 	    @Override
 	    public List<Airport> getAllAirports() {
 	        return airportRepository.findAll();
+	    }
+	    
+	    @Override
+	    public List<Flights> getFlightsByAirport(Long airportId) {
+	    	return airportRepository.findByAirportAirportId(airportId);
 	    }
 
 	    @Override

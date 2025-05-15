@@ -7,60 +7,55 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Payments;
+import com.capgemini.flightbookingsystem.exceptions.PaymentNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.PaymentsRepository;
 
 @Service
 public class PaymentsServiceImpl implements PaymentsService {
-	
-	private PaymentsRepository paymentRepo;
 
-	@Autowired
-	public PaymentsServiceImpl(PaymentsRepository paymentRepo) {
-		this.paymentRepo = paymentRepo;
-	}
+    private final PaymentsRepository paymentRepo;
 
-	@Override
-	public Payments getPaymentById(Long paymentId) {
-		return paymentRepo.findById(paymentId)
-        		.orElseThrow(() -> new RuntimeException("Payment not found with ID: " + paymentId));
-	}
+    @Autowired
+    public PaymentsServiceImpl(PaymentsRepository paymentRepo) {
+        this.paymentRepo = paymentRepo;
+    }
 
-	@Override
-	public List<Payments> getAllPayments() {
-		 return paymentRepo.findAll();
-	}
+    @Override
+    public Payments getPaymentById(Integer paymentId) {
+        return paymentRepo.findById(paymentId)
+            .orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + paymentId));
+    }
 
-	@Override
-	public Payments updatePayments(Long paymentId, Payments paymentUpdates) {
-	    Payments existingPayment = paymentRepo.findById(paymentId)
-	        .orElseThrow(() -> new RuntimeException("Payment not found with id: " + paymentId));
-	    
-	    if (paymentUpdates.getAmount() != null) {
-	        existingPayment.setAmount(paymentUpdates.getAmount());
-	    }
-	    
-	    if (paymentUpdates.getPaymentMethod() != null) {
-	        existingPayment.setPaymentMethod(paymentUpdates.getPaymentMethod());
-	    }
-	    
-	    if (paymentUpdates.getPaymentDate() != null) {
-	        existingPayment.setPaymentDate(paymentUpdates.getPaymentDate());
-	    }
-	    
-	    if (paymentUpdates.getPaymentTime() != null) {
-	        existingPayment.setPaymentTime(paymentUpdates.getPaymentTime());
-	    }
-	    
-	    return paymentRepo.save(existingPayment);
-	}
+    @Override
+    public List<Payments> getAllPayments() {
+        return paymentRepo.findAll();
+    }
 
-	@Override
-	public void deletePayments(Long paymentId) {
-		 if (!paymentRepo.existsById(paymentId)) {
-	            throw new RuntimeException("User not found with ID: " + paymentId);
-	        }
-		 paymentRepo.deleteById(paymentId);
-		
-	}
+    @Override
+    public Payments savePayments(Payments payment) {
+        return paymentRepo.save(payment);
+    }
 
+    @Override
+    public Payments updatePayments(Integer paymentId, Payments paymentUpdates) {
+        Payments existing = paymentRepo.findById(paymentId)
+            .orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + paymentId));
+
+        if (paymentUpdates.getAmount() != null) {
+            existing.setAmount(paymentUpdates.getAmount());
+        }
+        if (paymentUpdates.getPaymentDatetime() != null) {
+            existing.setPaymentDatetime(paymentUpdates.getPaymentDatetime());
+        }
+
+        return paymentRepo.save(existing);
+    }
+
+    @Override
+    public void deletePayments(Integer paymentId) {
+        if (!paymentRepo.existsById(paymentId)) {
+            throw new PaymentNotFoundException("Payment not found with ID: " + paymentId);
+        }
+        paymentRepo.deleteById(paymentId);
+    }
 }
