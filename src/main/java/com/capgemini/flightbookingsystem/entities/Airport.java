@@ -2,6 +2,7 @@ package com.capgemini.flightbookingsystem.entities;
 
 import java.util.List;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,6 +13,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+//6
+//Airport entity
 @Entity
 @Table(name = "airport_table")
 public class Airport {
