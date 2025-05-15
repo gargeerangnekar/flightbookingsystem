@@ -1,6 +1,7 @@
 package com.capgemini.flightbookingsystem.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -9,19 +10,22 @@ public class Payments {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "payment_id")
 	private Integer paymentId;
 
-	@Column(nullable = false)
+	@NotNull(message = "Amount is required")
+	@Positive(message = "Amount must be positive")
 	private Double amount;
 
-	@Column(name = "payment_datetime", nullable = false)
+	@NotNull(message = "Payment date is required")
+	@PastOrPresent(message = "Payment date cannot be in the future")
 	private LocalDateTime paymentDatetime;
 
-	@Column(name = "booking_id", nullable = false)
+	@NotNull(message = "Booking ID is required")
+	@Positive(message = "Booking ID must be a positive number")
 	private Integer bookingId;
 
-	@Column(name = "user_id", nullable = false)
+	@NotNull(message = "User ID is required")
+	@Positive(message = "User ID must be a positive number")
 	private Integer userId;
 
 	public Integer getPaymentId() {

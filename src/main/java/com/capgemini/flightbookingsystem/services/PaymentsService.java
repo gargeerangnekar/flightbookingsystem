@@ -11,7 +11,7 @@ public interface PaymentsService {
 	List<Payments> getAllPayments();
 
 	Payments savePayments(Payments payment);
-	
+
 	Payments updatePayments(Integer paymentId, Payments user);
 
 	void deletePayments(Integer paymentId);
