@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Payments;
+import com.capgemini.flightbookingsystem.exceptions.PaymentNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.PaymentsRepository;
 
 @Service
@@ -21,7 +22,7 @@ public class PaymentsServiceImpl implements PaymentsService {
     @Override
     public Payments getPaymentById(Integer paymentId) {
         return paymentRepo.findById(paymentId)
-            .orElseThrow(() -> new RuntimeException("Payment not found with ID: " + paymentId));
+            .orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + paymentId));
     }
 
     @Override
@@ -37,7 +38,7 @@ public class PaymentsServiceImpl implements PaymentsService {
     @Override
     public Payments updatePayments(Integer paymentId, Payments paymentUpdates) {
         Payments existing = paymentRepo.findById(paymentId)
-            .orElseThrow(() -> new RuntimeException("Payment not found with ID: " + paymentId));
+            .orElseThrow(() -> new PaymentNotFoundException("Payment not found with ID: " + paymentId));
 
         if (paymentUpdates.getAmount() != null) {
             existing.setAmount(paymentUpdates.getAmount());
@@ -52,7 +53,7 @@ public class PaymentsServiceImpl implements PaymentsService {
     @Override
     public void deletePayments(Integer paymentId) {
         if (!paymentRepo.existsById(paymentId)) {
-            throw new RuntimeException("Payment not found with ID: " + paymentId);
+            throw new PaymentNotFoundException("Payment not found with ID: " + paymentId);
         }
         paymentRepo.deleteById(paymentId);
     }
