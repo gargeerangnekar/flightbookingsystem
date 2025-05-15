@@ -32,7 +32,7 @@ public class AirportControllerTest {
 	    void setUp() {
 	        MockitoAnnotations.openMocks(this);
 	        sampleAirport = new Airport();
-	        sampleAirport.setAirportId(1L);
+	        sampleAirport.setAirportId(1);
 	        sampleAirport.setAirportName("Test Airport");
 	        sampleAirport.setCity("Test City");
 	        sampleAirport.setContact(1234567890);
@@ -58,9 +58,9 @@ public class AirportControllerTest {
 	    
 	    @Test
 	    void testGetAirportById() {
-	        when(airportService.getAirportById(1L)).thenReturn(sampleAirport);
+	        when(airportService.getAirportById(1)).thenReturn(sampleAirport);
 
-	        ResponseEntity<Airport> response = airportController.getAirport(1L);
+	        ResponseEntity<Airport> response = airportController.getAirport(1);
 
 	        assertEquals(HttpStatus.OK, response.getStatusCode());
 	        assertEquals(sampleAirport, response.getBody());
@@ -80,14 +80,14 @@ public class AirportControllerTest {
 	    @Test
 	    void testUpdateAirport() {
 	        Airport updated = new Airport();
-	        updated.setAirportId(1L);
+	        updated.setAirportId(1);
 	        updated.setAirportName("Updated Airport");
 	        updated.setCity("New City");
 	        updated.setContact(987654321);
 
 	        when(airportService.updateAirport(any(Airport.class))).thenReturn(updated);
 
-	        ResponseEntity<Airport> response = airportController.updateAirport(1L, updated);
+	        ResponseEntity<Airport> response = airportController.updateAirport(1, updated);
 
 	        assertEquals(HttpStatus.OK, response.getStatusCode());
 	        assertEquals(updated, response.getBody());
@@ -95,9 +95,9 @@ public class AirportControllerTest {
 
 	    @Test
 	    void testDeleteAirport() {
-	        doNothing().when(airportService).deleteAirport(1L);
+	        doNothing().when(airportService).deleteAirport(1);
 
-	        ResponseEntity<Void> response = airportController.deleteAirport(1L);
+	        ResponseEntity<Void> response = airportController.deleteAirport(1);
 
 	        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 	    }
