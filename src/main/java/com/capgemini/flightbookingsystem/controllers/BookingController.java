@@ -44,6 +44,12 @@ public class BookingController {
 	@PostMapping
 	public ResponseEntity<Booking> addBooking(@Valid @RequestBody Booking booking, BindingResult result) {
 		log.info("Request received to create booking: {}", booking);
+
+		if (result.hasErrors()) {
+			log.warn("Validation failed for Booking {}:", result.getAllErrors());
+			throw new IllegalArgumentException("Cannot insert in Booking");
+		}
+
 		Booking saveBooking = bookingService.saveBooking(booking);
 		log.debug("Booking created with ID: {}", saveBooking.getBookingId());
 
@@ -61,8 +67,14 @@ public class BookingController {
 
 	@PutMapping("/update-booking/{id}")
 	public ResponseEntity<Booking> updateBooking(@Valid @RequestBody Booking booking,
-			@PathVariable("id") Integer bookingId) {
+			@PathVariable("id") Integer bookingId, BindingResult result) {
 		log.info("Request received to update booking for ID: ", bookingId);
+
+		if (result.hasErrors()) {
+			log.warn("Validation failed {}:", result.getAllErrors());
+			throw new IllegalArgumentException("Cannot update Booking");
+		}
+
 		Booking updatedBooking = bookingService.updateBooking(bookingId, booking);
 		log.debug("Booking updated for ID: ", updatedBooking.getBookingId());
 		return ResponseEntity.ok(updatedBooking);

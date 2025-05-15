@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
+import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
+import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
 import com.capgemini.flightbookingsystem.services.FlightService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +31,13 @@ public class FlightRestController{
 	
 	//Injecting service layer
 	FlightService flightService;
+	AirLineAdminRepository airLineAdminRepository;
+	
 
 	@Autowired
-	public FlightRestController(FlightService flightService) {
+	public FlightRestController(FlightService flightService, AirLineAdminRepository airLineAdminRepository) {
 		this.flightService = flightService;
+		this.airLineAdminRepository = airLineAdminRepository;
 	}
 	
 	@GetMapping
@@ -50,13 +56,31 @@ public class FlightRestController{
 		return ResponseEntity.status(HttpStatus.OK).body(flight);
 	}
 	
-	@PostMapping
+	@PostMapping(consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Flights> createFlight(@RequestBody Flights flight){
-		log.info("Creating new flight with data: {}", flight);
-		Flights newFlight = flightService.createNewFlight(flight);
-		log.debug("Flight created successfully with ID: {}", newFlight.getFlightId());
-		return ResponseEntity.status(HttpStatus.CREATED).body(newFlight);
+	    log.info("Creating new flight with data: {}", flight);
+
+	    Integer adminId = null;
+	    if (flight.getAirlineAdmin() != null) {
+	        adminId = flight.getAirlineAdmin().getAirlineAdminId();
+	    }
+
+	    if (adminId == null) {
+	        log.warn("AirlineAdmin ID not provided in request");
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	    }
+
+	    AirLineAdmin admin = airLineAdminRepository.findById(adminId)
+	            .orElseThrow(() -> new FlightNotFoundException("AirlineAdmin not found with"));
+
+	    flight.setAirlineAdmin(admin);
+
+	    Flights newFlight = flightService.createNewFlight(flight);
+	    log.debug("Flight created successfully with ID: {}", newFlight.getFlightId());
+
+	    return ResponseEntity.status(HttpStatus.CREATED).body(newFlight);
 	}
+
 	
 	@PutMapping("/{flightId}")
 	public ResponseEntity<Flights> updateFlight(@PathVariable Integer flightId ,@RequestBody Flights flight){
