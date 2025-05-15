@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler{
 
 	@ExceptionHandler(BookingNotFoundException.class)
 	public ResponseEntity<Object> handleBookingNotFound(BookingNotFoundException ex, HttpServletRequest request) {
