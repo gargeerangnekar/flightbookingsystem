@@ -1,6 +1,7 @@
 package com.capgemini.flightbookingsystem.entities;
 
-import java.util.List;
+
+
 
 
 import jakarta.persistence.Column;
@@ -10,28 +11,36 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 //6
 //Airport entity
 @Entity
 @Table(name = "airport_table")
 public class Airport {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "airport_id")
 	private Integer airportId;
 
 	@NotBlank(message = "airport name is mandatory")
+	@Size(min = 2, max = 100, message = "Airport name must be between 2 and 100 characters")
 	@Column(name = "airport_name")
 	private String airportName;
 
 	@NotBlank(message = "airport city is mandatory")
+	@Size(min = 2, max = 100, message = "City name must be between 2 and 100 characters")
 	@Column(name = "city")
 	private String city;
 
 	@NotNull(message = "airport contact is mandatory")
+	@Min(value = 1000000000, message = "Contact number must be at least 10 digits")
+	@Max(value = 9999999999L, message = "Contact number must be no more than 10 digits")
 	@Column(name = "contact")
 	private Integer contact;
 
@@ -40,13 +49,20 @@ public class Airport {
 		super();
 	}
 
-	public Airport(Integer airportId, String airportName, @NotBlank String city, @NotNull Integer contact) {
+
+
+	public Airport(Integer airportId,
+			@NotBlank(message = "airport name is mandatory") @Size(min = 2, max = 100, message = "Airport name must be between 2 and 100 characters") String airportName,
+			@NotBlank(message = "airport city is mandatory") @Size(min = 2, max = 100, message = "City name must be between 2 and 100 characters") String city,
+			@NotNull(message = "airport contact is mandatory") @Min(value = 1000000000, message = "Contact number must be at least 10 digits") @Max(value = 9999999999L, message = "Contact number must be no more than 10 digits") Integer contact) {
 		super();
 		this.airportId = airportId;
 		this.airportName = airportName;
 		this.city = city;
 		this.contact = contact;
 	}
+
+
 
 	public Integer getAirportId() {
 		return airportId;
