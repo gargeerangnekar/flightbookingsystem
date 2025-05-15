@@ -6,18 +6,20 @@ import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import jakarta.validation.Valid;
 import java.util.List;
 
 @Service
 @Slf4j
 public class AirLineAdminServiceImpl implements AirLineAdminService {
 
+    private final AirLineAdminRepository airLineAdminRepository;
+
     @Autowired
-    private AirLineAdminRepository airLineAdminRepository;
+    public AirLineAdminServiceImpl(AirLineAdminRepository airLineAdminRepository) {
+        this.airLineAdminRepository = airLineAdminRepository;
+    }
 
     @Override
     public List<AirLineAdmin> getAllAirlineAdmins() {
@@ -46,7 +48,7 @@ public class AirLineAdminServiceImpl implements AirLineAdminService {
         existingAdmin.setPassword(admin.getPassword());
         existingAdmin.setContactNumber(admin.getContactNumber());
         existingAdmin.setAirlineEmail(admin.getAirlineEmail());
-        // Optionally update flights or other properties
+        // Optionally update other properties
 
         return airLineAdminRepository.save(existingAdmin);
     }
