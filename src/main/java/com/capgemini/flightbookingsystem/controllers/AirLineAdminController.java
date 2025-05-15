@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/airline-admin")
+@RequestMapping("/airline-admin")
 public class AirLineAdminController {
 
     private final AirLineAdminService airLineAdminService;

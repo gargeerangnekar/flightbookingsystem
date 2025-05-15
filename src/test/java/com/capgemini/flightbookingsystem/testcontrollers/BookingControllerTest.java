@@ -89,9 +89,10 @@ class BookingControllerTest {
 	@DisplayName("Updating the booking and updated will be shown")
 	void testUpdateBooking() {
 		Booking updatedBooking = new Booking(3, "A1", "Business", LocalDateTime.now(), "Confirmed", 6000.0, null, null);
+		BindingResult bindingResult = mock(BindingResult.class);
 		when(bookingService.updateBooking(3, updatedBooking)).thenReturn(updatedBooking);
 
-		ResponseEntity<Booking> response = bookingController.updateBooking(updatedBooking, 3);
+		ResponseEntity<Booking> response = bookingController.updateBooking(updatedBooking, 3, bindingResult);
 
 		assertEquals(200, response.getStatusCode().value());
 		assertEquals(updatedBooking, response.getBody());
