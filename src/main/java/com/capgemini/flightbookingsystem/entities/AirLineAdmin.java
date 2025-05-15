@@ -52,8 +52,9 @@ public class AirLineAdmin {
     private String airlineEmail;
 
     @OneToMany(mappedBy = "airlineAdmin", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Flights> flights = new ArrayList<>();
+
+	@JsonManagedReference("airline")
+	List<Flights> flights = new ArrayList<>();
 
     public AirLineAdmin() {
         super();
