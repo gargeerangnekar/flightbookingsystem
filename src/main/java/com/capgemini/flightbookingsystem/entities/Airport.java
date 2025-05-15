@@ -13,13 +13,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "airport")
+@Table(name = "airport_table")
 public class Airport {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@NotNull(message = "airport id is mandatory")
 	@Column(name = "airport_id")
-	private Long airportId;
+	private Integer airportId;
 
 	@NotBlank(message = "airport name is mandatory")
 	@Column(name = "airport_name")
@@ -33,28 +33,26 @@ public class Airport {
 	@Column(name = "contact")
 	private Integer contact;
 
-	@OneToMany(mappedBy = "airport")
-	private List<Flights> flights;
+//	@OneToMany(mappedBy = "airport")
+//	private List<Flights> flights;
 
 	public Airport() {
 		super();
 	}
 
-	public Airport(@NotNull Long airportId, String airportName, @NotBlank String city, @NotNull Integer contact,
-			@NotNull List<Flights> flights) {
+	public Airport(@NotNull Integer airportId, String airportName, @NotBlank String city, @NotNull Integer contact) {
 		super();
 		this.airportId = airportId;
 		this.airportName = airportName;
 		this.city = city;
 		this.contact = contact;
-		this.flights = flights;
 	}
 
-	public Long getAirportId() {
+	public Integer getAirportId() {
 		return airportId;
 	}
 
-	public void setAirportId(Long airportId) {
+	public void setAirportId(Integer airportId) {
 		this.airportId = airportId;
 	}
 
@@ -82,18 +80,10 @@ public class Airport {
 		this.contact = contact;
 	}
 
-	public List<Flights> getFlights() {
-		return flights;
-	}
-
-	public void setFlights(List<Flights> flights) {
-		this.flights = flights;
-	}
-
 	@Override
 	public String toString() {
 		return "Airport [airportId=" + airportId + ", airportName=" + airportName + ", city=" + city + ", contact="
-				+ contact + ", flights=" + flights + "]";
+				+ contact;
 	}
 
 }
