@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.services.FlightService;
 
@@ -54,5 +55,10 @@ public class FlightRestController{
 	public ResponseEntity<Flights> deleteFlight(@PathVariable Integer flightId){
 		flightService.deleteFlight(flightId);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+	
+	@PutMapping("/{flightId}/bookings")
+	public ResponseEntity<Booking> createBookingForFlight(@PathVariable Integer flightId ,@RequestBody Booking booking){
+		return ResponseEntity.status(HttpStatus.CREATED).body(flightService.createBookingForFlight(flightId, booking));
 	}
 }
