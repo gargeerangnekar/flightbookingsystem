@@ -33,7 +33,6 @@ public class Flights {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "flight_id")
-	@NotNull
 	protected Integer flightId;
 
 	@Column(name = "flight_number")
