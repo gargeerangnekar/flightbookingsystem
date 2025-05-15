@@ -29,7 +29,7 @@ public class AirportController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Airport> getAirport(@PathVariable Long id) {
+	public ResponseEntity<Airport> getAirport(@PathVariable Integer id) {
 		Airport airport = airportService.getAirportById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(airport);
 	}
@@ -39,22 +39,16 @@ public class AirportController {
 		List<Airport> airports = airportService.getAllAirports();
 		return ResponseEntity.status(HttpStatus.OK).body(airports);
 	}
-	
-//	@GetMapping
-//	public ResponseEntity<List<Flights>> getAllFlightsByAirport(){
-//		List<Flights> flights = airportService.getAllFlightsByAirport();
-//		return flights;
-//	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Airport> updateAirport(@PathVariable Long id, @RequestBody Airport airportDetails) {
+	public ResponseEntity<Airport> updateAirport(@PathVariable Integer id, @RequestBody Airport airportDetails) {
 		airportDetails.setAirportId(id);
 		Airport updatedAirport = airportService.updateAirport(airportDetails);
 		return ResponseEntity.ok(updatedAirport);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteAirport(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteAirport(@PathVariable Integer id) {
 		airportService.deleteAirport(id);
 		return ResponseEntity.noContent().build();
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,7 @@ public class BookingController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Booking> addBooking(@Valid @RequestBody Booking booking) {
+	public ResponseEntity<Booking> addBooking(@Valid @RequestBody Booking booking, BindingResult result) {
 		log.info("Request received to create booking: {}", booking);
 		Booking saveBooking = bookingService.saveBooking(booking);
 		log.debug("Booking created with ID: {}", saveBooking.getBookingId());
