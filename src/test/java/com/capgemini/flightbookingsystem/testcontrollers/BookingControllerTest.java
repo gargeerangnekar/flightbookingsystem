@@ -22,7 +22,8 @@ import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
-public class BookingControllerTest {
+//2
+class BookingControllerTest {
 
 	@Mock
 	private BookingService bookingService;
