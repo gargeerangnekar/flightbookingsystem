@@ -13,8 +13,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-//16
 @Entity
 @Table(name = "airline_admin")
 public class AirLineAdmin {
@@ -24,19 +27,32 @@ public class AirLineAdmin {
     @Column(name = "airline_admin_id")
     private Integer airlineAdminId;
 
-    @Column(name = "airline_admin_name", nullable = false, length = 255)
+    @NotBlank(message = "Airline Admin name is required")
+    @Size(min = 2, max = 100, message = "Airline Admin name must be between 2 and 100 characters")
+    @Column(name = "airline_admin_name")
     private String airlineAdminName;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, max = 15, message = "Password must be at least 8 characters long")
+    @Pattern(
+        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$",
+        message = "Password must include upper and lower case letters, a number, and a special character"
+    )
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "contact_number", nullable = false, length = 45)
+    @NotBlank(message = "Contact number is required")
+    @Pattern(regexp = "^[0-9]{10,15}$", message = "Contact number must be 10 to 15 digits")
+    @Column(name = "contact_number")
     private String contactNumber;
 
-    @Column(name = "airline_email", nullable = false, length = 45)
+    @NotBlank(message = "Airline email is required")
+    @Email(message = "Enter a valid airline email")
+    @Column(name = "airline_email")
     private String airlineEmail;
-    
+
     @OneToMany(mappedBy = "airlineAdmin", cascade = CascadeType.ALL)
+
 	@JsonManagedReference("airline")
 	List<Flights> flights = new ArrayList<>();
 
@@ -93,9 +109,17 @@ public class AirLineAdmin {
         this.airlineEmail = airlineEmail;
     }
 
+    public List<Flights> getFlights() {
+        return flights;
+    }
+
+    public void setFlights(List<Flights> flights) {
+        this.flights = flights;
+    }
+
     @Override
     public String toString() {
-        return "AirlinesAdmin [airlineAdminId=" + airlineAdminId +
+        return "AirLineAdmin [airlineAdminId=" + airlineAdminId +
                ", airlineAdminName=" + airlineAdminName +
                ", contactNumber=" + contactNumber +
                ", airlineEmail=" + airlineEmail + "]";
