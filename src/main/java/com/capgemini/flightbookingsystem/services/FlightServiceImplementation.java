@@ -75,6 +75,9 @@ public class FlightServiceImplementation implements FlightService {
 
 	    if (flight.getStatus() != null)
 	        existingFlight.setStatus(flight.getStatus());
+	    
+	    if (flight.getAmount() != null)
+	        existingFlight.setAmount(flight.getAmount());
 
 	    if (flight.getAircraftModel() != null)
 	        existingFlight.setAircraftModel(flight.getAircraftModel());
