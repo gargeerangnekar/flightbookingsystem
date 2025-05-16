@@ -73,7 +73,7 @@ public class AirportController {
 		}
 		
 		airportDetails.setAirportId(id);
-		Airport updatedAirport = airportService.updateAirport(airportDetails);
+		Airport updatedAirport = airportService.updateAirport(airportDetails, id);
 		logger.debug("Airport updated successfully: {}", updatedAirport);
 		return ResponseEntity.ok(updatedAirport);
 

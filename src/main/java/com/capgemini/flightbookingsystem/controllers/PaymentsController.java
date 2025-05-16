@@ -16,36 +16,39 @@ import java.util.List;
 @RequestMapping("/payments")
 public class PaymentsController {
 
-    @Autowired
-    private PaymentsService paymentsService;
+	private PaymentsService paymentsService;
 
-    @GetMapping
-    public ResponseEntity<List<Payments>> getAllPayments() {
-        return ResponseEntity.ok(paymentsService.getAllPayments());
-    }
+	@Autowired
+	public PaymentsController(PaymentsService paymentsService) {
+		super();
+		this.paymentsService = paymentsService;
+	}
 
-    @GetMapping("/{paymentId}")
-    public ResponseEntity<Payments> getPaymentById(@PathVariable Integer paymentId) {
-        return ResponseEntity.ok(paymentsService.getPaymentById(paymentId));
-    }
+	@GetMapping
+	public ResponseEntity<List<Payments>> getAllPayments() {
+		return ResponseEntity.ok(paymentsService.getAllPayments());
+	}
 
-    @PostMapping
-    public ResponseEntity<Payments> createPayments(@RequestBody Payments payment) {
-        Payments created = paymentsService.savePayments(payment);
-        return ResponseEntity.status(201).body(created);
-    }
+	@GetMapping("/{paymentId}")
+	public ResponseEntity<Payments> getPaymentById(@PathVariable Integer paymentId) {
+		return ResponseEntity.ok(paymentsService.getPaymentById(paymentId));
+	}
 
-    @PutMapping("/{paymentId}")
-    public ResponseEntity<Payments> updatePayments(
-            @PathVariable Integer paymentId,
-            @RequestBody Payments updatedPayment
-    ) {
-        return ResponseEntity.ok(paymentsService.updatePayments(paymentId, updatedPayment));
-    }
+	@PostMapping
+	public ResponseEntity<Payments> createPayments(@RequestBody Payments payment) {
+		Payments created = paymentsService.savePayments(payment);
+		return ResponseEntity.status(201).body(created);
+	}
 
-    @DeleteMapping("/{paymentId}")
-    public ResponseEntity<Void> deletePayments(@PathVariable Integer paymentId) {
-        paymentsService.deletePayments(paymentId);
-        return ResponseEntity.noContent().build();
-    }
+	@PutMapping("/{paymentId}")
+	public ResponseEntity<Payments> updatePayments(@PathVariable Integer paymentId,
+			@RequestBody Payments updatedPayment) {
+		return ResponseEntity.ok(paymentsService.updatePayments(paymentId, updatedPayment));
+	}
+
+	@DeleteMapping("/{paymentId}")
+	public ResponseEntity<Void> deletePayments(@PathVariable Integer paymentId) {
+		paymentsService.deletePayments(paymentId);
+		return ResponseEntity.noContent().build();
+	}
 }

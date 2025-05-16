@@ -15,7 +15,7 @@ public class AirportEntityTest {
 		airport.setAirportId(1);
 		airport.setAirportName("Dubai International");
 		airport.setCity("Dubai");
-		airport.setContact(1234567890);
+		airport.setContact("1234567890");
 
 		assertEquals(1, airport.getAirportId());
 		assertEquals("Dubai International", airport.getAirportName());

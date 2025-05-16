@@ -72,9 +72,8 @@ public class AirLineAdminServiceImpl implements AirLineAdminService {
 
 	@Override
 	public AirLineAdmin findByAirlineEmail(String email) {
-		AirLineAdmin admin = airLineAdminRepository.findByAirlineEmail(email)
+		return airLineAdminRepository.findByAirlineEmail(email)
 				.orElseThrow(() -> new AirlineAdminNotFoundException("User doesn't exist with email :" + email));
-		return admin;
 	}
 
 }
