@@ -28,9 +28,7 @@ public class Booking {
 	private Integer bookingId;
 
 	@Column(name = "seat_number")
-
 	@NotNull(message = "Seat number cannot be empty")
-
 	private String seatNumber;
 
 	@Column(name = "seat_class")
@@ -38,14 +36,8 @@ public class Booking {
 	private String seatClass;
 
 	@Column(name = "booking_time")
-
 	@NotNull(message = "Booking time cannot be empty")
-
 	private LocalDateTime bookingTime;
-
-	@Column(name = "status")
-	@NotNull(message = "Booking Status cannot be empty")
-	private String status;
 
 	@Column(name = "amount")
 	@NotNull(message = "Booking amount cannot be empty")
@@ -66,11 +58,13 @@ public class Booking {
 	@JoinColumn(name = "flight_id")
 	private Flights flights;
 	
+	public Booking() {
+		
+	}
 
 	public Booking(Integer bookingId, @NotNull(message = "Seat number cannot be empty") String seatNumber,
 			@NotNull(message = "Seat Class cannot be empty") String seatClass,
 			@NotNull(message = "Booking time cannot be empty") LocalDateTime bookingTime,
-			@NotNull(message = "Booking Status cannot be empty") String status,
 			@NotNull(message = "Booking amount cannot be empty") @Positive(message = "Amount must be positive") Double amount,
 			User users, Payments payment, Flights flights) {
 		super();
@@ -78,7 +72,6 @@ public class Booking {
 		this.seatNumber = seatNumber;
 		this.seatClass = seatClass;
 		this.bookingTime = bookingTime;
-		this.status = status;
 		this.amount = amount;
 		this.users = users;
 		this.payment = payment;
@@ -117,14 +110,6 @@ public class Booking {
 		this.bookingTime = bookingTime;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public Double getAmount() {
 		return amount;
 	}
@@ -160,8 +145,8 @@ public class Booking {
 	@Override
 	public String toString() {
 		return "Booking [bookingId=" + bookingId + ", seatNumber=" + seatNumber + ", seatClass=" + seatClass
-				+ ", bookingTime=" + bookingTime + ", status=" + status + ", amount=" + amount + ", users=" + users
-				+ ", payment=" + payment + ", flights=" + flights + "]";
+				+ ", bookingTime=" + bookingTime + ", amount=" + amount + ", users=" + users + ", payment=" + payment
+				+ ", flights=" + flights + "]";
 	}
 
 }
