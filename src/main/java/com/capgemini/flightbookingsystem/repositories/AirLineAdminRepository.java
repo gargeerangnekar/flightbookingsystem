@@ -15,4 +15,5 @@ public interface AirLineAdminRepository extends JpaRepository<AirLineAdmin, Inte
 	boolean existsByContactNumber(String contactNumber);
 
 	Optional<AirLineAdmin> findByAirlineEmail(String email);
+
 }
