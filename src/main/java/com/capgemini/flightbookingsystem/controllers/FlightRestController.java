@@ -29,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 public class FlightRestController{
 	
 	
-	//Injecting service layer
 	FlightService flightService;
 	AirLineAdminRepository airLineAdminRepository;
 	
@@ -49,7 +48,7 @@ public class FlightRestController{
 	}
 	
 	@GetMapping("/{flightId}")
-	public ResponseEntity<Flights> getFlightById(@PathVariable Integer flightId){
+	public ResponseEntity<Flights> getFlightById(@PathVariable("flightId") Integer flightId){
 		log.info("Fetching flight with ID: {}", flightId);
 		Flights flight = flightService.getFlightById(flightId);
 		log.debug("Fetched flight details: {}", flight);
@@ -83,7 +82,7 @@ public class FlightRestController{
 
 	
 	@PutMapping("/{flightId}")
-	public ResponseEntity<Flights> updateFlight(@PathVariable Integer flightId ,@RequestBody Flights flight){
+	public ResponseEntity<Flights> updateFlight(@PathVariable("flightId") Integer flightId ,@RequestBody Flights flight){
 		log.info("Updating flight with ID: {} using data: {}", flightId, flight);
 		Flights updatedFlight = flightService.updateFlightById(flightId, flight);
 		log.debug("User with ID {} updated successfully to: {}", flightId, updatedFlight);
@@ -91,7 +90,7 @@ public class FlightRestController{
 	}
 	
 	@DeleteMapping("/{flightId}")
-	public ResponseEntity<Flights> deleteFlight(@PathVariable Integer flightId){
+	public ResponseEntity<Flights> deleteFlight(@PathVariable("flightId") Integer flightId){
 		log.info("Deleting flight with ID: {}", flightId);
 		flightService.deleteFlight(flightId);
 		log.debug("Flight with ID {} deleted successfully", flightId);
@@ -99,7 +98,7 @@ public class FlightRestController{
 	}
 	
 	@PutMapping("/{flightId}/bookings")
-	public ResponseEntity<Booking> createBookingForFlight(@PathVariable Integer flightId ,@RequestBody Booking booking){
+	public ResponseEntity<Booking> createBookingForFlight(@PathVariable("flightId") Integer flightId ,@RequestBody Booking booking){
 		log.info("Creating booking for flight ID: {} with booking details: {}", flightId, booking);
 		Booking createdBooking = flightService.createBookingForFlight(flightId, booking);
 		log.debug("Booking created successfully for flight ID: {} with booking ID: {}", flightId, createdBooking.getBookingId());
