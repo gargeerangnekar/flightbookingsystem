@@ -19,9 +19,9 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/payments")
 public class PaymentsController {
-
-    @Autowired
-    private PaymentsService paymentsService;
+	
+	@Autowired
+	private PaymentsService paymentsService;
 
     @GetMapping
     public ResponseEntity<List<Payments>> getAllPayments() {
@@ -68,3 +68,4 @@ public class PaymentsController {
         return ResponseEntity.noContent().build();
     }
 }
+
