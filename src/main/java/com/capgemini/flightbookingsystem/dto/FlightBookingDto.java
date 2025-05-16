@@ -8,6 +8,8 @@ public class FlightBookingDto {
 	private Integer arrivalAirportId;
 	private String departureAirportName;
 	private String arrivalAirportName;
+	private String departureCity;
+	private String arrivalCity;
 	private LocalDateTime departureTime;
 	private LocalDateTime arrivalTime;
 	private Double amount;
@@ -17,12 +19,15 @@ public class FlightBookingDto {
 	}
 
 	public FlightBookingDto(Integer departureAirportId, Integer arrivalAirportId, String departureAirportName,
-			String arrivalAirportName, LocalDateTime departureTime, LocalDateTime arrivalTime, Double amount) {
+			String arrivalAirportName, String departureCity, String arrivalCity, LocalDateTime departureTime,
+			LocalDateTime arrivalTime, Double amount) {
 		super();
 		this.departureAirportId = departureAirportId;
 		this.arrivalAirportId = arrivalAirportId;
 		this.departureAirportName = departureAirportName;
 		this.arrivalAirportName = arrivalAirportName;
+		this.departureCity = departureCity;
+		this.arrivalCity = arrivalCity;
 		this.departureTime = departureTime;
 		this.arrivalTime = arrivalTime;
 		this.amount = amount;
@@ -84,11 +89,28 @@ public class FlightBookingDto {
 		this.amount = amount;
 	}
 
+	public String getDepartureCity() {
+		return departureCity;
+	}
+
+	public void setDepartureCity(String departureCity) {
+		this.departureCity = departureCity;
+	}
+
+	public String getArrivalCity() {
+		return arrivalCity;
+	}
+
+	public void setArrivalCity(String arrivalCity) {
+		this.arrivalCity = arrivalCity;
+	}
+
 	@Override
 	public String toString() {
 		return "FlightBookingDto [departureAirportId=" + departureAirportId + ", arrivalAirportId=" + arrivalAirportId
 				+ ", departureAirportName=" + departureAirportName + ", arrivalAirportName=" + arrivalAirportName
-				+ ", departureTime=" + departureTime + ", arrivalTime=" + arrivalTime + ", amount=" + amount + "]";
+				+ ", departureCity=" + departureCity + ", arrivalCity=" + arrivalCity + ", departureTime="
+				+ departureTime + ", arrivalTime=" + arrivalTime + ", amount=" + amount + "]";
 	}
 
 }

@@ -14,11 +14,13 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 	
 	@Query("SELECT new com.capgemini.flightbookingsystem.dto.FlightBookingDto(" +
 		       "f.departureAirportId, f.arrivalAirportId, " +
-		       "dep.airportName, arr.airportName, " +
+		       "dep.airportName, arr.airportName, "
+		       + "dep.city, arr.city, " +
 		       "f.departureTime, f.arrivalTime, f.amount) " +
 		       "FROM Flights f " +
 		       "JOIN Airport dep ON f.departureAirportId = dep.airportId " +
-		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId")
+		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId "
+		       )
 		List<FlightBookingDto> getAllBookingDto();
 
 
