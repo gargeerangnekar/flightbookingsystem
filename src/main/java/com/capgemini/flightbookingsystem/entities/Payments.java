@@ -22,14 +22,6 @@ public class Payments {
 	@PastOrPresent(message = "Payment date cannot be in the future")
 	private LocalDateTime paymentDatetime;
 
-	@NotNull(message = "Booking ID is required")
-	@Positive(message = "Booking ID must be a positive number")
-	private Integer bookingId;
-
-	@NotNull(message = "User ID is required")
-	@Positive(message = "User ID must be a positive number")
-	private Integer userId;
-
 	public Integer getPaymentId() {
 		return paymentId;
 	}
@@ -54,26 +46,8 @@ public class Payments {
 		this.paymentDatetime = paymentDatetime;
 	}
 
-	public Integer getBookingId() {
-		return bookingId;
-	}
-
-	public void setBookingId(Integer bookingId) {
-		this.bookingId = bookingId;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
 	@Override
 	public String toString() {
-		return "Payments [paymentId=" + paymentId + ", amount=" + amount + ", paymentDatetime=" + paymentDatetime
-				+ ", bookingId=" + bookingId + ", userId=" + userId + "]";
+		return "Payments [paymentId=" + paymentId + ", amount=" + amount + ", paymentDatetime=" + paymentDatetime + "]";
 	}
-//Checking Push
 }
