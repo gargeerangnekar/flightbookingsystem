@@ -46,7 +46,7 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public Airport updateAirport(Airport airport) {
+    public Airport updateAirport(Airport airport, Integer airportId) {
         logger.info("Updating airport with ID: {}", airport.getAirportId());
 
         Airport existingAirport = airportRepository.findById(airport.getAirportId())
