@@ -58,17 +58,17 @@ public class BookingController {
 		return ResponseEntity.created(URI.create("/bookings/" + saveBooking.getBookingId())).body(saveBooking);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<Booking> getBookingById(@PathVariable("id") Integer bookingId) {
+	@GetMapping("/{bookingId}")
+	public ResponseEntity<Booking> getBookingById(@PathVariable("bookingId") Integer bookingId) {
 		log.info("Request recieved to get booking with ID: ", bookingId);
 		Booking booking = bookingService.getBookingById(bookingId);
 		log.debug("Booking fethced :{}", booking);
 		return ResponseEntity.ok(booking);
 	}
 
-	@PutMapping("/update-booking/{id}")
+	@PutMapping("/update-booking/{bookingId}")
 	public ResponseEntity<Booking> updateBooking(@Valid @RequestBody Booking booking,
-			@PathVariable("id") Integer bookingId, BindingResult result) {
+			@PathVariable("bookingId") Integer bookingId, BindingResult result) {
 		log.info("Request received to update booking for ID: ", bookingId);
 
 		if (result.hasErrors()) {
@@ -81,8 +81,8 @@ public class BookingController {
 		return ResponseEntity.ok(updatedBooking);
 	}
 
-	@DeleteMapping("{id}")
-	public ResponseEntity<Booking> deleteBooking(@PathVariable("id") Integer bookingId) {
+	@DeleteMapping("{bookingId}")
+	public ResponseEntity<Booking> deleteBooking(@PathVariable("bookingId") Integer bookingId) {
 		log.info("Booking deleted with ID :", bookingId);
 		bookingService.deleteBooking(bookingId);
 		log.info("Booking deleted successfully for ID: ", bookingId);
@@ -90,8 +90,8 @@ public class BookingController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<Booking> patchBooking(@PathVariable("id") Integer bookingId,
+	@PatchMapping("/{bookingId}")
+	public ResponseEntity<Booking> patchBooking(@PathVariable("bookingId") Integer bookingId,
 			@Valid @RequestBody Booking booking, BindingResult result) {
 		if (result.hasErrors()) {
 			log.warn("Validation failed for patch: {}", result.getAllErrors());
