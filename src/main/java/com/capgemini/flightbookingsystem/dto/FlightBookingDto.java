@@ -6,7 +6,8 @@ public class FlightBookingDto {
 
 	private Integer departureAirportId;
 	private Integer arrivalAirportId;
-	private String airportName;
+	private String departureAirportName;
+	private String arrivalAirportName;
 	private LocalDateTime departureTime;
 	private LocalDateTime arrivalTime;
 	private Double amount;
@@ -15,12 +16,13 @@ public class FlightBookingDto {
 
 	}
 
-	public FlightBookingDto(Integer departureAirportId, Integer arrivalAirportId, String airportName,
-			LocalDateTime departureTime, LocalDateTime arrivalTime, Double amount) {
+	public FlightBookingDto(Integer departureAirportId, Integer arrivalAirportId, String departureAirportName,
+			String arrivalAirportName, LocalDateTime departureTime, LocalDateTime arrivalTime, Double amount) {
 		super();
 		this.departureAirportId = departureAirportId;
 		this.arrivalAirportId = arrivalAirportId;
-		this.airportName = airportName;
+		this.departureAirportName = departureAirportName;
+		this.arrivalAirportName = arrivalAirportName;
 		this.departureTime = departureTime;
 		this.arrivalTime = arrivalTime;
 		this.amount = amount;
@@ -42,12 +44,20 @@ public class FlightBookingDto {
 		this.arrivalAirportId = arrivalAirportId;
 	}
 
-	public String getAirportName() {
-		return airportName;
+	public String getDepartureAirportName() {
+		return departureAirportName;
 	}
 
-	public void setAirportName(String airportName) {
-		this.airportName = airportName;
+	public void setDepartureAirportName(String departureAirportName) {
+		this.departureAirportName = departureAirportName;
+	}
+
+	public String getArrivalAirportName() {
+		return arrivalAirportName;
+	}
+
+	public void setArrivalAirportName(String arrivalAirportName) {
+		this.arrivalAirportName = arrivalAirportName;
 	}
 
 	public LocalDateTime getDepartureTime() {
@@ -77,8 +87,8 @@ public class FlightBookingDto {
 	@Override
 	public String toString() {
 		return "FlightBookingDto [departureAirportId=" + departureAirportId + ", arrivalAirportId=" + arrivalAirportId
-				+ ", airportName=" + airportName + ", departureTime=" + departureTime + ", arrivalTime=" + arrivalTime
-				+ ", amount=" + amount + "]";
+				+ ", departureAirportName=" + departureAirportName + ", arrivalAirportName=" + arrivalAirportName
+				+ ", departureTime=" + departureTime + ", arrivalTime=" + arrivalTime + ", amount=" + amount + "]";
 	}
 
 }
