@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.entities.Payments;
@@ -118,7 +119,7 @@ public class BookingServiceImpl implements BookingService {
 			existing.setSeatNumber(booking.getSeatNumber());
 			log.debug("Updated seat number to: {}", booking.getSeatNumber());
 		}
-		
+
 		if (booking.getSeatClass() != null) {
 			existing.setSeatClass(booking.getSeatClass());
 			log.debug("Updated seat class to: {}", booking.getSeatClass());
@@ -139,5 +140,10 @@ public class BookingServiceImpl implements BookingService {
 		Booking updated = bookingRepository.save(existing);
 		log.debug("booking with ID {} patched successfully", bookingId);
 		return updated;
+	}
+
+	@Override
+	public List<FlightBookingDto> getAllFlights() {
+		return bookingRepository.getALLBookingDto();
 	}
 }

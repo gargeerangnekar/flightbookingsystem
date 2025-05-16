@@ -34,8 +34,6 @@ class PaymentsControllerTest {
         samplePayment.setPaymentId(1);
         samplePayment.setAmount(12500.0);
         samplePayment.setPaymentDatetime(LocalDateTime.of(2025, 6, 1, 15, 0));
-        samplePayment.setBookingId(10);
-        samplePayment.setUserId(1);
     }
 
     @Test
