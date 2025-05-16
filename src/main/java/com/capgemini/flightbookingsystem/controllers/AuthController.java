@@ -69,8 +69,11 @@ public class AuthController {
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			claims.put("email", user.getEmail());
+			claims.put("phone",user.getPhoneNumber());
+			claims.put("name", user.getName());
 			claims.put("userId", user.getUserId());
 			claims.put("userType", "USER");
+			claims.put("passPort", user.getPassportNumber());
 			role = "ROLE_USER";
 
 		} else {
@@ -78,8 +81,10 @@ public class AuthController {
 			if (optionalAdmin.isPresent()) {
 				AirLineAdmin admin = optionalAdmin.get();
 				claims.put("email", admin.getAirlineEmail());
+				claims.put("name", admin.getAirlineAdminName());
 				claims.put("userId", admin.getAirlineAdminId());
 				claims.put("userType", "ADMIN");
+				claims.put("phone",admin.getContactNumber());
 				role = "ROLE_ADMIN";
 			} else {
 				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
