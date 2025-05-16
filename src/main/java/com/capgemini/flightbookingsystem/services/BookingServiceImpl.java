@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.entities.User;
 import com.capgemini.flightbookingsystem.exceptions.BookingNotFoundException;
+import com.capgemini.flightbookingsystem.exceptions.UserNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -72,5 +74,46 @@ public class BookingServiceImpl implements BookingService {
 			log.warn("Booking not found with ID ", bookingId);
 			return new BookingNotFoundException("Booking not found with ID :" + bookingId);
 		});
+	}
+
+	@Override
+	public Booking patchBooking(Integer bookingId, Booking booking) {
+		log.info("Patching boking with ID: {}", bookingId);
+		Booking existing = bookingRepository.findById(bookingId).orElseThrow(() -> {
+			log.warn("booking not found for patch with ID: {}", bookingId);
+			return new BookingNotFoundException("Patch :Booking not found with Id : " + bookingId);
+		});
+		if (booking.getAmount() != null) {
+			existing.setAmount(booking.getAmount());
+			log.debug("Updated amount to: {}", booking.getAmount());
+		}
+		if (booking.getStatus() != null) {
+			existing.setStatus(booking.getStatus());
+			log.debug("Updated status to: {}", booking.getStatus());
+		}
+		if (booking.getSeatNumber() != null) {
+			existing.setSeatNumber(booking.getSeatNumber());
+			log.debug("Updated seat number to: {}", booking.getSeatNumber());
+		}
+		if (booking.getSeatClass() != null) {
+			existing.setSeatClass(booking.getSeatClass());
+			log.debug("Updated seat class to: {}", booking.getSeatClass());
+		}
+		if (booking.getBookingTime() != null) {
+			existing.setBookingTime(booking.getBookingTime());
+			log.debug("Updated booking time to: {}", booking.getBookingTime());
+		}
+		if (booking.getUsers() != null) {
+			existing.setUsers(booking.getUsers());
+			log.debug("Updated user to: {}", booking.getUsers().getUserId());
+		}
+		if (booking.getFlights() != null) {
+			existing.setFlights(booking.getFlights());
+			log.debug("Updated flight to: {}", booking.getFlights().getFlightId());
+		}
+
+		Booking updated = bookingRepository.save(existing);
+		log.debug("booking with ID {} patched successfully", bookingId);
+		return updated;
 	}
 }

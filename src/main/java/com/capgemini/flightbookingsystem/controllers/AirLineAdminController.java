@@ -30,7 +30,6 @@ public class AirLineAdminController {
 		this.airLineAdminService = airLineAdminService;
 	}
 
-	// Get all admins
 	@GetMapping
 	public ResponseEntity<List<AirLineAdmin>> getAllAdmins() {
 		log.info("Fetching all airline admins");
@@ -39,16 +38,14 @@ public class AirLineAdminController {
 		return ResponseEntity.ok(admins);
 	}
 
-	// Get admin by ID
 	@GetMapping("/{adminId}")
-	public ResponseEntity<AirLineAdmin> getAdminById(@PathVariable Integer adminId) {
+	public ResponseEntity<AirLineAdmin> getAdminById(@PathVariable("adminId") Integer adminId) {
 		log.info("Fetching airline admin with ID: {}", adminId);
 		AirLineAdmin admin = airLineAdminService.getAirlineAdminById(adminId);
 		log.debug("Fetched airline admin details: {}", admin);
 		return ResponseEntity.ok(admin);
 	}
 
-	// Create new admin
 	@PostMapping
 	public ResponseEntity<?> createAdmin(@Valid @RequestBody AirLineAdmin admin, BindingResult result) {
 		log.info("Creating new airline admin: {}", admin);
@@ -66,9 +63,8 @@ public class AirLineAdminController {
 		return ResponseEntity.created(URI.create("/api/airline-admin/" + saved.getAirlineAdminId())).body(saved);
 	}
 
-	// Update existing admin
 	@PutMapping("/{adminId}")
-	public ResponseEntity<?> updateAdmin(@PathVariable Integer adminId, @Valid @RequestBody AirLineAdmin admin,
+	public ResponseEntity<?> updateAdmin(@PathVariable("adminId") Integer adminId, @Valid @RequestBody AirLineAdmin admin,
 			BindingResult result) {
 		log.info("Updating airline admin with ID: {} using data: {}", adminId, admin);
 
@@ -84,18 +80,16 @@ public class AirLineAdminController {
 		return ResponseEntity.ok(updated);
 	}
 
-	// Delete admin by ID
 	@DeleteMapping("/{adminId}")
-	public ResponseEntity<String> deleteAdmin(@PathVariable Integer adminId) {
+	public ResponseEntity<String> deleteAdmin(@PathVariable("adminId") Integer adminId) {
 		log.info("Deleting airline admin with ID: {}", adminId);
 		airLineAdminService.deleteAdmin(adminId);
 		log.debug("Airline admin with ID {} deleted successfully", adminId);
 		return ResponseEntity.ok("Airline admin deleted successfully");
 	}
 
-	// Check if email exists
 	@GetMapping("/check-email/{email}")
-	public ResponseEntity<Map<String, Boolean>> checkEmailExists(@PathVariable String email) {
+	public ResponseEntity<Map<String, Boolean>> checkEmailExists(@PathVariable("email") String email) {
 		log.info("Checking if email exists: {}", email);
 		boolean exists = airLineAdminService.existsByAirlineEmail(email);
 		Map<String, Boolean> response = new HashMap<>();
@@ -103,9 +97,8 @@ public class AirLineAdminController {
 		return ResponseEntity.ok(response);
 	}
 
-	// Check if contact number exists
 	@GetMapping("/check-contact/{contactNumber}")
-	public ResponseEntity<Map<String, Boolean>> checkContactExists(@PathVariable String contactNumber) {
+	public ResponseEntity<Map<String, Boolean>> checkContactExists(@PathVariable("contactNumber") String contactNumber) {
 		log.info("Checking if contact number exists: {}", contactNumber);
 		boolean exists = airLineAdminService.existsByContactNumber(contactNumber);
 		Map<String, Boolean> response = new HashMap<>();

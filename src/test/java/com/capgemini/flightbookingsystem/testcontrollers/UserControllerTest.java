@@ -60,7 +60,7 @@ public class UserControllerTest {
 
 		when(userService.createUser(user1)).thenReturn(user1);
 
-		ResponseEntity<?> response = userController.createUser(user1, bindingResult);
+		ResponseEntity<User> response = userController.createUser(user1, bindingResult);
 
 		assertEquals(201, response.getStatusCode().value());
 		assertNotNull(response.getBody());
@@ -90,7 +90,7 @@ public class UserControllerTest {
 
 		when(userService.putUser(1, updatedUser)).thenReturn(updatedUser);
 
-		ResponseEntity<?> response = userController.updateUser(1, updatedUser, bindingResult);
+		ResponseEntity<User> response = userController.updateUser(1, updatedUser, bindingResult);
 
 		assertEquals(200, response.getStatusCode().value());
 
