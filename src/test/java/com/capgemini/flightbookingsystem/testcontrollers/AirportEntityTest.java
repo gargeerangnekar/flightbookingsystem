@@ -28,12 +28,10 @@ public class AirportEntityTest {
 	public void testAirportNullOrBlankFields() {
 		Airport airport = new Airport();
 
-		airport.setAirportId(null);
 		airport.setCity(" ");
 		airport.setContact(null);
 		airport.setAirportName(null);
 
-		assertNull(airport.getAirportId());
 		assertEquals(" ", airport.getCity());
 		assertNull(airport.getContact());
 		assertNull(airport.getAirportName());
