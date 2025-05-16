@@ -46,7 +46,6 @@ public class AirportControllerTest {
 	    }
 	    
 	    @Test
-	    @DisplayName("save airport")
 	    void testCreateAirport() {
 	        when(airportService.saveAirport(any(Airport.class))).thenReturn(sampleAirport);
 
