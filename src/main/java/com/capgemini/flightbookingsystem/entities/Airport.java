@@ -33,11 +33,11 @@ public class Airport {
 	@Column(name = "city")
 	private String city;
 
-	@NotNull(message = "airport contact is mandatory")
+	@NotBlank(message = "airport contact is mandatory")
 	@Min(value = 1000000000, message = "Contact number must be at least 10 digits")
 	@Max(value = 9999999999L, message = "Contact number must be no more than 10 digits")
 	@Column(name = "contact")
-	private Integer contact;
+	private String contact;
 
 	public Airport() {
 		super();
@@ -46,7 +46,7 @@ public class Airport {
 	public Airport(Integer airportId,
 			@NotBlank(message = "airport name is mandatory") @Size(min = 2, max = 100, message = "Airport name must be between 2 and 100 characters") String airportName,
 			@NotBlank(message = "airport city is mandatory") @Size(min = 2, max = 100, message = "City name must be between 2 and 100 characters") String city,
-			@NotNull(message = "airport contact is mandatory") @Min(value = 1000000000, message = "Contact number must be at least 10 digits") @Max(value = 9999999999L, message = "Contact number must be no more than 10 digits") Integer contact) {
+			@NotBlank(message = "airport contact is mandatory") @Min(value = 1000000000, message = "Contact number must be at least 10 digits") @Max(value = 9999999999L, message = "Contact number must be no more than 10 digits") String contact) {
 		super();
 		this.airportId = airportId;
 		this.airportName = airportName;
@@ -78,11 +78,11 @@ public class Airport {
 		this.city = city;
 	}
 
-	public Integer getContact() {
+	public String getContact() {
 		return contact;
 	}
 
-	public void setContact(Integer contact) {
+	public void setContact(String contact) {
 		this.contact = contact;
 	}
 
