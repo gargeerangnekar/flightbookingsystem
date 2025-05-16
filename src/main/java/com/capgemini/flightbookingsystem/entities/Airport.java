@@ -1,9 +1,5 @@
 package com.capgemini.flightbookingsystem.entities;
 
-
-
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,12 +13,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-//6
-//Airport entity
+
 @Entity
 @Table(name = "airport_table")
 public class Airport {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "airport_id")
@@ -44,12 +39,9 @@ public class Airport {
 	@Column(name = "contact")
 	private Integer contact;
 
-
 	public Airport() {
 		super();
 	}
-
-
 
 	public Airport(Integer airportId,
 			@NotBlank(message = "airport name is mandatory") @Size(min = 2, max = 100, message = "Airport name must be between 2 and 100 characters") String airportName,
@@ -61,8 +53,6 @@ public class Airport {
 		this.city = city;
 		this.contact = contact;
 	}
-
-
 
 	public Integer getAirportId() {
 		return airportId;
