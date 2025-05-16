@@ -1,49 +1,52 @@
 package com.capgemini.flightbookingsystem.entities;
 
-import java.util.List;
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-//6
-//Airport entity
+
 @Entity
 @Table(name = "airport_table")
 public class Airport {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull(message = "airport id is mandatory")
 	@Column(name = "airport_id")
 	private Integer airportId;
 
 	@NotBlank(message = "airport name is mandatory")
+	@Size(min = 2, max = 100, message = "Airport name must be between 2 and 100 characters")
 	@Column(name = "airport_name")
 	private String airportName;
 
 	@NotBlank(message = "airport city is mandatory")
+	@Size(min = 2, max = 100, message = "City name must be between 2 and 100 characters")
 	@Column(name = "city")
 	private String city;
 
-	@NotNull(message = "airport contact is mandatory")
+	@NotBlank(message = "airport contact is mandatory")
+	@Min(value = 1000000000, message = "Contact number must be at least 10 digits")
+	@Max(value = 9999999999L, message = "Contact number must be no more than 10 digits")
 	@Column(name = "contact")
-	private Integer contact;
-
-//	@OneToMany(mappedBy = "airport")
-//	private List<Flights> flights;
+	private String contact;
 
 	public Airport() {
 		super();
 	}
 
-	public Airport(@NotNull Integer airportId, String airportName, @NotBlank String city, @NotNull Integer contact) {
+	public Airport(Integer airportId,
+			@NotBlank(message = "airport name is mandatory") @Size(min = 2, max = 100, message = "Airport name must be between 2 and 100 characters") String airportName,
+			@NotBlank(message = "airport city is mandatory") @Size(min = 2, max = 100, message = "City name must be between 2 and 100 characters") String city,
+			@NotBlank(message = "airport contact is mandatory") @Min(value = 1000000000, message = "Contact number must be at least 10 digits") @Max(value = 9999999999L, message = "Contact number must be no more than 10 digits") String contact) {
 		super();
 		this.airportId = airportId;
 		this.airportName = airportName;
@@ -75,11 +78,11 @@ public class Airport {
 		this.city = city;
 	}
 
-	public Integer getContact() {
+	public String getContact() {
 		return contact;
 	}
 
-	public void setContact(Integer contact) {
+	public void setContact(String contact) {
 		this.contact = contact;
 	}
 

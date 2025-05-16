@@ -17,6 +17,6 @@ public interface BookingService {
 
 	void deleteBooking(Integer bookingId);
 	
-//	Booking patchBooking(Integer bookingId, Booking booking);
+	Booking patchBooking(Integer bookingId, Booking booking);
 
 }
