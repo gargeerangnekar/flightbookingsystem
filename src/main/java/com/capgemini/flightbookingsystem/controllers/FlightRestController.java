@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
 import com.capgemini.flightbookingsystem.services.FlightService;
 
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -56,8 +58,8 @@ public class FlightRestController{
 		return ResponseEntity.status(HttpStatus.OK).body(flight);
 	}
 	
-	@PostMapping(consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Flights> createFlight(@RequestBody Flights flight){
+	@PostMapping
+	public ResponseEntity<Flights> createFlight(@Valid @RequestBody Flights flight, BindingResult result){
 	    log.info("Creating new flight with data: {}", flight);
 
 	    Integer adminId = null;
@@ -83,7 +85,7 @@ public class FlightRestController{
 
 	
 	@PutMapping("/{flightId}")
-	public ResponseEntity<Flights> updateFlight(@PathVariable Integer flightId ,@RequestBody Flights flight){
+	public ResponseEntity<Flights> updateFlight(@PathVariable Integer flightId ,@Valid @RequestBody Flights flight){
 		log.info("Updating flight with ID: {} using data: {}", flightId, flight);
 		Flights updatedFlight = flightService.updateFlightById(flightId, flight);
 		log.debug("User with ID {} updated successfully to: {}", flightId, updatedFlight);
@@ -98,7 +100,7 @@ public class FlightRestController{
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
-	@PutMapping("/{flightId}/bookings")
+	@PostMapping("/{flightId}/bookings")
 	public ResponseEntity<Booking> createBookingForFlight(@PathVariable Integer flightId ,@RequestBody Booking booking){
 		log.info("Creating booking for flight ID: {} with booking details: {}", flightId, booking);
 		Booking createdBooking = flightService.createBookingForFlight(flightId, booking);
