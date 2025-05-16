@@ -9,6 +9,7 @@ import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
 import com.capgemini.flightbookingsystem.exceptions.UserNotFoundException;
+import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.repositories.FlightRepository;
 
 import jakarta.validation.Valid;
@@ -21,10 +22,12 @@ public class FlightServiceImplementation implements FlightService {
 	
 	//Injecting repository
 	FlightRepository flightRepository;
+	BookingRepository bookingRepository;
 	
 	@Autowired
-	public FlightServiceImplementation(FlightRepository flightRepository) {
+	public FlightServiceImplementation(FlightRepository flightRepository, BookingRepository bookingRepository) {
 		this.flightRepository = flightRepository;
+		this.bookingRepository = bookingRepository;
 	}
 
 	@Override
@@ -114,8 +117,9 @@ public class FlightServiceImplementation implements FlightService {
 		booking.setFlights(flight);
 		flight.getBookings().add(booking);
 		flightRepository.save(flight);
+		Booking savedBooking = bookingRepository.save(booking);
 		log.debug("Booking successfully created for flight ID: {}", flightId);
-		return booking;
+		return savedBooking;
 	}
 
 }
