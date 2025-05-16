@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
+//Test 
 class FlightControllerTest {
 
     @Mock
