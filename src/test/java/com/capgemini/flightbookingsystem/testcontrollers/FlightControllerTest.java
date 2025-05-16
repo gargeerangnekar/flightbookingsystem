@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
+//Test 
 class FlightControllerTest {
 
 	@Mock
@@ -37,19 +38,20 @@ class FlightControllerTest {
 	void setUpFlight() {
 		MockitoAnnotations.openMocks(this);
 		flight1 = new Flights(1, "AI202", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), "Boeing 737", 180, 1, 3);
+				LocalDateTime.parse("2025-06-01T13:45:00"),5000.0, "Boeing 737", 180, 1, 3);
 		flight2 = new Flights(2, "BJ301", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), "Boeing 737", 180, 2, 3);
+				LocalDateTime.parse("2025-06-01T13:45:00"), 2000.0,"Boeing 737", 180, 2, 3);
 	}
 
-	// 1. Test Case for POST Mapping
-	@Test
-	@DisplayName("Test to create a flight")
-	void testCreateFlight() {
-		BindingResult bindingResult = mock(BindingResult.class);
-		when(flightService.createNewFlight(flight1)).thenReturn(flight1);
-		ResponseEntity<Flights> response = flightRestController.createFlight(flight1, bindingResult);
-		assertEquals(201, response.getStatusCode().value());
+    
+    //1. Test Case for POST Mapping
+    @Test
+    @DisplayName("Test to create a flight")
+    void testCreateFlight() {
+    	BindingResult bindingResult = mock(BindingResult.class);
+    	when(flightService.createNewFlight(flight1)).thenReturn(flight1);
+        ResponseEntity<Flights> response = flightRestController.createFlight(flight1, bindingResult);
+        assertEquals(201, response.getStatusCode().value());
 		assertEquals(flight1, response.getBody());
 	}
 
@@ -77,16 +79,17 @@ class FlightControllerTest {
 		assertEquals(200, response.getStatusCode().value());
 		assertEquals(1, response.getBody().getFlightId());
 	}
-
-	// 4. Test Case for PUT Mapping
-	@Test
-	@DisplayName("Test to update a flight")
-	void testUpdateFlight() {
-		Flights updateFlight = new Flights(3, "CL507", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), "Boeing 737", 200, 1, 1);
-		when(flightService.updateFlightById(3, updateFlight)).thenReturn(updateFlight);
-		ResponseEntity<Flights> response = flightRestController.updateFlight(3, updateFlight);
-		assertEquals(200, response.getStatusCode().value());
+    
+    
+    //4. Test Case for PUT Mapping
+    @Test
+    @DisplayName("Test to update a flight")
+    void testUpdateFlight() {
+    	Flights updateFlight = new Flights(3, "CL507", LocalDateTime.parse("2025-06-01T10:30:00"), LocalDateTime.parse("2025-06-01T13:45:00"),
+               21000.0,"Boeing 737",200, 1, 1);
+        when(flightService.updateFlightById(3, updateFlight)).thenReturn(updateFlight);
+        ResponseEntity<Flights> response = flightRestController.updateFlight(3, updateFlight);
+        assertEquals(200, response.getStatusCode().value());
 		assertEquals(updateFlight, response.getBody());
 	}
 
