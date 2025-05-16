@@ -1,14 +1,19 @@
 package com.capgemini.flightbookingsystem.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.entities.Flights;
+import com.capgemini.flightbookingsystem.entities.Payments;
 import com.capgemini.flightbookingsystem.entities.User;
 import com.capgemini.flightbookingsystem.exceptions.BookingNotFoundException;
 import com.capgemini.flightbookingsystem.exceptions.UserNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
+import com.capgemini.flightbookingsystem.repositories.FlightRepository;
+import com.capgemini.flightbookingsystem.repositories.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,9 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 public class BookingServiceImpl implements BookingService {
 
 	BookingRepository bookingRepository;
+	UserRepository userRepository;
+	FlightRepository flightRepository;
 
-	public BookingServiceImpl(BookingRepository bookingRepository) {
+	public BookingServiceImpl(BookingRepository bookingRepository, FlightRepository flightRepository,
+			UserRepository userRepository) {
 		this.bookingRepository = bookingRepository;
+		this.userRepository = userRepository;
+		this.flightRepository = flightRepository;
 	}
 
 	@Override
@@ -42,6 +52,23 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public Booking saveBooking(Booking booking) {
 		log.debug("Creating new booking and saving in repository");
+		if (booking.getUsers() != null && booking.getUsers().getUserId() != null) {
+			User user = userRepository.findById(booking.getUsers().getUserId())
+					.orElseThrow(() -> new UserNotFoundException("User not found"));
+			booking.setUsers(user);
+		}
+		if (booking.getFlights() != null && booking.getFlights().getFlightId() != null) {
+			Flights flight = flightRepository.findById(booking.getFlights().getFlightId())
+					.orElseThrow(() -> new RuntimeException("Flight not found"));
+			booking.setFlights(flight);
+		}
+
+		Payments payment = new Payments();
+		payment.setAmount(booking.getAmount());
+		payment.setPaymentDatetime(LocalDateTime.now());
+
+		booking.setPayment(payment);
+
 		return bookingRepository.save(booking);
 	}
 
