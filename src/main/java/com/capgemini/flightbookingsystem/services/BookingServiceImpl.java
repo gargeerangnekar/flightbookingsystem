@@ -85,7 +85,6 @@ public class BookingServiceImpl implements BookingService {
 		existing.setBookingTime(booking.getBookingTime());
 		existing.setSeatClass(booking.getSeatClass());
 		existing.setSeatNumber(booking.getSeatNumber());
-		existing.setStatus(booking.getStatus());
 		existing.setFlights(booking.getFlights());
 		existing.setUsers(booking.getUsers());
 
@@ -114,14 +113,12 @@ public class BookingServiceImpl implements BookingService {
 			existing.setAmount(booking.getAmount());
 			log.debug("Updated amount to: {}", booking.getAmount());
 		}
-		if (booking.getStatus() != null) {
-			existing.setStatus(booking.getStatus());
-			log.debug("Updated status to: {}", booking.getStatus());
-		}
+
 		if (booking.getSeatNumber() != null) {
 			existing.setSeatNumber(booking.getSeatNumber());
 			log.debug("Updated seat number to: {}", booking.getSeatNumber());
 		}
+		
 		if (booking.getSeatClass() != null) {
 			existing.setSeatClass(booking.getSeatClass());
 			log.debug("Updated seat class to: {}", booking.getSeatClass());
