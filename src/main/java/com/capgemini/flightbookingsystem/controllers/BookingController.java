@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.entities.User;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
 import jakarta.validation.Valid;
@@ -86,6 +88,20 @@ public class BookingController {
 		log.info("Booking deleted successfully for ID: ", bookingId);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<Booking> patchBooking(@PathVariable("id") Integer bookingId,
+			@Valid @RequestBody Booking booking, BindingResult result) {
+		if (result.hasErrors()) {
+			log.warn("Validation failed for patch: {}", result.getAllErrors());
+			throw new IllegalArgumentException("Invalid Data");
+		}
+
+		log.info("Patching booking with ID: {} using data: {}", bookingId, booking);
+		Booking updated = bookingService.patchBooking(bookingId, booking);
+		log.debug("Booking with ID {} patched successfully to: {}", bookingId, updated);
+		return ResponseEntity.status(HttpStatus.OK).body(updated);
 	}
 
 }
