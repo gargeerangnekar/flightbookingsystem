@@ -15,15 +15,14 @@ import com.capgemini.flightbookingsystem.repositories.FlightRepository;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
-//16
 @Service
 @Slf4j
 public class FlightServiceImplementation implements FlightService {
-
-	// Injecting repository
+	
+	//Injecting repository
 	FlightRepository flightRepository;
 	BookingRepository bookingRepository;
-
+	
 	@Autowired
 	public FlightServiceImplementation(FlightRepository flightRepository, BookingRepository bookingRepository) {
 		this.flightRepository = flightRepository;
@@ -33,7 +32,7 @@ public class FlightServiceImplementation implements FlightService {
 	@Override
 	public List<Flights> getAllFlights() {
 		log.info("Fetching all flights from the database");
-		List<Flights> flights = flightRepository.findAll();
+		List<Flights> flights =  flightRepository.findAll();
 		log.debug("Total flights retrieved: {}", flights.size());
 		return flights;
 	}
@@ -41,10 +40,11 @@ public class FlightServiceImplementation implements FlightService {
 	@Override
 	public Flights getFlightById(Integer flightId) {
 		log.info("Fetching Flight with ID: {}", flightId);
-		return flightRepository.findById(flightId).orElseThrow(() -> {
-			log.warn("Flight not found with ID: {}", flightId);
-			return new FlightNotFoundException("Get : Flight not found with ID : " + flightId);
-		});
+		return flightRepository.findById(flightId)
+				.orElseThrow(() -> {
+					log.warn("Flight not found with ID: {}", flightId);
+					return new FlightNotFoundException("Get : Flight not found with ID : " + flightId);
+				});
 	}
 
 	@Override
@@ -57,49 +57,53 @@ public class FlightServiceImplementation implements FlightService {
 	@Override
 	public Flights updateFlightById(Integer flightId, @Valid Flights flight) {
 		log.info("Updating flight with ID: {}", flightId);
-		Flights existingFlight = flightRepository.findById(flightId).orElseThrow(() -> {
-			log.warn("User not found for deletion with ID: {}", flightId);
-			return new FlightNotFoundException("Flight with Id " + flightId + " is not available");
-		});
-
-		if (flight.getFlightNumber() != null)
+		Flights existingFlight = flightRepository.findById(flightId)
+				.orElseThrow(()-> {
+					log.warn("User not found for deletion with ID: {}", flightId);
+					return new FlightNotFoundException("Flight with Id "+flightId+" is not available");
+					});
+		
+		if(flight.getFlightNumber() != null)
 			existingFlight.setFlightNumber(flight.getFlightNumber());
-
+		
 		if (flight.getDepartureTime() != null)
-			existingFlight.setDepartureTime(flight.getDepartureTime());
+	        existingFlight.setDepartureTime(flight.getDepartureTime());
 
-		if (flight.getArrivalTime() != null)
-			existingFlight.setArrivalTime(flight.getArrivalTime());
+	    if (flight.getArrivalTime() != null)
+	        existingFlight.setArrivalTime(flight.getArrivalTime());
 
-		if (flight.getStatus() != null)
-			existingFlight.setStatus(flight.getStatus());
+	    if (flight.getStatus() != null)
+	        existingFlight.setStatus(flight.getStatus());
+	    
+	    if (flight.getAmount() != null)
+	        existingFlight.setAmount(flight.getAmount());
 
-		if (flight.getAircraftModel() != null)
-			existingFlight.setAircraftModel(flight.getAircraftModel());
+	    if (flight.getAircraftModel() != null)
+	        existingFlight.setAircraftModel(flight.getAircraftModel());
 
-		if (flight.getCapacity() != null)
-			existingFlight.setCapacity(flight.getCapacity());
+	    if (flight.getCapacity() != null)
+	        existingFlight.setCapacity(flight.getCapacity());
 
-		if (flight.getArrivalAirportId() != null)
-			existingFlight.setArrivalAirportId(flight.getArrivalAirportId());
+	    if (flight.getArrivalAirportId() != null)
+	        existingFlight.setArrivalAirportId(flight.getArrivalAirportId());
 
-		if (flight.getDepartureAirportId() != null)
-			existingFlight.setDepartureAirportId(flight.getDepartureAirportId());
-		if (flight.getAmount() != null)
-			existingFlight.setAmount(flight.getAmount());
+	    if (flight.getDepartureAirportId() != null)
+	        existingFlight.setDepartureAirportId(flight.getDepartureAirportId());
 
-		Flights updatedFlight = flightRepository.save(existingFlight);
-		log.debug("Flight with ID {} updated successfully", flightId);
-		return updatedFlight;
+	    
+	    Flights updatedFlight = flightRepository.save(existingFlight);
+	    log.debug("Flight with ID {} updated successfully", flightId);
+	    return updatedFlight;
 	}
 
 	@Override
 	public void deleteFlight(Integer flightId) {
 		log.info("Attempting to delete flight with ID: {}", flightId);
-		Flights existingFlight = flightRepository.findById(flightId).orElseThrow(() -> {
-			log.warn("Delete failed. Flight not found with ID: {}", flightId);
-			return new FlightNotFoundException("Flight with Id " + flightId + " is not available");
-		});
+		Flights existingFlight = flightRepository.findById(flightId)
+				.orElseThrow(()-> {
+					log.warn("Delete failed. Flight not found with ID: {}", flightId);
+					return new FlightNotFoundException("Flight with Id "+flightId+" is not available");
+					});
 		flightRepository.delete(existingFlight);
 		log.debug("Flight with ID {} deleted successfully", flightId);
 	}
@@ -107,10 +111,11 @@ public class FlightServiceImplementation implements FlightService {
 	@Override
 	public Booking createBookingForFlight(Integer flightId, Booking booking) {
 		log.info("Creating booking for flight ID: {}", flightId);
-		Flights flight = flightRepository.findById(flightId).orElseThrow(() -> {
-			log.warn("Flight not found with ID: {}", flightId);
-			return new FlightNotFoundException("Flight with Id " + flightId + " is not available");
-		});
+		Flights flight = flightRepository.findById(flightId)
+				.orElseThrow(()-> {
+					log.warn("Flight not found with ID: {}", flightId);
+					return new FlightNotFoundException("Flight with Id "+flightId+" is not available");
+					});
 		booking.setFlights(flight);
 		flight.getBookings().add(booking);
 		flightRepository.save(flight);
