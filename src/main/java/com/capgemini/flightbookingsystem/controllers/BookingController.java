@@ -64,7 +64,7 @@ public class BookingController {
 		return ResponseEntity.ok(booking);
 	}
 
-	@PutMapping("/update-booking/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<Booking> updateBooking(@Valid @RequestBody Booking booking,
 			@PathVariable("id") Integer bookingId, BindingResult result) {
 		log.info("Request received to update booking for ID: ", bookingId);
@@ -79,7 +79,7 @@ public class BookingController {
 		return ResponseEntity.ok(updatedBooking);
 	}
 
-	@DeleteMapping("{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<Booking> deleteBooking(@PathVariable("id") Integer bookingId) {
 		log.info("Booking deleted with ID :", bookingId);
 		bookingService.deleteBooking(bookingId);
