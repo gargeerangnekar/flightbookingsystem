@@ -33,7 +33,6 @@ public class AirLineAdmin {
     private String airlineAdminName;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 8, max = 15, message = "Password must be at least 8 characters long")
     @Pattern(
         regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$",
         message = "Password must include upper and lower case letters, a number, and a special character"
