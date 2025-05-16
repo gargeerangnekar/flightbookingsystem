@@ -69,6 +69,7 @@ public class AuthController {
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			claims.put("email", user.getEmail());
+			claims.put("name", user.getName());
 			claims.put("userId", user.getUserId());
 			claims.put("userType", "USER");
 			role = "ROLE_USER";
@@ -78,6 +79,7 @@ public class AuthController {
 			if (optionalAdmin.isPresent()) {
 				AirLineAdmin admin = optionalAdmin.get();
 				claims.put("email", admin.getAirlineEmail());
+				claims.put("name", admin.getAirlineAdminName());
 				claims.put("userId", admin.getAirlineAdminId());
 				claims.put("userType", "ADMIN");
 				role = "ROLE_ADMIN";
