@@ -81,7 +81,7 @@ public class BookingController {
 		return ResponseEntity.ok(updatedBooking);
 	}
 
-	@DeleteMapping("{bookingId}")
+	@DeleteMapping("/{bookingId}")
 	public ResponseEntity<Booking> deleteBooking(@PathVariable("bookingId") Integer bookingId) {
 		log.info("Booking deleted with ID :", bookingId);
 		bookingService.deleteBooking(bookingId);
