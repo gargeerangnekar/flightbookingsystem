@@ -50,6 +50,7 @@ public class AuthController {
 		this.jwtUtils = jwtUtils;
 		this.userRepository = userRepository;
 		this.adminService = adminService;
+		this.airLineAdminRepository = adminRepository;
 	}
 
 	@PostMapping("/signin")
