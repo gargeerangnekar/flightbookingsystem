@@ -53,8 +53,7 @@ public class BookingController {
 		Booking saveBooking = bookingService.saveBooking(booking);
 		log.debug("Booking created with ID: {}", saveBooking.getBookingId());
 
-		URI location = URI.create("/bookings/" + saveBooking.getBookingId());
-		return ResponseEntity.created(location).body(saveBooking);
+		return ResponseEntity.created(URI.create("/bookings/" + saveBooking.getBookingId())).body(saveBooking);
 	}
 
 	@GetMapping("/{id}")

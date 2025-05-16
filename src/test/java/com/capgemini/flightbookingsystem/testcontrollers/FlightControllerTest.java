@@ -17,8 +17,10 @@ import com.capgemini.flightbookingsystem.services.FlightService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 
 class FlightControllerTest {
 
@@ -44,8 +46,9 @@ class FlightControllerTest {
     @Test
     @DisplayName("Test to create a flight")
     void testCreateFlight() {
+    	BindingResult bindingResult = mock(BindingResult.class);
     	when(flightService.createNewFlight(flight1)).thenReturn(flight1);
-        ResponseEntity<Flights> response = flightRestController.createFlight(flight1);
+        ResponseEntity<Flights> response = flightRestController.createFlight(flight1, bindingResult);
         assertEquals(201, response.getStatusCode().value());
 		assertEquals(flight1, response.getBody());
     }
@@ -80,7 +83,7 @@ class FlightControllerTest {
     //4. Test Case for PUT Mapping
     @Test
     @DisplayName("Test to update a flight")
-    void testUpdateFlight() throws Exception {
+    void testUpdateFlight() {
     	Flights updateFlight = new Flights(3, "CL507", LocalDateTime.parse("2025-06-01T10:30:00"), LocalDateTime.parse("2025-06-01T13:45:00"),
                 "Scheduled","Boeing 737",200, 1, 1);
         when(flightService.updateFlightById(3, updateFlight)).thenReturn(updateFlight);
@@ -93,7 +96,7 @@ class FlightControllerTest {
     //5. Test Case for DELETE Mapping
     @Test
     @DisplayName("Test to delete a flight by ID")
-    void testDeleteFlight() throws Exception {
+    void testDeleteFlight() {
         doNothing().when(flightService).deleteFlight(1);
         ResponseEntity<Flights> response = flightRestController.deleteFlight(1);
         assertEquals(204, response.getStatusCode().value());

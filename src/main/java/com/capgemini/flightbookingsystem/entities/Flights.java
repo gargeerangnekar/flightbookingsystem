@@ -77,7 +77,7 @@ public class Flights {
 	
 	
 	// 1. Flight to Booking
-	@OneToMany(mappedBy = "flights", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	@OneToMany(mappedBy = "flights", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference("flight-booking")
 	List<Booking> bookings = new ArrayList<>();
 	
