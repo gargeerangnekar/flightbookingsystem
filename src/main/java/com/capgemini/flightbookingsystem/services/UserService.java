@@ -17,4 +17,8 @@ public interface UserService {
 	User patchUser(Integer id, User user);
 
 	void deleteUser(Integer id);
+	
+	User findByEmail(String email);
+	
+	boolean existsByEmail(String email);
 }
