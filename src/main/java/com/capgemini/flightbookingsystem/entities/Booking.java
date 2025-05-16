@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,9 +28,7 @@ public class Booking {
 	private Integer bookingId;
 
 	@Column(name = "seat_number")
-
 	@NotNull(message = "Seat number cannot be empty")
-
 	private String seatNumber;
 
 	@Column(name = "seat_class")
@@ -37,15 +36,8 @@ public class Booking {
 	private String seatClass;
 
 	@Column(name = "booking_time")
-
 	@NotNull(message = "Booking time cannot be empty")
-
-	
 	private LocalDateTime bookingTime;
-
-	@Column(name = "status")
-	@NotNull(message = "Booking Status cannot be empty")
-	private String status;
 
 	@Column(name = "amount")
 	@NotNull(message = "Booking amount cannot be empty")
@@ -53,31 +45,36 @@ public class Booking {
 	private Double amount;
 
 	@JsonBackReference
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User users;
 
-@JsonBackReference("flight-booking")
-@ManyToOne(cascade = CascadeType.PERSIST)
-@JoinColumn(name = "flight_id")
-private Flights flights;
-	public Booking() {
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "payment_id")
+	private Payments payment;
 
+	@JsonBackReference("flight-booking")
+	@ManyToOne
+	@JoinColumn(name = "flight_id")
+	private Flights flights;
+	
+	public Booking() {
+		
 	}
 
-	public Booking(Integer bookingId, @NotBlank(message = "Seat number cannot be empty") String seatNumber,
-			@NotBlank(message = "Seat Class cannot be empty") String seatClass,
-			@NotBlank(message = "Booking time cannot be empty") LocalDateTime bookingTime,
-			@NotBlank(message = "Booking Status cannot be empty") String status,
-			@NotNull(message = "Booking amount cannot be empty") Double amount, User users, Flights flights) {
+	public Booking(Integer bookingId, @NotNull(message = "Seat number cannot be empty") String seatNumber,
+			@NotNull(message = "Seat Class cannot be empty") String seatClass,
+			@NotNull(message = "Booking time cannot be empty") LocalDateTime bookingTime,
+			@NotNull(message = "Booking amount cannot be empty") @Positive(message = "Amount must be positive") Double amount,
+			User users, Payments payment, Flights flights) {
 		super();
 		this.bookingId = bookingId;
 		this.seatNumber = seatNumber;
 		this.seatClass = seatClass;
 		this.bookingTime = bookingTime;
-		this.status = status;
 		this.amount = amount;
 		this.users = users;
+		this.payment = payment;
 		this.flights = flights;
 	}
 
@@ -113,14 +110,6 @@ private Flights flights;
 		this.bookingTime = bookingTime;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public Double getAmount() {
 		return amount;
 	}
@@ -145,10 +134,19 @@ private Flights flights;
 		this.flights = flights;
 	}
 
+	public Payments getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payments payment) {
+		this.payment = payment;
+	}
+
 	@Override
 	public String toString() {
-		return "Bookings [bookingId=" + bookingId + ", seatNumber=" + seatNumber + ", seatClass=" + seatClass
-				+ ", bookingTime=" + bookingTime + ", status=" + status + "]";
+		return "Booking [bookingId=" + bookingId + ", seatNumber=" + seatNumber + ", seatClass=" + seatClass
+				+ ", bookingTime=" + bookingTime + ", amount=" + amount + ", users=" + users + ", payment=" + payment
+				+ ", flights=" + flights + "]";
 	}
 
 }

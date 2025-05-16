@@ -2,6 +2,7 @@ package com.capgemini.flightbookingsystem.services;
 
 import java.util.List;
 
+import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 
 //9
@@ -18,5 +19,7 @@ public interface BookingService {
 	void deleteBooking(Integer bookingId);
 	
 	Booking patchBooking(Integer bookingId, Booking booking);
+	
+	List<FlightBookingDto> getAllFlights();
 
 }
