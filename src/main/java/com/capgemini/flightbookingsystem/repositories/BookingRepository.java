@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
 import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 
@@ -22,6 +23,19 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId "
 		       )
 		List<FlightBookingDto> getAllBookingDto();
+	
+	
+	@Query("SELECT new com.capgemini.flightbookingsystem.dto.BookingHistoryDto( " +
+		       "u.name, f.flightNumber, f.arrivalTime, " +
+		       "b.seatNumber, b.bookingTime, " +
+		       "dep.airportName, arr.airportName) " +
+		       "FROM Booking b " +
+		       "JOIN User u ON b.users.userId = u.userId " +
+		       "JOIN Flights f ON b.flights.flightId = f.flightId " +
+		       "JOIN Airport dep ON f.departureAirportId = dep.airportId " +
+		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId " +
+		       "WHERE u.userId = ?1")
+		List<BookingHistoryDto> getBookingHistory(Integer userId);
 
 
 

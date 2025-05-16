@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
-import com.capgemini.flightbookingsystem.exceptions.UserNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.repositories.FlightRepository;
 
@@ -72,8 +71,6 @@ public class FlightServiceImplementation implements FlightService {
 	    if (flight.getArrivalTime() != null)
 	        existingFlight.setArrivalTime(flight.getArrivalTime());
 
-	    if (flight.getStatus() != null)
-	        existingFlight.setStatus(flight.getStatus());
 	    
 	    if (flight.getAmount() != null)
 	        existingFlight.setAmount(flight.getAmount());

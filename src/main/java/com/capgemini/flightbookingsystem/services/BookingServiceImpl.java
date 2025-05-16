@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
 import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
@@ -145,5 +146,9 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public List<FlightBookingDto> getAllFlights() {
 		return bookingRepository.getAllBookingDto();
+	}
+	 @Override
+	public List<BookingHistoryDto> getBookingHistoryById(Integer userId) {
+		return bookingRepository.getBookingHistory(userId);
 	}
 }
