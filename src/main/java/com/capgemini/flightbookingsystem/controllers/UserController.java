@@ -51,7 +51,7 @@ public class UserController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> createUser(@Valid @RequestBody User enrollment, BindingResult result) {
+	public ResponseEntity<User> createUser(@Valid @RequestBody User enrollment, BindingResult result) {
 		log.info("Creating new user with data: {}", enrollment);
 
 		if (result.hasErrors()) {
@@ -67,7 +67,7 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateUser(@PathVariable Integer id, @Valid @RequestBody User newUser, BindingResult result) {
+	public ResponseEntity<User> updateUser(@PathVariable Integer id, @Valid @RequestBody User newUser, BindingResult result) {
 		log.info("Updating user with ID: {} using data: {}", id, newUser);
 		
 		if (result.hasErrors()) {
@@ -81,7 +81,7 @@ public class UserController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> patchUser(@PathVariable Integer id, @Valid @RequestBody User patch, BindingResult result) {
+	public ResponseEntity<User> patchUser(@PathVariable Integer id, @Valid @RequestBody User patch, BindingResult result) {
 	    if (result.hasErrors()) {
 	    	log.warn("Validation failed for patch: {}", result.getAllErrors());
 			throw new IllegalArgumentException("Invalid Data");

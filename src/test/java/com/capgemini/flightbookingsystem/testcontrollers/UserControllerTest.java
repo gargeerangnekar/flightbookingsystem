@@ -55,19 +55,20 @@ public class UserControllerTest {
 	@Test
 	@DisplayName("Should add a new user and return it")
 	void testAddUser() {
-		BindingResult bindingResult = mock(BindingResult.class);
-		when(bindingResult.hasErrors()).thenReturn(false);
+	    BindingResult bindingResult = mock(BindingResult.class);
+	    when(bindingResult.hasErrors()).thenReturn(false);
 
-		when(userService.createUser(user1)).thenReturn(user1);
+	    when(userService.createUser(user1)).thenReturn(user1);
 
-		ResponseEntity<?> response = userController.createUser(user1, bindingResult);
+	    ResponseEntity<User> response = userController.createUser(user1, bindingResult);
 
-		assertEquals(201, response.getStatusCode().value());
-		assertNotNull(response.getBody());
+	    assertEquals(201, response.getStatusCode().value());
+	    assertNotNull(response.getBody());
 
-		User savedUser = (User) response.getBody();
-		assertEquals("Rahul", savedUser.getName());
+	    User savedUser = response.getBody();
+	    assertEquals("Rahul", savedUser.getName());
 	}
+
 
 	@Test
 	@DisplayName("Should get user by ID")
@@ -90,7 +91,7 @@ public class UserControllerTest {
 
 		when(userService.putUser(1, updatedUser)).thenReturn(updatedUser);
 
-		ResponseEntity<?> response = userController.updateUser(1, updatedUser, bindingResult);
+		ResponseEntity<User> response = userController.updateUser(1, updatedUser, bindingResult);
 
 		assertEquals(200, response.getStatusCode().value());
 
