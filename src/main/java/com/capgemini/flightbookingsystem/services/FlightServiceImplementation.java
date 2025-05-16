@@ -71,8 +71,6 @@ public class FlightServiceImplementation implements FlightService {
 		if (flight.getArrivalTime() != null)
 			existingFlight.setArrivalTime(flight.getArrivalTime());
 
-		if (flight.getStatus() != null)
-			existingFlight.setStatus(flight.getStatus());
 
 		if (flight.getAircraftModel() != null)
 			existingFlight.setAircraftModel(flight.getAircraftModel());
