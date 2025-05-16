@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.flightbookingsystem.entities.Booking;
-import com.capgemini.flightbookingsystem.entities.User;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
 import jakarta.validation.Valid;
@@ -66,7 +65,7 @@ public class BookingController {
 		return ResponseEntity.ok(booking);
 	}
 
-	@PutMapping("/update-booking/{bookingId}")
+	@PutMapping("/{bookingId}")
 	public ResponseEntity<Booking> updateBooking(@Valid @RequestBody Booking booking,
 			@PathVariable("bookingId") Integer bookingId, BindingResult result) {
 		log.info("Request received to update booking for ID: ", bookingId);
