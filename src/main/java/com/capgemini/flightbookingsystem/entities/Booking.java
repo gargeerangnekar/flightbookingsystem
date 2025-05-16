@@ -53,12 +53,12 @@ public class Booking {
 	private Double amount;
 
 	@JsonBackReference
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User users;
 
 @JsonBackReference("flight-booking")
-@ManyToOne(cascade = CascadeType.PERSIST)
+@ManyToOne
 @JoinColumn(name = "flight_id")
 private Flights flights;
 	public Booking() {
