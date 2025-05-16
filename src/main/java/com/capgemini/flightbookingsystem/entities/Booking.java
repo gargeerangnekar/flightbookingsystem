@@ -57,6 +57,10 @@ public class Booking {
 	@ManyToOne
 	@JoinColumn(name = "flight_id")
 	private Flights flights;
+	
+	public Booking() {
+		
+	}
 
 	public Booking(Integer bookingId, @NotNull(message = "Seat number cannot be empty") String seatNumber,
 			@NotNull(message = "Seat Class cannot be empty") String seatClass,

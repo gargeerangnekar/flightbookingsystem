@@ -118,6 +118,7 @@ public class BookingServiceImpl implements BookingService {
 			existing.setSeatNumber(booking.getSeatNumber());
 			log.debug("Updated seat number to: {}", booking.getSeatNumber());
 		}
+		
 		if (booking.getSeatClass() != null) {
 			existing.setSeatClass(booking.getSeatClass());
 			log.debug("Updated seat class to: {}", booking.getSeatClass());
