@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
@@ -101,6 +102,14 @@ public class BookingController {
 		Booking updated = bookingService.patchBooking(bookingId, booking);
 		log.debug("Booking with ID {} patched successfully to: {}", bookingId, updated);
 		return ResponseEntity.status(HttpStatus.OK).body(updated);
+	}
+
+	@GetMapping("/book-a-flight")
+	public ResponseEntity<List<FlightBookingDto>> getAllFlightsForBooking() {
+		log.info("Fetching all flights for booking");
+		List<FlightBookingDto> flights = bookingService.getAllFlights();
+		log.info("Fetched all flights");
+		return ResponseEntity.status(HttpStatus.OK).body(flights);
 	}
 
 }
