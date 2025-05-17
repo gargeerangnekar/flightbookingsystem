@@ -104,51 +104,19 @@ public class BookingServiceImpl implements BookingService {
 		});
 	}
 
-	@Override
-	public Booking patchBooking(Integer bookingId, Booking booking) {
-		log.info("Patching boking with ID: {}", bookingId);
-		Booking existing = bookingRepository.findById(bookingId).orElseThrow(() -> {
-			log.warn("booking not found for patch with ID: {}", bookingId);
-			return new BookingNotFoundException("Patch :Booking not found with Id : " + bookingId);
-		});
-		if (booking.getAmount() != null) {
-			existing.setAmount(booking.getAmount());
-			log.debug("Updated amount to: {}", booking.getAmount());
-		}
 
-		if (booking.getSeatNumber() != null) {
-			existing.setSeatNumber(booking.getSeatNumber());
-			log.debug("Updated seat number to: {}", booking.getSeatNumber());
-		}
-
-		if (booking.getSeatClass() != null) {
-			existing.setSeatClass(booking.getSeatClass());
-			log.debug("Updated seat class to: {}", booking.getSeatClass());
-		}
-		if (booking.getBookingTime() != null) {
-			existing.setBookingTime(booking.getBookingTime());
-			log.debug("Updated booking time to: {}", booking.getBookingTime());
-		}
-		if (booking.getUsers() != null) {
-			existing.setUsers(booking.getUsers());
-			log.debug("Updated user to: {}", booking.getUsers().getUserId());
-		}
-		if (booking.getFlights() != null) {
-			existing.setFlights(booking.getFlights());
-			log.debug("Updated flight to: {}", booking.getFlights().getFlightId());
-		}
-
-		Booking updated = bookingRepository.save(existing);
-		log.debug("booking with ID {} patched successfully", bookingId);
-		return updated;
-	}
 
 	@Override
-	public List<FlightBookingDto> getAllFlights() {
-		return bookingRepository.getAllBookingDto();
+	public List<FlightBookingDto> getAllFlights(LocalDateTime departureTime
+			,String departureCity, String arrivalCity) {
+		return bookingRepository.getAllBookingDto(departureTime, departureCity, arrivalCity);
 	}
 	 @Override
 	public List<BookingHistoryDto> getBookingHistoryById(Integer userId) {
 		return bookingRepository.getBookingHistory(userId);
+	}
+	 @Override
+	public List<FlightBookingDto> getAllFlightsForDisplay() {
+		return bookingRepository.getAllBookingDtoForDisplay();
 	}
 }
