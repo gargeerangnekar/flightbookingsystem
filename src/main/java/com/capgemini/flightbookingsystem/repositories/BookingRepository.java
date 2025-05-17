@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-<<<<<<< HEAD
-=======
+
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
->>>>>>> origin/main
+
 import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 

@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< HEAD
-=======
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
->>>>>>> origin/main
+
 import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.services.BookingService;
@@ -116,8 +114,6 @@ public class BookingController {
 		return ResponseEntity.status(HttpStatus.OK).body(flights);
 	}
 
-<<<<<<< HEAD
-=======
 	@GetMapping("/history/{userId}")
 	public ResponseEntity<List<BookingHistoryDto>> getBookingHistory(@PathVariable Integer userId) {
 		log.info("Request to fetch booking history for ID :", userId);
@@ -126,5 +122,5 @@ public class BookingController {
 		return ResponseEntity.status(HttpStatus.OK).body(bookingHistory);
 	}
 
->>>>>>> origin/main
+
 }
