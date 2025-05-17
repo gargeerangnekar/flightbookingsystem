@@ -40,7 +40,6 @@ public class User {
 
 	@NotBlank(message = "Enter valid password")
 	@Column(name = "password")
-	//@Size(min = 8, max = 15, message = "Password must be at least 8 characters long")
 	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$",
 	message = "Password must contain at least one uppercase, one lowercase, one digit, and one special character") 
 	private String password;
