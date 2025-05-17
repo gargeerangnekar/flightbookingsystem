@@ -53,9 +53,9 @@ class FlightControllerTest {
 		when(airLineAdminRepository.findById(1)).thenReturn(Optional.of(admin));
 
 		flight1 = new Flights(1, "AI202", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), 5000.0, "Boeing 737", 180, 1, 3, admin);
+				LocalDateTime.parse("2025-06-01T13:45:00"), 5000.0, "Boeing 737", 180, 1, 3, admin, "available");
 		flight2 = new Flights(2, "BJ301", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), 2000.0, "Boeing 737", 180, 2, 3, admin);
+				LocalDateTime.parse("2025-06-01T13:45:00"), 2000.0, "Boeing 737", 180, 2, 3, admin, "available");
 	}
 
 	@Test
@@ -97,7 +97,7 @@ class FlightControllerTest {
 	@DisplayName("Test to update a flight")
 	void testUpdateFlight() {
 		Flights updateFlight = new Flights(3, "CL507", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), 21000.0, "Boeing 737", 200, 1, 1, admin);
+				LocalDateTime.parse("2025-06-01T13:45:00"), 21000.0, "Boeing 737", 200, 1, 1, admin, "available");
 
 		when(flightService.updateFlightById(3, updateFlight)).thenReturn(updateFlight);
 

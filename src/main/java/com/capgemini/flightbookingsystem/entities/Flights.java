@@ -65,6 +65,9 @@ public class Flights {
 	@Max(value = 1000, message = "Capacity cannot exceed 1000")
 	@Column(name = "capacity")
 	protected Integer capacity;
+	
+	@Column(name = "display_status")
+	protected String displayStatus;
 
 	// FK - Airports Entity
 	@NotNull(message = "Arrival airport ID is required")
@@ -104,7 +107,7 @@ public class Flights {
 			@NotNull(message = "Capacity is required") @Min(value = 1, message = "Capacity must be at least 1") @Max(value = 1000, message = "Capacity cannot exceed 1000") Integer capacity,
 			@NotNull(message = "Arrival airport ID is required") @Positive(message = "Arrival airport ID must be a positive integer") @NotNull Integer arrivalAirportId,
 			@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId,
-			List<Booking> bookings, AirLineAdmin airlineAdmin) {
+			List<Booking> bookings, AirLineAdmin airlineAdmin, String displayStatus) {
 		this.flightId = flightId;
 		this.flightNumber = flightNumber;
 		this.departureTime = departureTime;
@@ -116,6 +119,7 @@ public class Flights {
 		this.departureAirportId = departureAirportId;
 		this.bookings = bookings;
 		this.airlineAdmin = airlineAdmin;
+		this.displayStatus = "available";
 	}
 	
 	// Constructor with flight ID (PK)
@@ -127,7 +131,7 @@ public class Flights {
 				@NotNull(message = "Capacity is required") @Min(value = 1, message = "Capacity must be at least 1") @Max(value = 1000, message = "Capacity cannot exceed 1000") Integer capacity,
 				@NotNull(message = "Arrival airport ID is required") @Positive(message = "Arrival airport ID must be a positive integer") @NotNull Integer arrivalAirportId,
 				@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId,
-				AirLineAdmin airlineAdmin) {
+				AirLineAdmin airlineAdmin, String displayStatus) {
 			this.flightId = flightId;
 			this.flightNumber = flightNumber;
 			this.departureTime = departureTime;
@@ -138,6 +142,7 @@ public class Flights {
 			this.arrivalAirportId = arrivalAirportId;
 			this.departureAirportId = departureAirportId;
 			this.airlineAdmin = airlineAdmin;
+			this.displayStatus = "available";
 		}
 	
 	// Constructor with flight ID (PK)
@@ -148,7 +153,8 @@ public class Flights {
 			@NotNull(message = "Aircraft model is required") String aircraftModel, Double amount,
 			@NotNull(message = "Capacity is required") @Min(value = 1, message = "Capacity must be at least 1") @Max(value = 1000, message = "Capacity cannot exceed 1000") Integer capacity,
 			@NotNull(message = "Arrival airport ID is required") @Positive(message = "Arrival airport ID must be a positive integer") @NotNull Integer arrivalAirportId,
-			@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId) {
+			@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId,
+			String displayStatus) {
 		this.flightId = flightId;
 		this.flightNumber = flightNumber;
 		this.departureTime = departureTime;
@@ -158,6 +164,7 @@ public class Flights {
 		this.amount = amount;
 		this.arrivalAirportId = arrivalAirportId;
 		this.departureAirportId = departureAirportId;
+		this.displayStatus = "available";
 	}
 
 		public Flights(@NotNull Integer flightId,
@@ -168,7 +175,8 @@ public class Flights {
 				@NotNull(message = "Aircraft model is required") String aircraftModel,
 				@NotNull(message = "Capacity is required") @Min(value = 1, message = "Capacity must be at least 1") @Max(value = 1000, message = "Capacity cannot exceed 1000") Integer capacity,
 				@NotNull(message = "Arrival airport ID is required") @Positive(message = "Arrival airport ID must be a positive integer") @NotNull Integer arrivalAirportId,
-				@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId) {
+				@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId,
+				String displayStatus) {
 			this.flightId = flightId;
 			this.flightNumber = flightNumber;
 			this.departureTime = departureTime;
@@ -178,6 +186,7 @@ public class Flights {
 			this.capacity = capacity;
 			this.arrivalAirportId = arrivalAirportId;
 			this.departureAirportId = departureAirportId;
+			this.displayStatus = "available";
 		}
 	
 	// Constructor without flight ID (PK)
@@ -190,7 +199,7 @@ public class Flights {
 			@NotNull(message = "Capacity is required") @Min(value = 1, message = "Capacity must be at least 1") @Max(value = 1000, message = "Capacity cannot exceed 1000") Integer capacity,
 			@NotNull(message = "Arrival airport ID is required") @Positive(message = "Arrival airport ID must be a positive integer") @NotNull Integer arrivalAirportId,
 			@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId,
-			List<Booking> bookings, AirLineAdmin airlineAdmin) {
+			List<Booking> bookings, AirLineAdmin airlineAdmin, String displayStatus) {
 		this.flightNumber = flightNumber;
 		this.departureTime = departureTime;
 		this.arrivalTime = arrivalTime;
@@ -201,6 +210,7 @@ public class Flights {
 		this.departureAirportId = departureAirportId;
 		this.bookings = bookings;
 		this.airlineAdmin = airlineAdmin;
+		this.displayStatus = "available";
 	}
 	
 	// Constructor without mappings
@@ -212,7 +222,7 @@ public class Flights {
 			@NotNull(message = "Aircraft model is required") String aircraftModel,
 			@NotNull(message = "Capacity is required") @Min(value = 1, message = "Capacity must be at least 1") @Max(value = 1000, message = "Capacity cannot exceed 1000") Integer capacity,
 			@NotNull(message = "Arrival airport ID is required") @Positive(message = "Arrival airport ID must be a positive integer") @NotNull Integer arrivalAirportId,
-			@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId) {
+			@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId, String displayStatus) {
 		this.flightNumber = flightNumber;
 		this.departureTime = departureTime;
 		this.arrivalTime = arrivalTime;
@@ -221,6 +231,7 @@ public class Flights {
 		this.capacity = capacity;
 		this.arrivalAirportId = arrivalAirportId;
 		this.departureAirportId = departureAirportId;
+		this.displayStatus = "available";
 		
 	}
 
@@ -316,6 +327,16 @@ public class Flights {
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
+	
+	
+
+	public String getDisplayStatus() {
+		return displayStatus;
+	}
+
+	public void setDisplayStatus(String displayStatus) {
+		this.displayStatus = displayStatus;
+	}
 
 	@Override
 	public String toString() {
@@ -324,8 +345,6 @@ public class Flights {
 				+ ", capacity=" + capacity + ", arrivalAirportId=" + arrivalAirportId + ", departureAirportId="
 				+ departureAirportId + ", bookings=" + bookings + ", airlineAdmin=" + airlineAdmin + "]";
 	}
-
-	
 
 	
 	
