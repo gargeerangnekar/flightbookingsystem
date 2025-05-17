@@ -154,7 +154,6 @@ public class ReportServiceImpl implements ReportService {
                     dto.setArrivalTime(b.getFlights().getArrivalTime());
                     dto.setSeatClass(b.getSeatClass());
                     dto.setAmount(b.getAmount());
-                    dto.setStatus(b.getFlights().getStatus());
                     
                     // Add airport names to detailed booking
                     Flights flight = b.getFlights();

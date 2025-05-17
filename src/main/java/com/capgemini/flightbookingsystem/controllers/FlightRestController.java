@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.flightbookingsystem.dto.AirportFetchingDto;
 import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
@@ -100,11 +102,18 @@ public class FlightRestController{
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
-	@PostMapping("/{flightId}/bookings")
-	public ResponseEntity<Booking> createBookingForFlight(@PathVariable Integer flightId ,@RequestBody Booking booking){
-		log.info("Creating booking for flight ID: {} with booking details: {}", flightId, booking);
-		Booking createdBooking = flightService.createBookingForFlight(flightId, booking);
-		log.debug("Booking created successfully for flight ID: {} with booking ID: {}", flightId, createdBooking.getBookingId());
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
+	@GetMapping("/sortedByNumber")
+	public ResponseEntity<List<Flights>> getSortedFlightsByNumber(@RequestParam(defaultValue = "asc") String direction) {
+		return ResponseEntity.status(HttpStatus.OK).body(flightService.sortFlightsByNumber(direction));
 	}
+
+	@GetMapping("/sortedByAmount")
+	public ResponseEntity<List<Flights>> getSortedAmount(@RequestParam(defaultValue = "asc") String direction) {
+		return ResponseEntity.status(HttpStatus.OK).body(flightService.sortFlightsByAmount(direction));
+	}
+	
+	@GetMapping("/{flightId}/summary")
+    public ResponseEntity<AirportFetchingDto> getFlightSummary(@PathVariable Integer flightId) {
+		return ResponseEntity.status(HttpStatus.OK).body(flightService.getFlightDTO(flightId));
+    }
 }
