@@ -144,6 +144,6 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public List<FlightBookingDto> getAllFlights() {
-		return bookingRepository.getALLBookingDto();
+		return bookingRepository.getAllBookingDto();
 	}
 }
