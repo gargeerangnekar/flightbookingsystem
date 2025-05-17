@@ -27,7 +27,6 @@ import com.capgemini.flightbookingsystem.exceptions.BookingNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
-//2
 class BookingControllerTest {
 
 	@Mock
