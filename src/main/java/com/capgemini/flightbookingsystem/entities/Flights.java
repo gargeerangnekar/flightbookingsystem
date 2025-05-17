@@ -79,13 +79,13 @@ public class Flights {
 	protected Integer departureAirportId; 
 	
 	
-	// 1. Flight to Booking
+	// 1. Flight to Booking - One flight can have multiple bookings
 	@OneToMany(mappedBy = "flights", cascade = CascadeType.ALL)
 	@JsonManagedReference("flight-booking")
 	List<Booking> bookings = new ArrayList<>();
 	
 	
-	// 3. Airline Admin to Flight
+	// 2. Airline Admin to Flight - One airline admin can handle multiple flights
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "airline_admin_id")
 	@JsonBackReference("airline")
@@ -117,6 +117,28 @@ public class Flights {
 		this.bookings = bookings;
 		this.airlineAdmin = airlineAdmin;
 	}
+	
+	// Constructor with flight ID (PK)
+		public Flights(@NotNull Integer flightId,
+				@NotNull(message = "Flight number is required") @Size(min = 2, max = 10, message = "Flight number must be between 2 and 10 characters") String flightNumber,
+				@NotNull(message = "Departure time is required") @FutureOrPresent(message = "Departure time must be in the present or future") LocalDateTime departureTime,
+				@NotNull(message = "Arrival time is required") @Future(message = "Arrival time must be in the future") LocalDateTime arrivalTime,
+				Double amount, @NotNull(message = "Aircraft model is required") String aircraftModel,
+				@NotNull(message = "Capacity is required") @Min(value = 1, message = "Capacity must be at least 1") @Max(value = 1000, message = "Capacity cannot exceed 1000") Integer capacity,
+				@NotNull(message = "Arrival airport ID is required") @Positive(message = "Arrival airport ID must be a positive integer") @NotNull Integer arrivalAirportId,
+				@NotNull(message = "Departure airport ID is required") @Positive(message = "Departure airport ID must be a positive integer") Integer departureAirportId,
+				AirLineAdmin airlineAdmin) {
+			this.flightId = flightId;
+			this.flightNumber = flightNumber;
+			this.departureTime = departureTime;
+			this.arrivalTime = arrivalTime;
+			this.amount = amount;
+			this.aircraftModel = aircraftModel;
+			this.capacity = capacity;
+			this.arrivalAirportId = arrivalAirportId;
+			this.departureAirportId = departureAirportId;
+			this.airlineAdmin = airlineAdmin;
+		}
 	
 	// Constructor with flight ID (PK)
 	public Flights(@NotNull Integer flightId,
