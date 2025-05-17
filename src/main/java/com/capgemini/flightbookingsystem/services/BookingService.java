@@ -2,6 +2,10 @@ package com.capgemini.flightbookingsystem.services;
 
 import java.util.List;
 
+
+
+import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
+
 import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 
@@ -22,4 +26,6 @@ public interface BookingService {
 	
 	List<FlightBookingDto> getAllFlights();
 
+	List<BookingHistoryDto> getBookingHistoryById(Integer userId);
+	
 }

@@ -1,9 +1,13 @@
 package com.capgemini.flightbookingsystem.services;
 
 import java.time.LocalDateTime;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+
+
+import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
 
 import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
@@ -144,6 +148,12 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 	public List<FlightBookingDto> getAllFlights() {
-		return bookingRepository.getALLBookingDto();
+
+		return bookingRepository.getAllBookingDto();
+	}
+	 @Override
+	public List<BookingHistoryDto> getBookingHistoryById(Integer userId) {
+		return bookingRepository.getBookingHistory(userId);
+
 	}
 }

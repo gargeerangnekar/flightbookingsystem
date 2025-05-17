@@ -6,20 +6,41 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+<<<<<<< HEAD
+=======
+import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
+>>>>>>> origin/main
 import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
+
+	@Query("SELECT new com.capgemini.flightbookingsystem.dto.FlightBookingDto(" +
+		       "f.departureAirportId, f.arrivalAirportId, " +
+		       "dep.airportName, arr.airportName, "
+		       + "dep.city, arr.city, " +
+		       "f.departureTime, f.arrivalTime, f.amount) " +
+		       "FROM Flights f " +
+		       "JOIN Airport dep ON f.departureAirportId = dep.airportId " +
+		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId "
+		       )
+		List<FlightBookingDto> getAllBookingDto();
 	
-	@Query(value = "SELECT new com.capgemini.flightbookingsystem.dto.FlightBookingDto("
-		     + "f.departure_airport_id, f.arrival_airport_id, "
-		     + "dep.airport_name, arr.airport_name, "
-		     + "f.departure_time, f.arrival_time, f.amount) "
-		     + "FROM flights f "
-		     + "JOIN airport dep ON f.departure_airport_id = dep.airport_id "
-		     + "JOIN airport arr ON f.arrival_airport_id = arr.airport_id", nativeQuery = true)
-		List<FlightBookingDto> getALLBookingDto();
+	
+	@Query("SELECT new com.capgemini.flightbookingsystem.dto.BookingHistoryDto( " +
+		       "u.name, f.flightNumber, f.arrivalTime, " +
+		       "b.seatNumber, b.bookingTime, " +
+		       "dep.airportName, arr.airportName) " +
+		       "FROM Booking b " +
+		       "JOIN User u ON b.users.userId = u.userId " +
+		       "JOIN Flights f ON b.flights.flightId = f.flightId " +
+		       "JOIN Airport dep ON f.departureAirportId = dep.airportId " +
+		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId " +
+		       "WHERE u.userId = ?1")
+		List<BookingHistoryDto> getBookingHistory(Integer userId);
+
+
 
 
 }
