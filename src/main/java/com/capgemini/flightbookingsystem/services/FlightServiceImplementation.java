@@ -3,11 +3,15 @@ package com.capgemini.flightbookingsystem.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.capgemini.flightbookingsystem.dto.AirportFetchingDto;
+import com.capgemini.flightbookingsystem.entities.Airport;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
+import com.capgemini.flightbookingsystem.repositories.AirportRepository;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.repositories.FlightRepository;
 
@@ -21,11 +25,13 @@ public class FlightServiceImplementation implements FlightService {
 	//Injecting repository
 	FlightRepository flightRepository;
 	BookingRepository bookingRepository;
+	AirportRepository airportRepository;
 	
 	@Autowired
-	public FlightServiceImplementation(FlightRepository flightRepository, BookingRepository bookingRepository) {
+	public FlightServiceImplementation(FlightRepository flightRepository, BookingRepository bookingRepository, AirportRepository airportRepository) {
 		this.flightRepository = flightRepository;
 		this.bookingRepository = bookingRepository;
+		this.airportRepository = airportRepository;
 	}
 
 	@Override
@@ -106,19 +112,39 @@ public class FlightServiceImplementation implements FlightService {
 	}
 
 	@Override
-	public Booking createBookingForFlight(Integer flightId, Booking booking) {
-		log.info("Creating booking for flight ID: {}", flightId);
-		Flights flight = flightRepository.findById(flightId)
-				.orElseThrow(()-> {
-					log.warn("Flight not found with ID: {}", flightId);
-					return new FlightNotFoundException("Flight with Id "+flightId+" is not available");
-					});
-		booking.setFlights(flight);
-		flight.getBookings().add(booking);
-		flightRepository.save(flight);
-		Booking savedBooking = bookingRepository.save(booking);
-		log.debug("Booking successfully created for flight ID: {}", flightId);
-		return savedBooking;
+	public List<Flights> sortFlightsByNumber(String direction) {
+		Sort sortedFlights = Sort.by("flightNumber");
+		if(direction.equalsIgnoreCase("desc")) 
+			sortedFlights = sortedFlights.descending();
+		else 
+			sortedFlights = sortedFlights.ascending();
+		return flightRepository.findAll(sortedFlights);
 	}
+
+	@Override
+	public List<Flights> sortFlightsByAmount(String direction) {
+		Sort sortedFlights = Sort.by("amount");
+		if(direction.equalsIgnoreCase("desc")) 
+			sortedFlights = sortedFlights.descending();
+		else 
+			sortedFlights = sortedFlights.ascending();
+		return flightRepository.findAll(sortedFlights);
+	}
+
+	@Override
+	public AirportFetchingDto getFlightDTO(Integer flightId) {
+        Flights flight = flightRepository.findById(flightId)
+            .orElseThrow(() -> new RuntimeException("Flight not found"));
+
+        String departureCity = airportRepository.findById(flight.getDepartureAirportId())
+            .map(Airport::getCity)
+            .orElse("Unknown");
+
+        String arrivalCity = airportRepository.findById(flight.getArrivalAirportId())
+            .map(Airport::getCity)
+            .orElse("Unknown");
+
+        return new AirportFetchingDto(departureCity, arrivalCity);
+    }
 
 }
