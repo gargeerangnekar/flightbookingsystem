@@ -1,5 +1,6 @@
 package com.capgemini.flightbookingsystem.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,6 +38,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 		       "WHERE u.userId = ?1")
 		List<BookingHistoryDto> getBookingHistory(Integer userId);
 
-
+	 List<Booking> findByBookingTimeBetween(LocalDateTime start, LocalDateTime end);
+	 
 
 }
