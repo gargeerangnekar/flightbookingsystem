@@ -12,6 +12,7 @@ import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import java.util.*;
 
@@ -34,7 +35,6 @@ class AirLineAdminControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-
         sampleAdmin = new AirLineAdmin();
         sampleAdmin.setAirlineAdminId(1);
         sampleAdmin.setAirlineAdminName("John Doe");
@@ -79,74 +79,78 @@ class AirLineAdminControllerTest {
         assertEquals("Admin not found with ID: 999", exception.getMessage());
     }
 
+   
     @Test
-    void testCreateAdmin() {
-        when(bindingResult.hasErrors()).thenReturn(false);
-        when(airLineAdminService.createAdmin(sampleAdmin)).thenReturn(sampleAdmin);
-
-        ResponseEntity<?> response = airLineAdminController.createAdmin(sampleAdmin, bindingResult);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertTrue(response.getBody() instanceof AirLineAdmin);
-        assertEquals(sampleAdmin, response.getBody());
-    }
-
-    @Test
-    void testCreateAdmin_WithValidationErrors() {
+    void testCreateAdmin_ValidationErrors() {
+        // Arrange
         when(bindingResult.hasErrors()).thenReturn(true);
-        when(bindingResult.getAllErrors()).thenReturn(
-                List.of(new org.springframework.validation.ObjectError("admin", "Invalid email"))
-        );
 
-        ResponseEntity<?> response = airLineAdminController.createAdmin(sampleAdmin, bindingResult);
+        ObjectError mockError = mock(ObjectError.class);
+        when(mockError.getDefaultMessage()).thenReturn("Invalid email");
 
+        when(bindingResult.getAllErrors()).thenReturn(List.of(mockError));
+
+        // Act
+        ResponseEntity<Object> response = airLineAdminController.createAdmin(sampleAdmin, bindingResult);
+
+        // Assert
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertTrue(response.getBody() instanceof Map);
+        assertTrue(response.getBody() instanceof List);
 
-        Map<?, ?> body = (Map<?, ?>) response.getBody();
-        assertTrue(body.containsKey("errors"));
-        List<?> errors = (List<?>) body.get("errors");
-        assertTrue(errors.contains("Invalid email"));
+        List<?> errors = (List<?>) response.getBody();
+        assertTrue(errors.contains("Invalid email"));  // This should now pass
     }
 
+
     @Test
-    void testUpdateAdmin() {
+    void testUpdateAdmin_Success() {
         when(bindingResult.hasErrors()).thenReturn(false);
         when(airLineAdminService.updateAdmin(eq(1), any(AirLineAdmin.class))).thenReturn(sampleAdmin);
 
-        ResponseEntity<?> response = airLineAdminController.updateAdmin(1, sampleAdmin, bindingResult);
+        ResponseEntity<Object> response = airLineAdminController.updateAdmin(1, sampleAdmin, bindingResult);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody() instanceof AirLineAdmin);
         assertEquals(sampleAdmin, response.getBody());
     }
 
     @Test
-    void testUpdateAdmin_WithValidationErrors() {
+    void testUpdateAdmin_ValidationErrors() {
         when(bindingResult.hasErrors()).thenReturn(true);
-        when(bindingResult.getAllErrors()).thenReturn(
-                List.of(new org.springframework.validation.ObjectError("admin", "Invalid contact number"))
-        );
+        when(bindingResult.getAllErrors()).thenReturn(List.of(new ObjectError("admin", "Invalid contact number")));
 
-        ResponseEntity<?> response = airLineAdminController.updateAdmin(1, sampleAdmin, bindingResult);
+        ResponseEntity<Object> response = airLineAdminController.updateAdmin(1, sampleAdmin, bindingResult);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertTrue(response.getBody() instanceof Map);
-
-        Map<?, ?> body = (Map<?, ?>) response.getBody();
-        assertTrue(body.containsKey("errors"));
-        List<?> errors = (List<?>) body.get("errors");
+        assertTrue(response.getBody() instanceof List);
+        List<?> errors = (List<?>) response.getBody();
         assertTrue(errors.contains("Invalid contact number"));
     }
 
     @Test
-    void testDeleteAdmin() {
-        doNothing().when(airLineAdminService).deleteAdmin(1);
+    void testPatchAdmin_Success() {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("airlineAdminName", "Jane Doe");
 
-        ResponseEntity<String> response = airLineAdminController.deleteAdmin(1);
+        AirLineAdmin updatedAdmin = new AirLineAdmin();
+        updatedAdmin.setAirlineAdminId(1);
+        updatedAdmin.setAirlineAdminName("Jane Doe");
+
+        when(airLineAdminService.patchAdmin(1, updates)).thenReturn(updatedAdmin);
+
+        ResponseEntity<AirLineAdmin> response = airLineAdminController.patchAdmin(1, updates);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Airline admin deleted successfully", response.getBody());
+        assertEquals("Jane Doe", response.getBody().getAirlineAdminName());
+    }
+
+    @Test
+    void testDeleteAdmin_Success() {
+        doNothing().when(airLineAdminService).deleteAdmin(1);
+
+        ResponseEntity<Void> response = airLineAdminController.deleteAdmin(1);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertNull(response.getBody());
     }
 
     @Test

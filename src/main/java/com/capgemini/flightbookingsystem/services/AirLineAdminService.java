@@ -1,9 +1,9 @@
 package com.capgemini.flightbookingsystem.services;
 
 import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AirLineAdminService {
 	List<AirLineAdmin> getAllAirlineAdmins();
@@ -21,4 +21,6 @@ public interface AirLineAdminService {
 	boolean existsByContactNumber(String contactNumber);
 
 	AirLineAdmin findByAirlineEmail(String email);
+
+	AirLineAdmin patchAdmin(Integer adminId, Map<String, Object> updates);
 }

@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,9 +19,13 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/payments")
 public class PaymentsController {
-	
-	@Autowired
-	private PaymentsService paymentsService;
+
+    private final PaymentsService paymentsService;
+
+    // Constructor injection
+    public PaymentsController(PaymentsService paymentsService) {
+        this.paymentsService = paymentsService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Payments>> getAllPayments() {
@@ -36,9 +40,7 @@ public class PaymentsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createPayments(
-            @Valid @RequestBody Payments payment,
-            BindingResult result) {
+    public ResponseEntity<Object> createPayments(@Valid @RequestBody Payments payment, BindingResult result) {
         log.info("POST /payments called with: {}", payment);
         if (result.hasErrors()) {
             log.warn("Validation failed: {}", result.getAllErrors());
@@ -49,7 +51,7 @@ public class PaymentsController {
     }
 
     @PutMapping("/{paymentId}")
-    public ResponseEntity<?> updatePayments(
+    public ResponseEntity<Object> updatePayments(
             @PathVariable Integer paymentId,
             @Valid @RequestBody Payments updatedPayment,
             BindingResult result) {
@@ -68,4 +70,3 @@ public class PaymentsController {
         return ResponseEntity.noContent().build();
     }
 }
-

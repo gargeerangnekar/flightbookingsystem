@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import com.capgemini.flightbookingsystem.entities.Flights;
 
-//repository layer
 @Repository
 public interface FlightRepository extends JpaRepository<Flights, Integer> {
 	@Query("SELECT f FROM Flights f JOIN f.bookings b WHERE b.bookingTime BETWEEN :start AND :end")
