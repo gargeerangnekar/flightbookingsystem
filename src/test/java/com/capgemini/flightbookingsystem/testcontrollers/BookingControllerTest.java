@@ -1,8 +1,7 @@
 package com.capgemini.flightbookingsystem.testcontrollers;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,7 +22,6 @@ import org.springframework.validation.BindingResult;
 import com.capgemini.flightbookingsystem.controllers.BookingController;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.exceptions.BookingNotFoundException;
-import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
 class BookingControllerTest {
@@ -48,8 +45,8 @@ class BookingControllerTest {
 	@Test
 	@DisplayName("Should fetch number of bookings done")
 	void testGetAllBookings() {
-		booking1 = new Booking(1, "A1", "Economy", LocalDateTime.now(),  5000.0, null, null,null);
-		booking2 = new Booking(2, "B2", "Business", LocalDateTime.now(),10000.0, null, null,null);
+		booking1 = new Booking(1, "A1", "Economy", LocalDateTime.now(), 5000.0, null, null, null);
+		booking2 = new Booking(2, "B2", "Business", LocalDateTime.now(), 10000.0, null, null, null);
 		List<Booking> bookings = Arrays.asList(booking1, booking2);
 		when(bookingService.getAllBookings()).thenReturn(bookings);
 
@@ -87,20 +84,21 @@ class BookingControllerTest {
 	@Test
 	@DisplayName("Updating the booking and updated will be shown")
 	void testUpdateBooking() {
-		Booking updatedBooking = new Booking(3, "A1", "Business", LocalDateTime.now(),6000.0, null, null,null);
-		BindingResult bindingResult = mock(BindingResult.class);
-		when(bookingService.updateBooking(3, updatedBooking)).thenReturn(updatedBooking);
+	    Booking updatedBooking = new Booking(3, "A1", "Business", LocalDateTime.now(), 6000.0, null, null, null);
+	    BindingResult bindingResult = mock(BindingResult.class);
+	    when(bindingResult.hasErrors()).thenReturn(false);
+	    when(bookingService.updateBooking(3, updatedBooking)).thenReturn(updatedBooking);
 
-		ResponseEntity<Booking> response = bookingController.updateBooking(updatedBooking, 3, bindingResult);
+	    ResponseEntity<Booking> response = bookingController.updateBooking(updatedBooking, 3, bindingResult);
 
-		assertEquals(200, response.getStatusCode().value());
-		assertEquals(updatedBooking, response.getBody());
-
+	    assertEquals(200, response.getStatusCode().value());
+	    assertEquals(updatedBooking, response.getBody());
 	}
+
 
 	@Test
 	@DisplayName("Testing the delete method")
-	public void testDeleteMethod() {
+	void testDeleteMethod() {
 		doNothing().when(bookingService).deleteBooking(1);
 
 		ResponseEntity<Booking> response = bookingController.deleteBooking(1);

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.dto.AirportFetchingDto;
 import com.capgemini.flightbookingsystem.entities.Airport;
-import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.AirportRepository;
