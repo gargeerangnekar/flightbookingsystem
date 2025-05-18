@@ -62,7 +62,7 @@ public class UserController {
 		User saved = userService.createUser(enrollment);
 		log.debug("User created successfully with ID: {}", saved.getUserId());
 
-		return ResponseEntity.status(HttpStatus.CREATED).location(URI.create("/api/users/" + saved.getUserId()))
+		return ResponseEntity.status(HttpStatus.CREATED).location(URI.create("/users/" + saved.getUserId()))
 				.body(saved);
 	}
 

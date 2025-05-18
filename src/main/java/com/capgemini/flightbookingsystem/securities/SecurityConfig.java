@@ -53,18 +53,23 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity httpSecurity)throws Exception {
-		return httpSecurity.csrf(AbstractHttpConfigurer::disable)
-				.cors(Customizer.withDefaults())
-				.exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/signin","/auth/register","/auth/register-admin").permitAll()
-						.requestMatchers("/**").hasAnyRole("USER","ADMIN").anyRequest().authenticated())
-				.authenticationProvider(authenticationProvider())
-				.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-				.build();
+	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+	    return httpSecurity
+	        // CSRF protection is disabled because JWT is used for stateless authentication (no session or cookies).
+	        .csrf(AbstractHttpConfigurer::disable)
+	        .cors(Customizer.withDefaults())
+	        .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))
+	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	        .authorizeHttpRequests(auth -> auth
+	            .requestMatchers("/auth/signin", "/auth/register", "/auth/register-admin").permitAll()
+	            .requestMatchers("/**").hasAnyRole("USER", "ADMIN")
+	            .anyRequest().authenticated()
+	        )
+	        .authenticationProvider(authenticationProvider())
+	        .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+	        .build();
 	}
-	
+
 	
 	
 }

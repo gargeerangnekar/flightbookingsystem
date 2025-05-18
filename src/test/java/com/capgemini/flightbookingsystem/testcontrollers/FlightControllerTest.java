@@ -51,12 +51,32 @@ class FlightControllerTest {
 		);
 
 		when(airLineAdminRepository.findById(1)).thenReturn(Optional.of(admin));
-
-		flight1 = new Flights(1, "AI202", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), 5000.0, "Boeing 737", 180, 1, 3, admin, "available");
-		flight2 = new Flights(2, "BJ301", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), 2000.0, "Boeing 737", 180, 2, 3, admin, "available");
+		
+		flight1 = new Flights();
+		flight1.setFlightId(1);
+		flight1.setFlightNumber("AI202");
+		flight1.setDepartureTime(LocalDateTime.parse("2025-06-01T10:30:00"));
+		flight1.setArrivalTime(LocalDateTime.parse("2025-06-01T13:45:00"));
+		flight1.setAmount(5000.0);
+		flight1.setAircraftModel("Boeing 737");
+		flight1.setCapacity(180);
+		flight1.setArrivalAirportId(1);
+		flight1.setDepartureAirportId(3);
+		flight1.setAirlineAdmin(admin);
+		
+		flight2 = new Flights();
+		flight2.setFlightId(2);
+		flight2.setFlightNumber("BJ301");
+		flight2.setDepartureTime(LocalDateTime.parse("2025-06-01T10:30:00"));
+		flight2.setArrivalTime(LocalDateTime.parse("2025-06-01T13:45:00"));
+		flight2.setAmount(2000.0);
+		flight2.setAircraftModel("Boeing 737");
+		flight2.setCapacity(180);
+		flight2.setArrivalAirportId(2);
+		flight2.setDepartureAirportId(3);
+		flight2.setAirlineAdmin(admin);
 	}
+		
 
 	@Test
 	@DisplayName("Test to create a flight")
@@ -96,8 +116,18 @@ class FlightControllerTest {
 	@Test
 	@DisplayName("Test to update a flight")
 	void testUpdateFlight() {
-		Flights updateFlight = new Flights(3, "CL507", LocalDateTime.parse("2025-06-01T10:30:00"),
-				LocalDateTime.parse("2025-06-01T13:45:00"), 21000.0, "Boeing 737", 200, 1, 1, admin, "available");
+		Flights updateFlight;
+		updateFlight = new Flights();
+		updateFlight.setFlightId(3);
+		updateFlight.setFlightNumber("CL507");
+		updateFlight.setDepartureTime(LocalDateTime.parse("2025-06-01T10:30:00"));
+		updateFlight.setArrivalTime(LocalDateTime.parse("2025-06-01T13:45:00"));
+		updateFlight.setAmount(21000.0);
+		updateFlight.setAircraftModel("Boeing 737");
+		updateFlight.setCapacity(200);
+		updateFlight.setArrivalAirportId(1);
+		updateFlight.setDepartureAirportId(1);
+		updateFlight.setAirlineAdmin(admin);
 
 		when(flightService.updateFlightById(3, updateFlight)).thenReturn(updateFlight);
 

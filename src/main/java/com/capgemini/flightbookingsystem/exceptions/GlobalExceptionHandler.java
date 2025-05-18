@@ -81,15 +81,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), request.getRequestURI()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // Validation error handler (useful if you're validating request bodies with @Valid)
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
-        String errorMessage = ex.getBindingResult().getFieldError() != null
-                ? ex.getBindingResult().getFieldError().getDefaultMessage()
-                : "Validation error";
+        String errorMessage;
+        var fieldError = ex.getBindingResult().getFieldError();
+        if (fieldError != null && fieldError.getDefaultMessage() != null) {
+            errorMessage = fieldError.getDefaultMessage();
+        } else {
+            errorMessage = "Validation error";
+        }
 
         String uri = ((ServletWebRequest) request).getRequest().getRequestURI();
 
