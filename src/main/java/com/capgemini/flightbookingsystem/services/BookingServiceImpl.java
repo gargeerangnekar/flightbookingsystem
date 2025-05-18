@@ -1,12 +1,12 @@
 package com.capgemini.flightbookingsystem.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
-import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.entities.Payments;
@@ -68,8 +68,9 @@ public class BookingServiceImpl implements BookingService {
 		Payments payment = new Payments();
 		payment.setAmount(booking.getAmount());
 		payment.setPaymentDatetime(LocalDateTime.now());
-
+		
 		booking.setPayment(payment);
+		
 
 		return bookingRepository.save(booking);
 	}
@@ -104,19 +105,14 @@ public class BookingServiceImpl implements BookingService {
 		});
 	}
 
-
-
 	@Override
-	public List<FlightBookingDto> getAllFlights(LocalDateTime departureTime
-			,String departureCity, String arrivalCity) {
-		return bookingRepository.getAllBookingDto(departureTime, departureCity, arrivalCity);
+	public List<Flights> searchFlights(
+			Integer departureAirportId, Integer arrivalAirportId ,LocalDate departureTime) {
+		return bookingRepository.searchFlights(departureAirportId, arrivalAirportId, departureTime);
 	}
 	 @Override
 	public List<BookingHistoryDto> getBookingHistoryById(Integer userId) {
 		return bookingRepository.getBookingHistory(userId);
 	}
-	 @Override
-	public List<FlightBookingDto> getAllFlightsForDisplay() {
-		return bookingRepository.getAllBookingDtoForDisplay();
-	}
+	
 }

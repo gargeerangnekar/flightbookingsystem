@@ -10,4 +10,5 @@ import com.capgemini.flightbookingsystem.entities.Flights;
 public interface AirportRepository extends JpaRepository<Airport, Integer> {
 	
 	 List<Flights> findByAirportId(Integer airportId);
+	  
 }

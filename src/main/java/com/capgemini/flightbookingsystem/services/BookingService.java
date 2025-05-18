@@ -1,11 +1,11 @@
 package com.capgemini.flightbookingsystem.services;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
-import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.entities.Flights;
 
 //9
 public interface BookingService {
@@ -21,10 +21,8 @@ public interface BookingService {
 	void deleteBooking(Integer bookingId);
 	
 	
-	List<FlightBookingDto> getAllFlightsForDisplay();
-	
-	List<FlightBookingDto> getAllFlights(LocalDateTime departureTime,
-			String departureCity, String arrivalCity);
+	List<Flights> searchFlights(
+			Integer departureAirportId, Integer arrivalAirportId , LocalDate departureTime);
 
 	List<BookingHistoryDto> getBookingHistoryById(Integer userId);
 	

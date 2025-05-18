@@ -1,9 +1,10 @@
 package com.capgemini.flightbookingsystem.controllers;
 
 import java.net.URI;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
-import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
 import jakarta.validation.Valid;
@@ -93,30 +94,21 @@ public class BookingController {
 	}
 
 
-	@GetMapping("/book-a-flight")
-	public ResponseEntity<List<FlightBookingDto>> getAllFlightsForBooking(){
-		log.info("Fetching all flights for booking");
-		List<FlightBookingDto> flights = bookingService.getAllFlightsForDisplay();
-		log.info("Fetched all flights");
-		return ResponseEntity.status(HttpStatus.OK).body(flights);
-	}
-	
-	@PostMapping("/book-a-flight/{departureTime}")
-	public ResponseEntity<List<FlightBookingDto>> getAllFlightsForBooking(@PathVariable LocalDateTime departureTime,
-			@RequestParam("from") String departureCity,
-		    @RequestParam("to") String arrivalCity) {
-		log.info("Fetching all flights for booking");
-		List<FlightBookingDto> flights = bookingService.getAllFlights(departureTime , departureCity, arrivalCity);
-		log.info("Fetched all flights");
-		return ResponseEntity.status(HttpStatus.OK).body(flights);
-	}
-
 	@GetMapping("/history/{userId}")
 	public ResponseEntity<List<BookingHistoryDto>> getBookingHistory(@PathVariable Integer userId) {
 		log.info("Request to fetch booking history for ID :", userId);
 		List<BookingHistoryDto> bookingHistory = bookingService.getBookingHistoryById(userId);
 		log.info("Booking history fetched for ID :", userId);
 		return ResponseEntity.status(HttpStatus.OK).body(bookingHistory);
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<List<Flights>> searchFlights(@RequestParam Integer fromCity, @RequestParam Integer toCity,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate) {
+		log.info("Searching flights for input data");
+		List<Flights> flights = bookingService.searchFlights(fromCity, toCity, departureDate);
+		log.info("Fetched results");
+		return ResponseEntity.status(HttpStatus.OK).body(flights);
 	}
 
 }
