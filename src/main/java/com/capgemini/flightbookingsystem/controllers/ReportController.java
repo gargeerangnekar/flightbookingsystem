@@ -11,7 +11,6 @@ import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequestMapping("/api/v1/reports")
-@CrossOrigin(origins = "*") // Adjust for production
 public class ReportController {
 
     private final ReportService reportService;

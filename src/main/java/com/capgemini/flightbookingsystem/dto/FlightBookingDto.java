@@ -4,113 +4,134 @@ import java.time.LocalDateTime;
 
 public class FlightBookingDto {
 
-	private Integer departureAirportId;
-	private Integer arrivalAirportId;
-	private String departureAirportName;
-	private String arrivalAirportName;
-	private String departureCity;
-	private String arrivalCity;
-	private LocalDateTime departureTime;
-	private LocalDateTime arrivalTime;
-	private Double amount;
+    private Integer departureAirportId;
+    private Integer arrivalAirportId;
+    private String departureAirportName;
+    private String arrivalAirportName;
+    private String departureCity;
+    private String arrivalCity;
+    private LocalDateTime departureTime;
+    private LocalDateTime arrivalTime;
+    private Double amount;
 
-	public FlightBookingDto() {
+    // Default constructor
+    public FlightBookingDto() {}
 
-	}
+    // Private constructor for Builder
+    private FlightBookingDto(Builder builder) {
+        this.departureAirportId = builder.departureAirportId;
+        this.arrivalAirportId = builder.arrivalAirportId;
+        this.departureAirportName = builder.departureAirportName;
+        this.arrivalAirportName = builder.arrivalAirportName;
+        this.departureCity = builder.departureCity;
+        this.arrivalCity = builder.arrivalCity;
+        this.departureTime = builder.departureTime;
+        this.arrivalTime = builder.arrivalTime;
+        this.amount = builder.amount;
+    }
 
-	public FlightBookingDto(Integer departureAirportId, Integer arrivalAirportId, String departureAirportName,
-			String arrivalAirportName, String departureCity, String arrivalCity, LocalDateTime departureTime,
-			LocalDateTime arrivalTime, Double amount) {
-		super();
-		this.departureAirportId = departureAirportId;
-		this.arrivalAirportId = arrivalAirportId;
-		this.departureAirportName = departureAirportName;
-		this.arrivalAirportName = arrivalAirportName;
-		this.departureCity = departureCity;
-		this.arrivalCity = arrivalCity;
-		this.departureTime = departureTime;
-		this.arrivalTime = arrivalTime;
-		this.amount = amount;
-	}
+    // Builder class
+    public static class Builder {
+        private Integer departureAirportId;
+        private Integer arrivalAirportId;
+        private String departureAirportName;
+        private String arrivalAirportName;
+        private String departureCity;
+        private String arrivalCity;
+        private LocalDateTime departureTime;
+        private LocalDateTime arrivalTime;
+        private Double amount;
 
-	public Integer getDepartureAirportId() {
-		return departureAirportId;
-	}
+        public Builder departureAirportId(Integer id) {
+            this.departureAirportId = id;
+            return this;
+        }
 
-	public void setDepartureAirportId(Integer departureAirportId) {
-		this.departureAirportId = departureAirportId;
-	}
+        public Builder arrivalAirportId(Integer id) {
+            this.arrivalAirportId = id;
+            return this;
+        }
 
-	public Integer getArrivalAirportId() {
-		return arrivalAirportId;
-	}
+        public Builder departureAirportName(String name) {
+            this.departureAirportName = name;
+            return this;
+        }
 
-	public void setArrivalAirportId(Integer arrivalAirportId) {
-		this.arrivalAirportId = arrivalAirportId;
-	}
+        public Builder arrivalAirportName(String name) {
+            this.arrivalAirportName = name;
+            return this;
+        }
 
-	public String getDepartureAirportName() {
-		return departureAirportName;
-	}
+        public Builder departureCity(String city) {
+            this.departureCity = city;
+            return this;
+        }
 
-	public void setDepartureAirportName(String departureAirportName) {
-		this.departureAirportName = departureAirportName;
-	}
+        public Builder arrivalCity(String city) {
+            this.arrivalCity = city;
+            return this;
+        }
 
-	public String getArrivalAirportName() {
-		return arrivalAirportName;
-	}
+        public Builder departureTime(LocalDateTime time) {
+            this.departureTime = time;
+            return this;
+        }
 
-	public void setArrivalAirportName(String arrivalAirportName) {
-		this.arrivalAirportName = arrivalAirportName;
-	}
+        public Builder arrivalTime(LocalDateTime time) {
+            this.arrivalTime = time;
+            return this;
+        }
 
-	public LocalDateTime getDepartureTime() {
-		return departureTime;
-	}
+        public Builder amount(Double amount) {
+            this.amount = amount;
+            return this;
+        }
 
-	public void setDepartureTime(LocalDateTime departureTime) {
-		this.departureTime = departureTime;
-	}
+        public FlightBookingDto build() {
+            return new FlightBookingDto(this);
+        }
+    }
 
-	public LocalDateTime getArrivalTime() {
-		return arrivalTime;
-	}
+    // Getters and Setters
+    public Integer getDepartureAirportId() { return departureAirportId; }
+    public void setDepartureAirportId(Integer id) { this.departureAirportId = id; }
 
-	public void setArrivalTime(LocalDateTime arrivalTime) {
-		this.arrivalTime = arrivalTime;
-	}
+    public Integer getArrivalAirportId() { return arrivalAirportId; }
+    public void setArrivalAirportId(Integer id) { this.arrivalAirportId = id; }
 
-	public Double getAmount() {
-		return amount;
-	}
+    public String getDepartureAirportName() { return departureAirportName; }
+    public void setDepartureAirportName(String name) { this.departureAirportName = name; }
 
-	public void setAmount(Double amount) {
-		this.amount = amount;
-	}
+    public String getArrivalAirportName() { return arrivalAirportName; }
+    public void setArrivalAirportName(String name) { this.arrivalAirportName = name; }
 
-	public String getDepartureCity() {
-		return departureCity;
-	}
+    public String getDepartureCity() { return departureCity; }
+    public void setDepartureCity(String city) { this.departureCity = city; }
 
-	public void setDepartureCity(String departureCity) {
-		this.departureCity = departureCity;
-	}
+    public String getArrivalCity() { return arrivalCity; }
+    public void setArrivalCity(String city) { this.arrivalCity = city; }
 
-	public String getArrivalCity() {
-		return arrivalCity;
-	}
+    public LocalDateTime getDepartureTime() { return departureTime; }
+    public void setDepartureTime(LocalDateTime time) { this.departureTime = time; }
 
-	public void setArrivalCity(String arrivalCity) {
-		this.arrivalCity = arrivalCity;
-	}
+    public LocalDateTime getArrivalTime() { return arrivalTime; }
+    public void setArrivalTime(LocalDateTime time) { this.arrivalTime = time; }
 
-	@Override
-	public String toString() {
-		return "FlightBookingDto [departureAirportId=" + departureAirportId + ", arrivalAirportId=" + arrivalAirportId
-				+ ", departureAirportName=" + departureAirportName + ", arrivalAirportName=" + arrivalAirportName
-				+ ", departureCity=" + departureCity + ", arrivalCity=" + arrivalCity + ", departureTime="
-				+ departureTime + ", arrivalTime=" + arrivalTime + ", amount=" + amount + "]";
-	}
+    public Double getAmount() { return amount; }
+    public void setAmount(Double amount) { this.amount = amount; }
 
+    @Override
+    public String toString() {
+        return "FlightBookingDto{" +
+                "departureAirportId=" + departureAirportId +
+                ", arrivalAirportId=" + arrivalAirportId +
+                ", departureAirportName='" + departureAirportName + '\'' +
+                ", arrivalAirportName='" + arrivalAirportName + '\'' +
+                ", departureCity='" + departureCity + '\'' +
+                ", arrivalCity='" + arrivalCity + '\'' +
+                ", departureTime=" + departureTime +
+                ", arrivalTime=" + arrivalTime +
+                ", amount=" + amount +
+                '}';
+    }
 }

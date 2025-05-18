@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capgemini.flightbookingsystem.dto.AirportFetchingDto;
 import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
-import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
