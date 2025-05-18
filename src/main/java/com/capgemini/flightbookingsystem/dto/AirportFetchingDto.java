@@ -7,10 +7,10 @@ public class AirportFetchingDto {
 	String arrivalCity;
 
 	public AirportFetchingDto() {
-		super();
+
 	}
 
-	public AirportFetchingDto(String departureCity, String arrivalCity) {
+	public AirportFetchingDto(String departureCity,String arrivalCity) {
 		this.departureCity = departureCity;
 		this.arrivalCity = arrivalCity;
 	}
@@ -30,6 +30,7 @@ public class AirportFetchingDto {
 	public void setArrivalCity(String arrivalCity) {
 		this.arrivalCity = arrivalCity;
 	}
+	
 	
 	
 }
