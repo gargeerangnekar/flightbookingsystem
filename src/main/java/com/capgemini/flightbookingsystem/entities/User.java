@@ -46,7 +46,7 @@ public class User {
 
 	@NotBlank(message = "This field is compulsary.")
 	@Column(name="phone_number")
-	@Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number must be 10 to 15 digits") 
+	@Pattern(regexp = "\\d{10,15}", message = "Phone number must be between 10 and 15 digits")
 	private String phoneNumber;
 
 	@NotBlank(message = "Passport number is mandatory.")

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Airport;
@@ -16,8 +15,12 @@ public class AirportServiceImpl implements AirportService {
 
     private static final Logger logger = LoggerFactory.getLogger(AirportServiceImpl.class);
 
-    @Autowired
-    private AirportRepository airportRepository;
+    private final AirportRepository airportRepository;
+
+    // Constructor injection
+    public AirportServiceImpl(AirportRepository airportRepository) {
+        this.airportRepository = airportRepository;
+    }
 
     @Override
     public Airport saveAirport(Airport airport) {

@@ -20,7 +20,7 @@ import com.capgemini.flightbookingsystem.controllers.UserController;
 import com.capgemini.flightbookingsystem.entities.User;
 import com.capgemini.flightbookingsystem.services.UserService;
 
-public class UserControllerTest {
+class UserControllerTest {
 
 	@Mock
 	private UserService userService;
@@ -108,4 +108,21 @@ public class UserControllerTest {
 
 		assertEquals(204, response.getStatusCode().value());
 	}
+	@Test
+	@DisplayName("Should patch user by ID")
+	void testPatchUser() {
+	    User patchUser = new User();
+	    patchUser.setName("Patched Name");
+
+	    BindingResult bindingResult = mock(BindingResult.class);
+	    when(bindingResult.hasErrors()).thenReturn(false);
+
+	    when(userService.patchUser(1, patchUser)).thenReturn(patchUser);
+
+	    ResponseEntity<User> response = userController.patchUser(1, patchUser, bindingResult);
+
+	    assertEquals(200, response.getStatusCode().value());
+	    assertEquals("Patched Name", response.getBody().getName());
+	}
+
 }

@@ -6,6 +6,7 @@ import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.List;
 public class AirLineAdminServiceImpl implements AirLineAdminService {
 
 	private final AirLineAdminRepository airLineAdminRepository;
+	PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public AirLineAdminServiceImpl(AirLineAdminRepository airLineAdminRepository) {
+	public AirLineAdminServiceImpl(AirLineAdminRepository airLineAdminRepository, PasswordEncoder passwordEncoder) {
 		this.airLineAdminRepository = airLineAdminRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -34,8 +37,9 @@ public class AirLineAdminServiceImpl implements AirLineAdminService {
 
 	@Override
 	public AirLineAdmin createAdmin(AirLineAdmin admin) {
-		// Add any extra validation or business logic here if needed
-		return airLineAdminRepository.save(admin);
+		String encodedPassword = passwordEncoder.encode(admin.getPassword());
+	    admin.setPassword(encodedPassword);
+	    return airLineAdminRepository.save(admin);
 	}
 
 	@Override
