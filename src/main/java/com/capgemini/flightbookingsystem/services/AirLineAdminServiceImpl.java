@@ -63,6 +63,37 @@ public class AirLineAdminServiceImpl implements AirLineAdminService {
 				.orElseThrow(() -> new AirlineAdminNotFoundException("Admin not found with ID: " + id));
 		airLineAdminRepository.delete(existingAdmin);
 	}
+ @Override
+    public AirLineAdmin patchAdmin(Integer id, Map<String, Object> updates) {
+        log.info("Patching AirLineAdmin with ID: {}", id);
+
+        AirLineAdmin existing = airLineAdminRepository.findById(id)
+            .orElseThrow(() -> new AirlineAdminNotFoundException(ADMIN_NOT_FOUND_MSG + id));
+
+        updates.forEach((key, value) -> {
+            switch (key) {
+                case "airlineAdminName" -> {
+                    existing.setAirlineAdminName((String) value);
+                    log.debug("Updated admin name to: {}", value);
+                }
+                case "password" -> {
+                    existing.setPassword((String) value);
+                    log.debug("Updated password");
+                }
+                case "contactNumber" -> {
+                    existing.setContactNumber((String) value);
+                    log.debug("Updated contact number to: {}", value);
+                }
+                case "airlineEmail" -> {
+                    existing.setAirlineEmail((String) value);
+                    log.debug("Updated airline email to: {}", value);
+                }
+                default -> log.warn("Unknown field '{}' in patch request", key);
+            }
+        });
+
+        return airLineAdminRepository.save(existing);
+    }
 
 	@Override
 	public boolean existsByAirlineEmail(String email) {
