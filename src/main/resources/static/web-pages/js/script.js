@@ -59,6 +59,14 @@ function getName() {
     return decoded.name;
 }
 
+function getPhoneNumber() {
+    const token = localStorage.getItem("token");
+    if (!token)
+        window.location.href = "Flight_login.html";;
+    const decoded = decodeJWT(token);
+    return decoded.phone;
+}
+
 function getEmail() {
     const token = localStorage.getItem("token");
     if (!token)
@@ -67,13 +75,7 @@ function getEmail() {
     return decoded.email;
 }
 
-function getPhoneNumber() {
-    const token = localStorage.getItem("token");
-    if (!token)
-        window.location.href = "Flight_login.html";;
-    const decoded = decodeJWT(token);
-    return decoded.phone;
-}
+
 
 function getPassportNumber() {
     const token = localStorage.getItem("token");
