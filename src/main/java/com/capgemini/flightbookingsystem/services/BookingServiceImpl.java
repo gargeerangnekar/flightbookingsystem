@@ -141,6 +141,10 @@ public class BookingServiceImpl implements BookingService {
 	public List<BookingHistoryDto> getBookingHistoryById(Integer userId) {
 		return bookingRepository.getBookingHistory(userId);
 	}
+	 @Override
+	public List<BookingHistoryDto> getAllBookingHistory() {
+		return bookingRepository.getAllBookingHistory();
+	}
 	
 	 
 	
