@@ -1,92 +1,53 @@
 package com.capgemini.flightbookingsystem.entities;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
-
+//11
 @Entity
+@Table(name = "payment_table")
 public class Payments {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long paymentId;
+	private Integer paymentId;
 
-	private Long amount;
-	private String paymentMethod;
-	private LocalDate paymentDate;
-	private LocalDateTime paymentTime;
-	private Long bookingId;
-	private Long userId;
+	@NotNull(message = "Amount is required")
+	@Positive(message = "Amount must be positive")
+	private Double amount;
 
-	public Payments() {
-	}
+	@NotNull(message = "Payment date is required")
+	@PastOrPresent(message = "Payment date cannot be in the future")
+	private LocalDateTime paymentDatetime;
 
-	public Payments(Long paymentId, Long amount, String paymentMethod, LocalDate paymentDate, LocalDateTime paymentTime,
-			Long bookingId, Long userId) {
-		super();
-		this.paymentId = paymentId;
-		this.amount = amount;
-		this.paymentMethod = paymentMethod;
-		this.paymentDate = paymentDate;
-		this.paymentTime = paymentTime;
-		this.bookingId = bookingId;
-		this.userId = userId;
-	}
-
-	public Long getPaymentId() {
+	public Integer getPaymentId() {
 		return paymentId;
 	}
 
-	public void setPaymentId(Long paymentId) {
+	public void setPaymentId(Integer paymentId) {
 		this.paymentId = paymentId;
 	}
 
-	public Long getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Long amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
-	public String getPaymentMethod() {
-		return paymentMethod;
+	public LocalDateTime getPaymentDatetime() {
+		return paymentDatetime;
 	}
 
-	public void setPaymentMethod(String paymentMethod) {
-		this.paymentMethod = paymentMethod;
+	public void setPaymentDatetime(LocalDateTime paymentDatetime) {
+		this.paymentDatetime = paymentDatetime;
 	}
 
-	public LocalDate getPaymentDate() {
-		return paymentDate;
+	@Override
+	public String toString() {
+		return "Payments [paymentId=" + paymentId + ", amount=" + amount + ", paymentDatetime=" + paymentDatetime + "]";
 	}
-
-	public void setPaymentDate(LocalDate paymentDate) {
-		this.paymentDate = paymentDate;
-	}
-
-	public LocalDateTime getPaymentTime() {
-		return paymentTime;
-	}
-
-	public void setPaymentTime(LocalDateTime paymentTime) {
-		this.paymentTime = paymentTime;
-	}
-
-	public Long getBookingId() {
-		return bookingId;
-	}
-
-	public void setBookingId(Long bookingId) {
-		this.bookingId = bookingId;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
 }

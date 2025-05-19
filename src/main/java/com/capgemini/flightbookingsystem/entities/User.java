@@ -1,14 +1,24 @@
 package com.capgemini.flightbookingsystem.entities;
 
+
+//12
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "user_table")
@@ -16,10 +26,11 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
-	private Long userId;
+	private Integer userId;
 
 	@NotBlank(message = "User name is mendentory.")
 	@Column(name = "name")
+	@Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
 	private String name;
 
 	@Email(message = "Enter valid email")
@@ -29,20 +40,29 @@ public class User {
 
 	@NotBlank(message = "Enter valid password")
 	@Column(name = "password")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$",
+	message = "Password must contain at least one uppercase, one lowercase, one digit, and one special character") 
 	private String password;
 
 	@NotBlank(message = "This field is compulsary.")
 	@Column(name="phone_number")
+	@Pattern(regexp = "\\d{10,15}", message = "Phone number must be between 10 and 15 digits")
 	private String phoneNumber;
 
 	@NotBlank(message = "Passport number is mandatory.")
 	@Column(name = "passport_number")
+	@Pattern(regexp = "^[A-Z0-9]{6,9}$", message = "Passport number must be 6 to 9 alphanumeric characters") 
 	private String passportNumber;
 
+	
+	@OneToMany(mappedBy = "users",cascade = CascadeType.PERSIST)
+	@JsonManagedReference
+	List<Booking> bookings = new ArrayList<>();
+	
 	public User() {
 	}
 
-	public User(Long userId, String name, String email, String password, String phoneNumber, String passportNumber) {
+	public User(Integer userId, String name, String email, String password, String phoneNumber, String passportNumber) {
 		super();
 		this.userId = userId;
 		this.name = name;
@@ -53,11 +73,11 @@ public class User {
 
 	}
 
-	public Long getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 
