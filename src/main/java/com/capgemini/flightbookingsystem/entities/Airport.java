@@ -5,69 +5,90 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 
 @Entity
-	@Table(name = "airport")
-	public class Airport {
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    @Column(name = "airport_id")
-	    private Long airportId;
-	    @Column(name = "airport_name", length = 255)
-	    
-	    private String airportName;
+@Table(name = "airport_table")
+public class Airport {
 
-	    @Column(name = "city", length = 255)
-	    private String city;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "airport_id")
+	private Integer airportId;
 
-	    @Column(name = "contact")
-	    private Integer contact;
+	@NotBlank(message = "airport name is mandatory")
+	@Size(min = 2, max = 100, message = "Airport name must be between 2 and 100 characters")
+	@Column(name = "airport_name")
+	private String airportName;
 
-		public Airport() {
-			super();
-		}
+	@NotBlank(message = "airport city is mandatory")
+	@Size(min = 2, max = 100, message = "City name must be between 2 and 100 characters")
+	@Column(name = "city")
+	private String city;
 
-		public Airport(Long airportId, String airportName, String city, Integer contact) {
-			super();
-			this.airportId = airportId;
-			this.airportName = airportName;
-			this.city = city;
-			this.contact = contact;
-		}
+	@NotBlank(message = "airport contact is mandatory")
+	@Min(value = 1000000000, message = "Contact number must be at least 10 digits")
+	@Max(value = 9999999999L, message = "Contact number must be no more than 10 digits")
+	@Column(name = "contact")
+	private String contact;
 
-		public Long getAirportId() {
-			return airportId;
-		}
-
-		public void setAirportId(Long airportId) {
-			this.airportId = airportId;
-		}
-
-		public String getAirportName() {
-			return airportName;
-		}
-
-		public void setAirportName(String airportName) {
-			this.airportName = airportName;
-		}
-
-		public String getCity() {
-			return city;
-		}
-
-		public void setCity(String city) {
-			this.city = city;
-		}
-
-		public Integer getContact() {
-			return contact;
-		}
-
-		public void setContact(Integer contact) {
-			this.contact = contact;
-		}
-
-	    
+	public Airport() {
+		super();
 	}
 
+	public Airport(Integer airportId,
+			@NotBlank(message = "airport name is mandatory") @Size(min = 2, max = 100, message = "Airport name must be between 2 and 100 characters") String airportName,
+			@NotBlank(message = "airport city is mandatory") @Size(min = 2, max = 100, message = "City name must be between 2 and 100 characters") String city,
+			@NotBlank(message = "airport contact is mandatory") @Min(value = 1000000000, message = "Contact number must be at least 10 digits") @Max(value = 9999999999L, message = "Contact number must be no more than 10 digits") String contact) {
+		super();
+		this.airportId = airportId;
+		this.airportName = airportName;
+		this.city = city;
+		this.contact = contact;
+	}
+
+	public Integer getAirportId() {
+		return airportId;
+	}
+
+	public void setAirportId(Integer airportId) {
+		this.airportId = airportId;
+	}
+
+	public String getAirportName() {
+		return airportName;
+	}
+
+	public void setAirportName(String airportName) {
+		this.airportName = airportName;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	@Override
+	public String toString() {
+		return "Airport [airportId=" + airportId + ", airportName=" + airportName + ", city=" + city + ", contact="
+				+ contact;
+	}
+
+}

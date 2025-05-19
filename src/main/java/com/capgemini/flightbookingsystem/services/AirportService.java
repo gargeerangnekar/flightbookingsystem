@@ -7,8 +7,9 @@ import com.capgemini.flightbookingsystem.entities.Airport;
 public interface AirportService {
 
     Airport saveAirport(Airport airport);
-    Airport getAirportById(Long airportId);
+    Airport getAirportById(Integer airportId);
     List<Airport> getAllAirports();
-    Airport updateAirport(Airport airport);
-    void deleteAirport(Long airportId);
+    Airport updateAirport(Airport airport, Integer airportId);
+    void deleteAirport(Integer airportId);
+    
 }
