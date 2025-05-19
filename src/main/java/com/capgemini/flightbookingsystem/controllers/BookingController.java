@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.flightbookingsystem.dto.BookingCardDTO;
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
@@ -110,5 +111,13 @@ public class BookingController {
 		log.info("Fetched results");
 		return ResponseEntity.status(HttpStatus.OK).body(flights);
 	}
+	
+	@GetMapping("/view/{bookingId}")
+	public ResponseEntity<BookingCardDTO> getBookingDetails(@PathVariable Integer bookingId) {
+	    log.info("Fetching booking details for display card: {}", bookingId);
+	    BookingCardDTO booking = bookingService.getBookingCardById(bookingId);
+	    return ResponseEntity.ok(booking);
+	}
+
 
 }
