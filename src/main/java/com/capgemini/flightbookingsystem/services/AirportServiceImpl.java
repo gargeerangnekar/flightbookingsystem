@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.entities.Airport;
@@ -16,8 +15,12 @@ public class AirportServiceImpl implements AirportService {
 
     private static final Logger logger = LoggerFactory.getLogger(AirportServiceImpl.class);
 
-    @Autowired
-    private AirportRepository airportRepository;
+    private final AirportRepository airportRepository;
+
+    // Constructor injection
+    public AirportServiceImpl(AirportRepository airportRepository) {
+        this.airportRepository = airportRepository;
+    }
 
     @Override
     public Airport saveAirport(Airport airport) {
@@ -55,9 +58,15 @@ public class AirportServiceImpl implements AirportService {
                     return new AirportNotFoundException("Airport ID not found: " + airport.getAirportId());
                 });
 
-        existingAirport.setAirportName(airport.getAirportName());
-        existingAirport.setCity(airport.getCity());
-        existingAirport.setContact(airport.getContact());
+        if (airport.getAirportName() != null) {
+            existingAirport.setAirportName(airport.getAirportName());
+        }
+        if (airport.getCity() != null) {
+            existingAirport.setCity(airport.getCity());
+        }
+        if (airport.getContact() != null) {
+            existingAirport.setContact(airport.getContact());
+        }
 
         Airport updated = airportRepository.save(existingAirport);
         logger.debug("Airport updated: {}", updated);

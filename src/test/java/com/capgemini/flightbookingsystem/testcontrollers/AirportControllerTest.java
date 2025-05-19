@@ -20,92 +20,134 @@ import static org.mockito.Mockito.*;
 import java.util.Arrays;
 import java.util.List;
 
-public class AirportControllerTest {
+class AirportControllerTest {
 
-	@Mock
-	private AirportService airportService;
+    @Mock
+    private AirportService airportService;
 
-	@InjectMocks
-	private AirportController airportController;
+    @InjectMocks
+    private AirportController airportController;
 
-	private Airport sampleAirport;
+    private Airport sampleAirport;
 
-	@BeforeEach
-	void setUp() {
-		MockitoAnnotations.openMocks(this);
-		sampleAirport = new Airport();
-		sampleAirport.setAirportId(1);
-		sampleAirport.setAirportName("Test Airport");
-		sampleAirport.setCity("Test City");
-		sampleAirport.setContact("1234567890");
-	}
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        sampleAirport = new Airport();
+        sampleAirport.setAirportId(1);
+        sampleAirport.setAirportName("Test Airport");
+        sampleAirport.setCity("Test City");
+        sampleAirport.setContact("1234567890");
+    }
 
-	@Test
-	void testConstructorInjection() {
-		AirportService mockService = mock(AirportService.class);
-		AirportController controller = new AirportController(mockService);
-		assertNotNull(controller);
-	}
+    @Test
+    @DisplayName("Constructor Injection - Should create controller instance")
+    void testConstructorInjection() {
+        AirportService mockService = mock(AirportService.class);
+        AirportController controller = new AirportController(mockService);
+        assertNotNull(controller);
+    }
 
-	@Test
-	void testCreateAirport() {
-		BindingResult bindingResult = mock(BindingResult.class);
-		when(bindingResult.hasErrors()).thenReturn(false);
-		
-		when(airportService.saveAirport(any(Airport.class))).thenReturn(sampleAirport);
+    @Test
+    @DisplayName("Create Airport - Success")
+    void testCreateAirport() {
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
 
-		ResponseEntity<Airport> response = airportController.createAirport(sampleAirport, bindingResult);
+        when(airportService.saveAirport(any(Airport.class))).thenReturn(sampleAirport);
 
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals(sampleAirport, response.getBody());
-	}
+        ResponseEntity<Airport> response = airportController.createAirport(sampleAirport, bindingResult);
 
-	@Test
-	void testGetAirportById() {
-		when(airportService.getAirportById(1)).thenReturn(sampleAirport);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(sampleAirport, response.getBody());
+    }
 
-		ResponseEntity<Airport> response = airportController.getAirport(1);
+    @Test
+    @DisplayName("Create Airport - Validation Failure")
+    void testCreateAirportValidationFails() {
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
 
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(sampleAirport, response.getBody());
-	}
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            airportController.createAirport(sampleAirport, bindingResult);
+        });
 
-	@Test
-	void testGetAllAirports() {
-		List<Airport> airports = Arrays.asList(sampleAirport);
-		when(airportService.getAllAirports()).thenReturn(airports);
+        assertEquals("Cannot insert in Airport", exception.getMessage());
+    }
 
-		ResponseEntity<List<Airport>> response = airportController.getAllAirports();
+    @Test
+    @DisplayName("Get Airport by ID - Success")
+    void testGetAirportById() {
+        when(airportService.getAirportById(1)).thenReturn(sampleAirport);
 
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(airports, response.getBody());
-	}
+        ResponseEntity<Airport> response = airportController.getAirport(1);
 
-	@Test
-	void testUpdateAirport() {		
-		
-		Airport updated = new Airport();
-		updated.setAirportId(1);
-		updated.setAirportName("Updated Airport");
-		updated.setCity("New City");
-		updated.setContact("987654321");
-		
-		BindingResult bindingResult = mock(BindingResult.class);
-		
-		when(airportService.updateAirport(any(Airport.class), 1)).thenReturn(updated);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(sampleAirport, response.getBody());
+    }
 
-		ResponseEntity<Airport> response = airportController.updateAirport(1, updated, bindingResult);
+    @Test
+    @DisplayName("Get Airport by ID - Not Found (returns null)")
+    void testGetAirportNotFound() {
+        when(airportService.getAirportById(99)).thenReturn(null);
 
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(updated, response.getBody());
-	}
+        ResponseEntity<Airport> response = airportController.getAirport(99);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNull(response.getBody());
+    }
 
-	@Test
-	void testDeleteAirport() {
-		doNothing().when(airportService).deleteAirport(1);
+    @Test
+    @DisplayName("Get All Airports - Success")
+    void testGetAllAirports() {
+        List<Airport> airports = Arrays.asList(sampleAirport);
+        when(airportService.getAllAirports()).thenReturn(airports);
 
-		ResponseEntity<Void> response = airportController.deleteAirport(1);
+        ResponseEntity<List<Airport>> response = airportController.getAllAirports();
 
-		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-	}
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(airports, response.getBody());
+    }
+
+    @Test
+    @DisplayName("Update Airport - Success")
+    void testUpdateAirport() {
+        Airport updated = new Airport();
+        updated.setAirportId(1);
+        updated.setAirportName("Updated Airport");
+        updated.setCity("New City");
+        updated.setContact("987654321");
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        when(airportService.updateAirport(any(Airport.class), eq(1))).thenReturn(updated);
+
+        ResponseEntity<Airport> response = airportController.updateAirport(1, updated, bindingResult);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(updated, response.getBody());
+    }
+
+    @Test
+    @DisplayName("Update Airport - Validation Failure")
+    void testUpdateAirportValidationFails() {
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            airportController.updateAirport(1, sampleAirport, bindingResult);
+        });
+
+        assertEquals("Cannot update in Airport", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("Delete Airport - Success")
+    void testDeleteAirport() {
+        doNothing().when(airportService).deleteAirport(1);
+
+        ResponseEntity<Void> response = airportController.deleteAirport(1);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+    }
 }

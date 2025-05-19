@@ -62,7 +62,7 @@ public class UserController {
 		User saved = userService.createUser(enrollment);
 		log.debug("User created successfully with ID: {}", saved.getUserId());
 
-		return ResponseEntity.status(HttpStatus.CREATED).location(URI.create("/api/users/" + saved.getUserId()))
+		return ResponseEntity.status(HttpStatus.CREATED).location(URI.create("/users/" + saved.getUserId()))
 				.body(saved);
 	}
 
@@ -81,12 +81,7 @@ public class UserController {
 	}
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<User> patchUser(@PathVariable Integer id, @Valid @RequestBody User patch, BindingResult result) {
-	    if (result.hasErrors()) {
-	    	log.warn("Validation failed for patch: {}", result.getAllErrors());
-			throw new IllegalArgumentException("Invalid Data");
-	    }
-
+	public ResponseEntity<User> patchUser(@PathVariable Integer id, @RequestBody User patch) {
 	    log.info("Patching user with ID: {} using data: {}", id, patch);
 	    User updated = userService.patchUser(id, patch);
 	    log.debug("User with ID {} patched successfully to: {}", id, updated);

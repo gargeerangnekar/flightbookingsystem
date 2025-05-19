@@ -1,30 +1,36 @@
 package com.capgemini.flightbookingsystem.repositories;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
-import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.entities.Flights;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 	
-	@Query("SELECT new com.capgemini.flightbookingsystem.dto.FlightBookingDto(" +
-		       "f.departureAirportId, f.arrivalAirportId, " +
-		       "dep.airportName, arr.airportName, "
-		       + "dep.city, arr.city, " +
-		       "f.departureTime, f.arrivalTime, f.amount) " +
-		       "FROM Flights f " +
-		       "JOIN Airport dep ON f.departureAirportId = dep.airportId " +
-		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId "
-		       )
-		List<FlightBookingDto> getAllBookingDto();
-	
+
+	@Query("""
+		    SELECT f
+		    FROM Flights f
+		    WHERE f.departureAirportId = :departureAirportId
+		      AND f.arrivalAirportId = :arrivalAirportId
+		      AND DATE(f.departureTime) = :departureDate
+		      AND f.displayStatus = 'available'
+		""")
+		List<Flights> searchFlights(
+		    @Param("departureAirportId") Integer departureAirportId,
+		    @Param("arrivalAirportId") Integer arrivalAirportId,
+		    @Param("departureDate") LocalDate departureDate
+		);
+
 	
 	@Query("SELECT new com.capgemini.flightbookingsystem.dto.BookingHistoryDto( " +
 		       "u.name, f.flightNumber, f.arrivalTime, " +
@@ -40,5 +46,19 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
 	 List<Booking> findByBookingTimeBetween(LocalDateTime start, LocalDateTime end);
 	 
+	 @Query("SELECT b FROM Booking b JOIN FETCH b.users JOIN FETCH b.flights WHERE b.bookingId = :id")
+	 Booking getBookingWithUserAndFlight(@Param("id") Integer id);
+	 
+	 @Query("SELECT new com.capgemini.flightbookingsystem.dto.BookingHistoryDto( " +
+		       "u.name, f.flightNumber, f.arrivalTime, " + 
+		       "b.seatNumber, b.bookingTime, " +
+		       "dep.airportName, arr.airportName, f.amount) " +
+		       "FROM Booking b " +
+		       "JOIN b.users u " +
+		       "JOIN b.flights f " +
+		       "JOIN Airport dep ON f.departureAirportId = dep.airportId " +
+		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId")
+		List<BookingHistoryDto> getAllBookingHistory();
+
 
 }
