@@ -58,9 +58,15 @@ public class AirportServiceImpl implements AirportService {
                     return new AirportNotFoundException("Airport ID not found: " + airport.getAirportId());
                 });
 
-        existingAirport.setAirportName(airport.getAirportName());
-        existingAirport.setCity(airport.getCity());
-        existingAirport.setContact(airport.getContact());
+        if (airport.getAirportName() != null) {
+            existingAirport.setAirportName(airport.getAirportName());
+        }
+        if (airport.getCity() != null) {
+            existingAirport.setCity(airport.getCity());
+        }
+        if (airport.getContact() != null) {
+            existingAirport.setContact(airport.getContact());
+        }
 
         Airport updated = airportRepository.save(existingAirport);
         logger.debug("Airport updated: {}", updated);
