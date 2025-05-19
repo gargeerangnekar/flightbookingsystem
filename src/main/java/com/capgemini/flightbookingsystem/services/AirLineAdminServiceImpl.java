@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class AirLineAdminServiceImpl implements AirLineAdminService {
-
+private static final String ADMIN_NOT_FOUND_MSG = "Admin not found with ID: ";
 	private final AirLineAdminRepository airLineAdminRepository;
 	PasswordEncoder passwordEncoder;
 
