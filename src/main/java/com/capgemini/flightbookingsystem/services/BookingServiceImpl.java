@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.capgemini.flightbookingsystem.dto.BookingCardDTO;
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
@@ -104,6 +105,32 @@ public class BookingServiceImpl implements BookingService {
 			return new BookingNotFoundException("Booking not found with ID :" + bookingId);
 		});
 	}
+	
+	@Override
+	public BookingCardDTO getBookingCardById(Integer bookingId) {
+	    log.debug("Fetching booking with ID: {}", bookingId);
+	    Booking booking = bookingRepository.getBookingWithUserAndFlight(bookingId);
+	    if (booking == null) {
+	        log.warn("Booking not found with ID: {}", bookingId);
+	        throw new BookingNotFoundException("Booking not found with ID: " + bookingId);
+	    }
+
+	    BookingCardDTO dto = new BookingCardDTO();
+	    dto.setBookingId(booking.getBookingId());
+	    dto.setPassengerName(booking.getUsers() != null ? booking.getUsers().getName() : "N/A");
+	    dto.setPassportNumber(booking.getUsers() != null ? booking.getUsers().getPassportNumber() : "N/A");
+	    dto.setFlightNumber(booking.getFlights() != null ? booking.getFlights().getFlightNumber() : "N/A");
+	    dto.setAircraftModel(booking.getFlights() != null ? booking.getFlights().getAircraftModel() : "N/A");
+	    dto.setDepartureTime(booking.getFlights() != null ? booking.getFlights().getDepartureTime() : null);
+	    dto.setArrivalTime(booking.getFlights() != null ? booking.getFlights().getArrivalTime() : null);
+	    dto.setBookingTime(booking.getBookingTime());
+	    dto.setSeatNumber(booking.getSeatNumber());
+	    dto.setSeatClass(booking.getSeatClass());
+	    dto.setAmount(booking.getAmount());
+
+	    return dto;
+	}
+
 
 	@Override
 	public List<Flights> searchFlights(

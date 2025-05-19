@@ -3,6 +3,7 @@ package com.capgemini.flightbookingsystem.services;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.capgemini.flightbookingsystem.dto.BookingCardDTO;
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
@@ -25,5 +26,7 @@ public interface BookingService {
 			Integer departureAirportId, Integer arrivalAirportId , LocalDate departureTime);
 
 	List<BookingHistoryDto> getBookingHistoryById(Integer userId);
+	
+	BookingCardDTO getBookingCardById(Integer bookingId);
 	
 }
