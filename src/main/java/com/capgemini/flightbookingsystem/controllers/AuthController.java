@@ -54,46 +54,44 @@ public class AuthController {
 	}
 
 	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@RequestBody LoginDto loginDto) {
-		Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+	public ResponseEntity<Object> authenticateUser(@RequestBody LoginDto loginDto) {
+	    Authentication authentication = authenticationManager
+	            .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
 
-		Map<String, Object> claims = new HashMap<>();
-		String role = "";
+	    if (!authentication.isAuthenticated()) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+	    }
 
-		if (!authentication.isAuthenticated()) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-		}
+	    Map<String, Object> claims = new HashMap<>();
 
-		Optional<User> optionalUser = userRepository.findByEmail(loginDto.getUsername());
-		if (optionalUser.isPresent()) {
-			User user = optionalUser.get();
-			claims.put("email", user.getEmail());
-			claims.put("phone",user.getPhoneNumber());
-			claims.put("name", user.getName());
-			claims.put("userId", user.getUserId());
-			claims.put("userType", "USER");
-			claims.put("passPort", user.getPassportNumber());
-			role = "ROLE_USER";
+	    Optional<User> optionalUser = userRepository.findByEmail(loginDto.getUsername());
+	    if (optionalUser.isPresent()) {
+	        User user = optionalUser.get();
+	        claims.put("email", user.getEmail());
+	        claims.put("phone", user.getPhoneNumber());
+	        claims.put("name", user.getName());
+	        claims.put("userId", user.getUserId());
+	        claims.put("userType", "USER");
+	        claims.put("passPort", user.getPassportNumber());
+	    } else {
+	        Optional<AirLineAdmin> optionalAdmin = airLineAdminRepository.findByAirlineEmail(loginDto.getUsername());
+	        if (optionalAdmin.isPresent()) {
+	            AirLineAdmin admin = optionalAdmin.get();
+	            claims.put("email", admin.getAirlineEmail());
+	            claims.put("name", admin.getAirlineAdminName());
+	            claims.put("userId", admin.getAirlineAdminId());
+	            claims.put("userType", "ADMIN");
+	            claims.put("phone", admin.getContactNumber());
+	        } else {
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
+	        }
+	    }
 
-		} else {
-			Optional<AirLineAdmin> optionalAdmin = airLineAdminRepository.findByAirlineEmail(loginDto.getUsername());
-			if (optionalAdmin.isPresent()) {
-				AirLineAdmin admin = optionalAdmin.get();
-				claims.put("email", admin.getAirlineEmail());
-				claims.put("name", admin.getAirlineAdminName());
-				claims.put("userId", admin.getAirlineAdminId());
-				claims.put("userType", "ADMIN");
-				claims.put("phone",admin.getContactNumber());
-				role = "ROLE_ADMIN";
-			} else {
-				return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
-			}
-		}
-		String token = jwtUtils.generateToken(loginDto.getUsername(), claims);
-		ResponseToken responseToken = new ResponseToken(token);
-		return ResponseEntity.status(HttpStatus.OK).body(responseToken);
+	    String token = jwtUtils.generateToken(loginDto.getUsername(), claims);
+	    ResponseToken responseToken = new ResponseToken(token);
+	    return ResponseEntity.status(HttpStatus.OK).body(responseToken);
 	}
+
 
 	@PostMapping("/register")
 	public ResponseEntity<User> registerUser(@RequestBody User user) {

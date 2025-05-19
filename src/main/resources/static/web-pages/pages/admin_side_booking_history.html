@@ -1,0 +1,124 @@
+<div class="container mt-4">
+  <h3 class="mb-3">Booking History</h3>
+
+  <!-- Search Box -->
+  <div class="mb-3">
+    <input type="text" id="searchInput" class="form-control" placeholder="Search by Username, Flight Name, or Airports..." />
+  </div>
+
+  <button id="sortFlightName" class="btn btn-primary mb-3">
+  Sort by Flight Name
+</button>
+<table id="bookingHistoryTableContainer" class="table table-bordered" style="display:none;">
+  <thead>
+    <tr>
+      <th>User Name</th>
+      <th>Flight Number</th>
+      <th>From</th>
+      <th>Arrival Time</th>
+      <th>To</th>
+      <th>Seat Number</th>
+      <th>Amount (₹)</th>
+      <th>Booking Time</th>
+    </tr>
+  </thead>
+  <tbody id="bookingHistoryTable"></tbody>
+</table>
+
+  
+
+
+
+  <script src="js/script.js"></script>
+<script>
+  (() => {
+
+
+    const searchInput = document.getElementById("searchInput");
+    const sortFlightNameBtn = document.getElementById("sortFlightName");
+
+    let bookingData = [];
+    let sortState = {
+      flightName: "none",
+    }
+
+    function bookingHistory() {
+      fetch(`${URL}/bookings/history/all-bookings`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getAuthorization(),
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          bookingData = data;
+          renderTable(bookingData);
+        })
+        .catch((error) =>
+          console.error("Error fetching booking history:", error)
+        );
+    }
+
+   function renderTable(data) {
+  const tableBody = document.getElementById("bookingHistoryTable");
+  tableBody.innerHTML = "";
+
+  if (data.length === 0) {
+    tableBody.innerHTML =
+      '<tr><td colspan="9" class="text-center text-muted">No bookings found.</td></tr>';
+    return;
+  }
+
+  data.forEach((booking) => {
+    const row = `<tr>
+      <td>${booking.name}</td>
+      <td>${booking.flightNumber}</td>
+      <td>${booking.departureAirport}</td>
+      <td>${booking.arrivalTime}</td>
+      <td>${booking.arrivalAirport}</td>
+      <td>${booking.seatNumber}</td>
+      <td>${booking.amount}</td>
+      <td>${new Date(booking.bookingTime).toLocaleString()}</td>
+    </tr>`;
+    tableBody.innerHTML += row;
+  });
+
+  // Show the table
+  document.getElementById("bookingHistoryTableContainer").style.display = "table";
+}
+
+
+    // Live Search
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = bookingData.filter(
+        (b) =>
+          b.flightNumber.toLowerCase().includes(query) ||
+          b.departureAirport.toLowerCase().includes(query) ||
+          b.arrivalAirport.toLowerCase().includes(query) || 
+			 b.name.toLowerCase().includes(query)
+      );
+      renderTable(filtered);
+    });
+
+    // Sorting
+    function sortData(field, direction) {
+      return [...bookingData].sort((a, b) => {
+        const valA = a[field]?.toLowerCase() || "";
+        const valB = b[field]?.toLowerCase() || "";
+        if (valA < valB) return direction === "asc" ? -1 : 1;
+        if (valA > valB) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    sortFlightNameBtn.addEventListener("click", () => {
+      sortState.flightName = sortState.flightName === "asc" ? "desc" : "asc";
+      const sorted = sortData("flightName", sortState.flightName);
+      renderTable(sorted);
+    });
+
+    bookingHistory();
+  })();
+</script>

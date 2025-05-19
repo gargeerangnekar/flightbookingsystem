@@ -1,24 +1,27 @@
 package com.capgemini.flightbookingsystem.controllers;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.flightbookingsystem.dto.BookingCardDTO;
 import com.capgemini.flightbookingsystem.dto.BookingHistoryDto;
-import com.capgemini.flightbookingsystem.dto.FlightBookingDto;
 import com.capgemini.flightbookingsystem.entities.Booking;
+import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.services.BookingService;
 
 import jakarta.validation.Valid;
@@ -91,27 +94,6 @@ public class BookingController {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
-	@PatchMapping("/{bookingId}")
-	public ResponseEntity<Booking> patchBooking(@PathVariable("bookingId") Integer bookingId,
-			@Valid @RequestBody Booking booking, BindingResult result) {
-		if (result.hasErrors()) {
-			log.warn("Validation failed for patch: {}", result.getAllErrors());
-			throw new IllegalArgumentException("Invalid Data");
-		}
-
-		log.info("Patching booking with ID: {} using data: {}", bookingId, booking);
-		Booking updated = bookingService.patchBooking(bookingId, booking);
-		log.debug("Booking with ID {} patched successfully to: {}", bookingId, updated);
-		return ResponseEntity.status(HttpStatus.OK).body(updated);
-	}
-
-	@GetMapping("/book-a-flight")
-	public ResponseEntity<List<FlightBookingDto>> getAllFlightsForBooking() {
-		log.info("Fetching all flights for booking");
-		List<FlightBookingDto> flights = bookingService.getAllFlights();
-		log.info("Fetched all flights");
-		return ResponseEntity.status(HttpStatus.OK).body(flights);
-	}
 
 	@GetMapping("/history/{userId}")
 	public ResponseEntity<List<BookingHistoryDto>> getBookingHistory(@PathVariable Integer userId) {
@@ -120,5 +102,31 @@ public class BookingController {
 		log.info("Booking history fetched for ID :", userId);
 		return ResponseEntity.status(HttpStatus.OK).body(bookingHistory);
 	}
+
+	@GetMapping("/search")
+	public ResponseEntity<List<Flights>> searchFlights(@RequestParam Integer fromCity, @RequestParam Integer toCity,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate departureDate) {
+		log.info("Searching flights for input data");
+		List<Flights> flights = bookingService.searchFlights(fromCity, toCity, departureDate);
+		log.info("Fetched results");
+		return ResponseEntity.status(HttpStatus.OK).body(flights);
+	}
+	
+	@GetMapping("/view/{bookingId}")
+	public ResponseEntity<BookingCardDTO> getBookingDetails(@PathVariable Integer bookingId) {
+	    log.info("Fetching booking details for display card: {}", bookingId);
+	    BookingCardDTO booking = bookingService.getBookingCardById(bookingId);
+	    return ResponseEntity.ok(booking);
+	}
+
+
+	@GetMapping("/history/all-bookings")
+
+	public ResponseEntity<List<BookingHistoryDto>> getAllBookingHistory(){
+		log.info("Fetching all booking history");
+		List<BookingHistoryDto> bookings = bookingService.getAllBookingHistory();
+		return ResponseEntity.status(HttpStatus.OK).body(bookings);
+	}
+
 
 }

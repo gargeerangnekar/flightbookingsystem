@@ -40,14 +40,13 @@ public class User {
 
 	@NotBlank(message = "Enter valid password")
 	@Column(name = "password")
-	//@Size(min = 8, max = 15, message = "Password must be at least 8 characters long")
 	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$",
 	message = "Password must contain at least one uppercase, one lowercase, one digit, and one special character") 
 	private String password;
 
 	@NotBlank(message = "This field is compulsary.")
 	@Column(name="phone_number")
-	@Pattern(regexp = "^[0-9]{10,15}$", message = "Phone number must be 10 to 15 digits") 
+	@Pattern(regexp = "\\d{10,15}", message = "Phone number must be between 10 and 15 digits")
 	private String phoneNumber;
 
 	@NotBlank(message = "Passport number is mandatory.")

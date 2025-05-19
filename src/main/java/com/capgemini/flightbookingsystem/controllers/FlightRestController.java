@@ -8,15 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capgemini.flightbookingsystem.dto.AirportFetchingDto;
+import com.capgemini.flightbookingsystem.dto.CityWithAirportIdDto;
 import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
-import com.capgemini.flightbookingsystem.entities.Booking;
 import com.capgemini.flightbookingsystem.entities.Flights;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
@@ -92,6 +95,14 @@ public class FlightRestController{
 		return ResponseEntity.status(HttpStatus.OK).body(updatedFlight);
 	}
 	
+	@PatchMapping("/{flightId}")
+	public ResponseEntity<Flights> patchFlight(@PathVariable Integer flightId ,@Valid @RequestBody Flights flight){
+		log.info("Updating flight with ID: {} using data: {}", flightId, flight);
+		Flights updatedFlight = flightService.patchFlightById(flightId, flight);
+		log.debug("User with ID {} updated successfully to: {}", flightId, updatedFlight);
+		return ResponseEntity.status(HttpStatus.OK).body(updatedFlight);
+	}
+	
 	@DeleteMapping("/{flightId}")
 	public ResponseEntity<Flights> deleteFlight(@PathVariable Integer flightId){
 		log.info("Deleting flight with ID: {}", flightId);
@@ -100,11 +111,28 @@ public class FlightRestController{
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 	
-	@PostMapping("/{flightId}/bookings")
-	public ResponseEntity<Booking> createBookingForFlight(@PathVariable Integer flightId ,@RequestBody Booking booking){
-		log.info("Creating booking for flight ID: {} with booking details: {}", flightId, booking);
-		Booking createdBooking = flightService.createBookingForFlight(flightId, booking);
-		log.debug("Booking created successfully for flight ID: {} with booking ID: {}", flightId, createdBooking.getBookingId());
-		return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
+	@GetMapping("/sortedByNumber")
+	public ResponseEntity<List<Flights>> getSortedFlightsByNumber(@RequestParam(defaultValue = "asc") String direction) {
+		return ResponseEntity.status(HttpStatus.OK).body(flightService.sortFlightsByNumber(direction));
 	}
+
+	@GetMapping("/sortedByAmount")
+	public ResponseEntity<List<Flights>> getSortedAmount(@RequestParam(defaultValue = "asc") String direction) {
+		return ResponseEntity.status(HttpStatus.OK).body(flightService.sortFlightsByAmount(direction));
+	}
+	
+	@GetMapping("/{flightId}/summary")
+    public ResponseEntity<AirportFetchingDto> getFlightSummary(@PathVariable Integer flightId) {
+		return ResponseEntity.status(HttpStatus.OK).body(flightService.getFlightDTO(flightId));
+    }
+	
+	@GetMapping("/arrival-cities")
+	public ResponseEntity<List<CityWithAirportIdDto>> getArrivalCities() {
+		return ResponseEntity.status(HttpStatus.OK).body(flightService.getArrivalCities());
+    }
+	
+	@GetMapping("/aircraftModels")
+	public ResponseEntity<List<String>> getAircraftModels() {
+		return ResponseEntity.status(HttpStatus.OK).body(flightService.getAircraftModels());
+    }
 }
