@@ -17,14 +17,11 @@ import com.capgemini.flightbookingsystem.entities.Flights;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 	
 
-	@Query("""
-		    SELECT f
-		    FROM Flights f
-		    WHERE f.departureAirportId = :departureAirportId
-		      AND f.arrivalAirportId = :arrivalAirportId
-		      AND DATE(f.departureTime) = :departureDate
-		      AND f.displayStatus = 'available'
-		""")
+	@Query("SELECT f FROM Flights f "
+			+ "WHERE f.departureAirportId = :departureAirportId "
+			+ "AND f.arrivalAirportId = :arrivalAirportId "
+			+ "AND DATE(f.departureTime) = :departureDate "
+			+ "AND f.displayStatus = 'available'")
 		List<Flights> searchFlights(
 		    @Param("departureAirportId") Integer departureAirportId,
 		    @Param("arrivalAirportId") Integer arrivalAirportId,
