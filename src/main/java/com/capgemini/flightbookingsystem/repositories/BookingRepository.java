@@ -46,5 +46,8 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
 	 List<Booking> findByBookingTimeBetween(LocalDateTime start, LocalDateTime end);
 	 
+	 @Query("SELECT b FROM Booking b JOIN FETCH b.users JOIN FETCH b.flights WHERE b.bookingId = :id")
+	 Booking getBookingWithUserAndFlight(@Param("id") Integer id);
+	 
 
 }

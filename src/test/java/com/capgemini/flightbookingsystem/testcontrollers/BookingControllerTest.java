@@ -10,9 +10,10 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
+import com.capgemini.flightbookingsystem.dto.BookingCardDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -154,5 +155,44 @@ class BookingControllerTest {
 		assertEquals(200, response.getStatusCode().value());
 		assertEquals(0, response.getBody().size());
 	}
+
+	@Nested
+	@DisplayName("Tests for /view/{bookingId} endpoint")
+	class ViewBookingCardTests {
+
+	    @Test
+	    @DisplayName("Should return booking card DTO when booking exists")
+	    void testGetBookingCardSuccess() {
+	        int bookingId = 1;
+	        BookingCardDTO dto = new BookingCardDTO();
+	        dto.setBookingId(bookingId);
+	        dto.setPassengerName("Alice");
+	        dto.setPassportNumber("P123456");
+	        dto.setFlightNumber("AI101");
+	        dto.setAircraftModel("Boeing 747");
+	        dto.setSeatNumber("10A");
+	        dto.setSeatClass("Economy");
+	        dto.setAmount(7500.0);
+	        dto.setBookingTime(LocalDateTime.now());
+
+	        when(bookingService.getBookingCardById(bookingId)).thenReturn(dto);
+
+	        ResponseEntity<BookingCardDTO> response = bookingController.getBookingDetails(bookingId);
+
+	        assertEquals(200, response.getStatusCodeValue());
+	        assertEquals(dto, response.getBody());
+	    }
+
+	    @Test
+	    @DisplayName("Should throw BookingNotFoundException when booking does not exist")
+	    void testGetBookingCardNotFound() {
+	        int invalidId = 999;
+	        when(bookingService.getBookingCardById(invalidId))
+	            .thenThrow(new BookingNotFoundException("Booking not found with ID: " + invalidId));
+
+	        assertThrows(BookingNotFoundException.class, () -> bookingController.getBookingDetails(invalidId));
+	    }
+	}
+
 
 }
