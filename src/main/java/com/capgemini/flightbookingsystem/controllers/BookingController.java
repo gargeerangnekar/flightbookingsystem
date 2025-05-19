@@ -118,6 +118,13 @@ public class BookingController {
 	    BookingCardDTO booking = bookingService.getBookingCardById(bookingId);
 	    return ResponseEntity.ok(booking);
 	}
+	
+	@GetMapping("/history")
+	public ResponseEntity<List<BookingHistoryDto>> getAllBookingHistory(){
+		log.info("Fetching all booking history");
+		List<BookingHistoryDto> bookings = bookingService.getAllBookingHistory();
+		return ResponseEntity.status(HttpStatus.OK).body(bookings);
+	}
 
 
 }

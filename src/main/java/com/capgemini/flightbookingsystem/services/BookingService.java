@@ -29,4 +29,6 @@ public interface BookingService {
 	
 	BookingCardDTO getBookingCardById(Integer bookingId);
 	
+	List<BookingHistoryDto> getAllBookingHistory();
+	
 }

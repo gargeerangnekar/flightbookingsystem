@@ -11,6 +11,7 @@ public class BookingHistoryDto {
 	private LocalDateTime bookingTime;
 	private String departureAirport;
 	private String arrivalAirport;
+	private Double amount;
 
 	public BookingHistoryDto() {
 
@@ -26,6 +27,28 @@ public class BookingHistoryDto {
 		this.bookingTime = bookingTime;
 		this.departureAirport = departureAirport;
 		this.arrivalAirport = arrivalAirport;
+	}
+	
+	public BookingHistoryDto(String name, String flightNumber, LocalDateTime arrivalTime, String seatNumber,
+			LocalDateTime bookingTime, String departureAirport, String arrivalAirport,Double amount) {
+		super();
+		this.name = name;
+		this.flightNumber = flightNumber;
+		this.arrivalTime = arrivalTime;
+		this.seatNumber = seatNumber;
+		this.bookingTime = bookingTime;
+		this.departureAirport = departureAirport;
+		this.arrivalAirport = arrivalAirport;
+		this.amount = amount;
+	}
+	
+
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
 	}
 
 	public String getName() {
