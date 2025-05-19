@@ -34,7 +34,7 @@ public class AirportController {
 		logger.info("Received request to create a new airport: {}", airport.getAirportName());
 		
 		if (result.hasErrors()) {
-			logger.warn("Validation failed for Airport {}:", result.getAllErrors());
+			logger.warn("Validation failed for Airport in post {}:", result.getAllErrors());
 			throw new IllegalArgumentException("Cannot insert in Airport");
 		}
 		
@@ -68,7 +68,7 @@ public class AirportController {
 		logger.info("Fetching airport with ID: {}", id);
 		
 		if (result.hasErrors()) {
-			logger.warn("Validation failed for Airport {}:", result.getAllErrors());
+			logger.warn("Validation failed for Airport in put {}:", result.getAllErrors());
 			throw new IllegalArgumentException("Cannot update in Airport");
 		}
 		
@@ -88,7 +88,7 @@ public class AirportController {
 	    logger.info("Fetching airport for patch with ID: {}", id);
 
 	    if (result.hasErrors()) {
-	        logger.warn("Validation failed for Airport {}:", result.getAllErrors());
+	        logger.warn("Validation failed for Airport in patch {}:", result.getAllErrors());
 	        throw new IllegalArgumentException("Cannot patch Airport");
 	    }
 

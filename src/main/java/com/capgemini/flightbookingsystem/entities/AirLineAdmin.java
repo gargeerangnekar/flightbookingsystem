@@ -1,6 +1,7 @@
 package com.capgemini.flightbookingsystem.entities;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
