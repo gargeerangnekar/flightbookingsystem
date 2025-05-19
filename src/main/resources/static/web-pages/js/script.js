@@ -46,7 +46,7 @@ function decodeJWT(token) {
 function getId() {
     const token = localStorage.getItem("token");
     if (!token)
-        window.location.href = "login.html";
+        window.location.href = "Flight_login.html";
     const decoded = decodeJWT(token);
     return decoded.userId;
 }
@@ -54,7 +54,7 @@ function getId() {
 function getName() {
     const token = localStorage.getItem("token");
     if (!token)
-        window.location.href = "login.html";
+        window.location.href = "Flight_login.html";
     const decoded = decodeJWT(token);
     return decoded.name;
 }
@@ -62,7 +62,7 @@ function getName() {
 function getEmail() {
     const token = localStorage.getItem("token");
     if (!token)
-        window.location.href = "login.html";;
+        window.location.href = "Flight_login.html";;
     const decoded = decodeJWT(token);
     return decoded.email;
 }
@@ -70,7 +70,7 @@ function getEmail() {
 function getPhoneNumber() {
     const token = localStorage.getItem("token");
     if (!token)
-        window.location.href = "login.html";;
+        window.location.href = "Flight_login.html";;
     const decoded = decodeJWT(token);
     return decoded.phone;
 }
@@ -78,7 +78,7 @@ function getPhoneNumber() {
 function getPassportNumber() {
     const token = localStorage.getItem("token");
     if (!token)
-        window.location.href = "login.html";;
+        window.location.href = "Flight_login.html";;
     const decoded = decodeJWT(token);
     return decoded.passPort;
 }
@@ -86,7 +86,7 @@ function getPassportNumber() {
 function getUserType() {
     const token = localStorage.getItem("token");
     if (!token)
-        window.location.href = "login.html";
+        window.location.href = "Flight_login.html";
     const decoded = decodeJWT(token);
 	 if(getPassportNumber()!=null)return "USER";
     return "ADMIN";
@@ -95,7 +95,7 @@ function getUserType() {
 function getAuthorization() {
     const token = localStorage.getItem("token");
     if (!token)
-        window.location.href = "login.html";
+        window.location.href = "Flight_login.html";
     const decoded = decodeJWT(token);
     return `Bearer ${token}`;
 }
@@ -103,5 +103,5 @@ function getAuthorization() {
 function logout() {
     localStorage.removeItem("token");
     localStorage.clear();
-    window.location.href = "login.html";
+    window.location.href = "Flight_login.html";
 }
