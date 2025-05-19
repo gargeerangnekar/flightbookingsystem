@@ -1,0 +1,85 @@
+
+  <div class="container mt-4">
+    <h3 class="mb-3">All Registered Users</h3>
+
+    <div class="mb-3">
+      <input type="text" id="userSearchInput" class="form-control" placeholder="Search by Name or Email..." />
+    </div>
+
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Passport Number</th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody">
+
+      </tbody>
+    </table>
+  </div>
+
+  <script src = "../js/script.js"></script>
+  <script>
+
+    const userSearchInput = document.getElementById("userSearchInput");
+    const usersTableBody = document.getElementById("usersTableBody");
+    let usersData = [];
+
+    // Fetch users from backend
+    function fetchUsers() {
+      fetch(`${URL}/users`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getAuthorization() 
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          usersData = data;
+          renderUsers(data);
+        })
+        .catch(error => {
+          console.error("Error fetching users:", error);
+          usersTableBody.innerHTML =
+            '<tr><td colspan="4" class="text-center text-danger">Error loading users.</td></tr>';
+        });
+    }
+
+    // Render users into the table
+    function renderUsers(users) {
+      usersTableBody.innerHTML = "";
+
+      if (users.length === 0) {
+        usersTableBody.innerHTML =
+          '<tr><td colspan="4" class="text-center text-muted">No users found.</td></tr>';
+        return;
+      }
+
+      users.forEach(user => {
+        const row = `<tr>
+          <td>${user.name}</td>
+          <td>${user.email}</td>
+          <td>${user.phoneNumber}</td>
+          <td>${user.passportNumber}</td>
+        </tr>`;
+        usersTableBody.innerHTML += row;
+      });
+    }
+
+    // Live Search
+    userSearchInput.addEventListener("input", () => {
+      const query = userSearchInput.value.toLowerCase().trim();
+      const filtered = usersData.filter(user =>
+        user.name.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query)
+      );
+      renderUsers(filtered);
+    });
+
+    fetchUsers();
+  </script>
+</body>
+</html>

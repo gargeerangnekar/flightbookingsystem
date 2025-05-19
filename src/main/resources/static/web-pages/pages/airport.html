@@ -1,0 +1,254 @@
+<div class="container">
+  <h3 class="mb-4">Airports</h3>
+
+  <form id="airportForm" class="mb-5 needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="airportName" class="form-label">Airport Name</label>
+      <input type="text" class="form-control" id="airportName" required />
+      <div class="invalid-feedback">
+        Airport name must be at least 3 characters.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="airportCity" class="form-label">City</label>
+      <input type="text" class="form-control" id="airportCity" required />
+      <div class="invalid-feedback">City is required.</div>
+    </div>
+    <div class="mb-3">
+      <label for="airportContact" class="form-label">Contact</label>
+      <input type="text" class="form-control" id="airportContact" required />
+      <div class="invalid-feedback">Contact is required.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Airport</button>
+  </form>
+
+  <h4>Search</h4>
+  <div class="mb-3 row">
+    <div class="col-md-6">
+      <div class="d-flex">
+        <input
+          type="text"
+          id="globalSearch"
+          placeholder="Search across all fields..."
+          class="form-control me-2"
+        />
+        <button class="btn btn-sm btn-outline-primary" type="button">
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-hover table-bordered align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>No.</th>
+        <th id="sortName" style="cursor: pointer">Airport Name ▲▼</th>
+        <th id="sortCity" style="cursor: pointer">City ▲▼</th>
+        <th>Contact</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="airportTableBody"></tbody>
+  </table>
+</div>
+
+<script>
+  (function () {
+
+    const form = document.getElementById("airportForm");
+    const nameInput = document.getElementById("airportName");
+    const cityInput = document.getElementById("airportCity");
+    const contactInput = document.getElementById("airportContact");
+    const tableBody = document.getElementById("airportTableBody");
+    const globalSearchInput = document.getElementById("globalSearch");
+    const sortNameBtn = document.getElementById("sortName");
+    const sortCityBtn = document.getElementById("sortCity");
+
+    let editingId = null;
+    let airportsData = [];
+    let sortState = {
+      name: "none",
+      city: "none",
+    };
+
+    fetchAirports();
+
+    function fetchAirports() {
+      fetch(`${URL}/airports`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+         Authorization: getAuthorization(),
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          airportsData = data;
+          renderAirports(airportsData);
+        })
+        .catch((err) => {
+          console.error("Failed to load airports:", err);
+          tableBody.innerHTML = `
+            <tr><td colspan="5" class="text-danger text-center">Failed to load airport data</td></tr>
+          `;
+        });
+    }
+
+    function renderAirports(data) {
+      tableBody.innerHTML = "";
+      if (data.length === 0) {
+        tableBody.innerHTML = `
+          <tr><td colspan="5" class="text-center text-muted">No matching airports found</td></tr>
+        `;
+        return;
+      }
+
+      data.forEach((airport, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${airport.airportName}</td>
+          <td>${airport.city}</td>
+          <td>${airport.contact}</td>
+          <td>
+            <button class="btn btn-sm btn-warning" data-id="${airport.airportId}">Edit</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+
+      // Attach edit event listeners
+      document.querySelectorAll("button.btn-warning").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const airport = airportsData.find((a) => a.airportId == btn.dataset.id);
+          if (!airport) return;
+
+          nameInput.value = airport.airportName;
+          cityInput.value = airport.city;
+          contactInput.value = airport.contact;
+          editingId = airport.airportId;
+
+          form.querySelector("button[type='submit']").textContent = "Update Airport";
+
+          if (!document.getElementById("cancelEditBtn")) {
+            const cancelBtn = document.createElement("button");
+            cancelBtn.type = "button";
+            cancelBtn.className = "btn btn-secondary ms-2";
+            cancelBtn.textContent = "Cancel";
+            cancelBtn.id = "cancelEditBtn";
+            cancelBtn.addEventListener("click", cancelEditMode);
+            form.querySelector("button[type='submit']").after(cancelBtn);
+          }
+        });
+      });
+    }
+
+    function cancelEditMode() {
+      editingId = null;
+      form.reset();
+      form.classList.remove("was-validated");
+      form.querySelector("button[type='submit']").textContent = "Add Airport";
+      const cancelBtn = document.getElementById("cancelEditBtn");
+      if (cancelBtn) cancelBtn.remove();
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      if (!form.checkValidity() || nameInput.value.trim().length < 3) {
+        form.classList.add("was-validated");
+        nameInput.classList.add("is-invalid");
+        return;
+      }
+
+      const airport = {
+        airportName: nameInput.value.trim(),
+        city: cityInput.value.trim(),
+        contact: contactInput.value.trim(),
+      };
+
+      const method = editingId ? "PUT" : "POST";
+      const url = editingId ? `${URL}/airports/${editingId}` : `${URL}/airports`;
+
+      fetch(`${url}`, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getAuthorization(),
+        },
+        body: JSON.stringify(airport),
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Failed to submit airport.");
+          return res.json();
+        })
+        .then(() => {
+          form.reset();
+          form.classList.remove("was-validated");
+          editingId = null;
+          fetchAirports();
+          form.querySelector("button[type='submit']").textContent = "Add Airport";
+          const cancelBtn = document.getElementById("cancelEditBtn");
+          if (cancelBtn) cancelBtn.remove();
+        })
+        .catch((err) => {
+          console.error("Error submitting airport:", err);
+        });
+    });
+
+    // Live search
+    globalSearchInput.addEventListener("input", function () {
+      const query = globalSearchInput.value.trim().toLowerCase();
+      if (!query) {
+        renderAirports(airportsData);
+        return;
+      }
+
+      const filtered = airportsData.filter(
+        (airport) =>
+          airport.airportName.toLowerCase().includes(query) ||
+          airport.city.toLowerCase().includes(query) ||
+          airport.contact.toLowerCase().includes(query)
+      );
+
+      renderAirports(filtered);
+    });
+
+    // Sorting
+    function sortData(field, direction) {
+      return [...airportsData].sort((a, b) => {
+        const valA = a[field].toLowerCase();
+        const valB = b[field].toLowerCase();
+        if (valA < valB) return direction === "asc" ? -1 : 1;
+        if (valA > valB) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
+
+    sortNameBtn.addEventListener("click", () => {
+      sortState.city = "none";
+      sortState.name = sortState.name === "asc" ? "desc" : "asc";
+      const sorted = sortData("airportName", sortState.name);
+      renderAirports(sorted);
+    });
+
+    sortCityBtn.addEventListener("click", () => {
+      sortState.name = "none";
+      sortState.city = sortState.city === "asc" ? "desc" : "asc";
+      const sorted = sortData("city", sortState.city);
+      renderAirports(sorted);
+    });
+
+    // Blur validation styling
+    document.querySelectorAll("#airportForm input").forEach((input) => {
+      input.addEventListener("blur", () => {
+        if (!input.checkValidity() || (input.id === "airportName" && input.value.trim().length < 3)) {
+          input.classList.add("is-invalid");
+        } else {
+          input.classList.remove("is-invalid");
+        }
+      });
+    });
+  })();
+</script>

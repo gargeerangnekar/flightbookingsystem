@@ -1,0 +1,552 @@
+
+
+    <div id="main-content" class="flex-fill p-4">
+      <h2 style="text-align: center">FLIGHTS ✈️</h2>
+      <form id="flightForm" class="mb-4">
+        <div class="mb-3">
+          <label for="flightNumber" class="form-label">Flight Number</label>
+          <input type="text" class="form-control" id="flightNumber" required />
+          <div class="invalid-feedback">At least 5 characters required.</div>
+        </div>
+        <div class="d-flex gap-3">
+          <div class="mb-3 w-50">
+            <label for="departureTime" class="form-label">Departure Time</label>
+            <input type="datetime-local" class="form-control" id="departureTime" required />
+            <div class="invalid-feedback">
+              Please enter departure time
+            </div>
+          </div>
+          <div class="mb-3 w-50">
+            <label for="arrivalTime" class="form-label">Arrival Time</label>
+            <input type="datetime-local" class="form-control" id="arrivalTime" required />
+            <div class="invalid-feedback">
+              Please enter arrival time
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-3">
+          <div class="mb-3 w-50">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="text" class="form-control" id="amount" required />
+            <div class="invalid-feedback">
+              Please enter an amount. Should be positive.
+            </div>
+          </div>
+          <div class="mb-3 w-50">
+            <label for="aircraftModel" class="form-label">Aircraft Model</label>
+            <select name="aircraftModel" id="aircraftModel" class="form-control">
+              <option value="select">--select--</option>
+            </select>
+            <div class="invalid-feedback">Select alteast a choice.</div>
+          </div>
+          <div class="mb-3 w-50">
+            <label for="capacity" class="form-label">Capacity</label>
+            <input type="text" class="form-control" id="capacity" required />
+            <div class="invalid-feedback">
+              At least 5 characters required.
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-3">
+          <div class="mb-3 w-50">
+            <label for="arrivalCity" class="form-label">Arrival City</label>
+            <select name="arrivalCity" id="arrivalCity" class="form-control">
+              <option value="select">--select--</option>
+            </select>
+            <div class="invalid-feedback">Select alteast a choice.</div>
+          </div>
+          <div class="mb-3 w-50">
+            <label for="departureCity" class="form-label">Departure City</label>
+            <select name="departureCity" id="departureCity" class="form-control">
+              <option value="select">--select--</option>
+            </select>
+            <div class="invalid-feedback">Select alteast a choice.</div>
+          </div>
+          <div class="mb-3 w-50">
+            <label for="assignAdmin" class="form-label">Assign Airline Admin</label>
+            <select name="assignAdmin" id="assignAdmin" class="form-control">
+              <option value="select">--select--</option>
+            </select>
+            <div class="invalid-feedback">Select alteast a choice.</div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">
+          Add Flight
+        </button>
+      </form>
+      <table class="table table-bordered" style="margin-top: 15px">
+        <thead>
+          <th>ID</th>
+          <th>
+            Flight Number<i class="bi bi-arrow-down-up" id="sortFlightNumberBtn" style="cursor: pointer"></i>
+          </th>
+          <th>Departure Time</th>
+          <th>Arrival Time</th>
+          <th>
+            Amount<i class="bi bi-arrow-down-up" id="sortAmountBtn" style="cursor: pointer"></i>
+          </th>
+          <th>Aircraft Model</th>
+          <th>Capacity</th>
+          <th>Arrival Airport</th>
+          <th>Departure Airport</th>
+          <th>Actions</th>
+        </thead>
+        <tbody id="flightTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <script src="../js/script.js"></script>
+  <!-- <script src="js/login.js"></script> -->
+
+  <script>
+    (() =>{
+   
+    let arrivalCity = "";
+    let departureCity = "";
+    let editId = null;
+
+    // Add flight
+    const flightNumber = document.getElementById("flightNumber");
+    const departureTime = document.getElementById("departureTime");
+    const arrivalTime = document.getElementById("arrivalTime");
+    const amount = document.getElementById("amount");
+    const capacity = document.getElementById("capacity");
+    const aircraftModel = document.getElementById("aircraftModel");
+    const arrivalCityInp = document.getElementById("arrivalCity");
+    const departureCityInp = document.getElementById("departureCity");
+    const assignAdmin = document.getElementById("assignAdmin")
+    const form = document.getElementById("flightForm")
+
+    function validateFlightNumber() {
+      if (flightNumber.value.trim().length >= 5) {
+        flightNumber.classList.add("is-valid");
+        flightNumber.classList.remove("is-invalid");
+        return true;
+      }
+      else {
+        flightNumber.classList.add("is-invalid");
+        flightNumber.classList.remove("is-valid");
+        return false;
+      }
+    }
+    function validateDepartureTime() {
+      const selectedTime = new Date(departureTime.value);
+      const now = new Date();
+
+      if (!departureTime.value || selectedTime <= now) {
+        departureTime.classList.add("is-invalid");
+        departureTime.classList.remove("is-valid");
+        return false;
+      } else {
+        departureTime.classList.add("is-valid");
+        departureTime.classList.remove("is-invalid");
+        return true;
+      }
+    }
+
+    function validateArrivalTime() {
+      const arrival = new Date(arrivalTime.value);
+      const departure = new Date(departureTime.value);
+
+      if (!arrivalTime.value || arrival <= departure) {
+        arrivalTime.classList.add("is-invalid");
+        arrivalTime.classList.remove("is-valid");
+        return false;
+      } else {
+        arrivalTime.classList.add("is-valid");
+        arrivalTime.classList.remove("is-invalid");
+        return true;
+      }
+    }
+
+    function validateAmount() {
+      const amountValue = amount.value.trim();
+
+      if (!amountValue || isNaN(amountValue) || Number(amountValue) <= 0) {
+        amount.classList.add("is-invalid");
+        amount.classList.remove("is-valid");
+        return false;
+      } else {
+        amount.classList.add("is-valid");
+        amount.classList.remove("is-invalid");
+        return true;
+      }
+    }
+
+    function validateCapacity() {
+      const capacityValue= capacity.value.trim();
+
+      if (!capacityValue || isNaN(capacityValue) || Number(capacityValue) <= 0) {
+        capacity.classList.add("is-invalid");
+        capacity.classList.remove("is-valid");
+        return false;
+      } else {
+        capacity.classList.add("is-valid");
+        capacity.classList.remove("is-invalid");
+        return true;
+      }
+    }
+
+     function validateAircraftModel() {
+        if (aircraftModel.value !== "select") {
+          aircraftModel.classList.add("is-valid");
+          aircraftModel.classList.remove("is-invalid");
+            return true;
+        } else {
+          aircraftModel.classList.add("is-invalid");
+          aircraftModel.classList.remove("is-valid");
+            return false;
+        }
+    }
+
+    function validateArrivalCity() {
+        if (arrivalCityInp.value !== "select") {
+          arrivalCityInp.classList.add("is-valid");
+          arrivalCityInp.classList.remove("is-invalid");
+            return true;
+        } else {
+          arrivalCityInp.classList.add("is-invalid");
+          arrivalCityInp.classList.remove("is-valid");
+            return false;
+        }
+    }
+
+    function validateDepartureCity() {
+        if (departureCityInp.value !== "select") {
+          departureCityInp.classList.add("is-valid");
+          departureCityInp.classList.remove("is-invalid");
+            return true;
+        } else {
+          departureCityInp.classList.add("is-invalid");
+          departureCityInp.classList.remove("is-valid");
+            return false;
+        }
+    }
+
+    function validateAssignAdmin() {
+        if (assignAdmin.value !== "select") {
+          assignAdmin.classList.add("is-valid");
+          assignAdmin.classList.remove("is-invalid");
+            return true;
+        } else {
+          assignAdmin.classList.add("is-invalid");
+          assignAdmin.classList.remove("is-valid");
+            return false;
+        }
+    }
+
+    flightNumber.addEventListener("blur", validateFlightNumber);
+    departureTime.addEventListener("blur", validateDepartureTime);
+    arrivalTime.addEventListener("blur", validateArrivalTime);
+    amount.addEventListener("blur", validateAmount);
+    aircraftModel.addEventListener("blur", validateAircraftModel);
+    arrivalCityInp.addEventListener("blur", validateArrivalCity);
+    departureCityInp.addEventListener("blur", validateDepartureCity);
+    assignAdmin.addEventListener("blur", validateAssignAdmin);
+    capacity.addEventListener("blur", validateCapacity);
+
+    async function fetchAirportLocation(flightId) {
+      const res = await fetch(`${URL}/flights/${flightId}/summary`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getAuthorization(),
+        },
+      });
+      return await res.json();
+    }
+
+    function fetchAndRenderFlights() {
+      fetch(`${URL}/flights`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getAuthorization(),
+        },
+      })
+        .then((res) => res.json())
+        .then((flights) => {
+          allFlights = flights;
+          renderFlights(flights);
+        });
+    }
+
+    async function renderFlights(flights) {
+      const tbody = document.getElementById("flightTableBody");
+      tbody.innerHTML = "";
+
+      const summaries = await Promise.all(
+        flights.map((flight) => fetchAirportLocation(flight.flightId))
+      );
+
+      for (let i = 0; i < flights.length; i++) {
+        const flight = flights[i];
+        const city = summaries[i];
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${flight.flightId}</td>
+            <td>${flight.flightNumber}</td>
+            <td>${flight.departureTime}</td>
+            <td>${flight.arrivalTime}</td>
+            <td>${flight.amount}</td>
+            <td>${flight.aircraftModel}</td>
+            <td>${flight.capacity}</td>
+            <td>${city.arrivalCity || "Unknown"}</td>
+            <td>${city.departureCity || "Unknown"}</td>
+            <td>
+                 <button class="btn btn-sm btn-outline-success me-1 edit-btn" data-id="${flight.flightId}">
+                   <i class="bi bi-pencil-square"></i>
+                 </button>
+                 <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${flight.flightId}">
+                   <i class="bi bi-trash"></i>
+                 </button>
+               </td>
+        `;
+        tbody.appendChild(row);
+      }
+      function loadFlightForEdit(flightId) {
+        fetch(`${URL}/flights/${flightId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": getAuthorization()
+          },
+        })
+          .then(res => res.json())
+          .then(data => {
+            flightNumber.value = data.flightNumber;
+            departureTime.value = data.departureTime;
+            arrivalTime.value = data.arrivalTime;
+            amount.value = data.amount;
+            capacity.value = data.capacity;
+            aircraftModel.value = data.aircraftModel;
+            arrivalCityInp.value = data.arrivalAirportId;
+            departureCityInp.value = data.departureAirportId;
+            editId = flightId;
+            submitBtn.textContent = "Update Flight";
+          });
+      }
+      document.querySelectorAll(".edit-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          loadFlightForEdit(id);
+        });
+      });
+
+      document.querySelectorAll(".delete-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          deleteFlight(id);
+        });
+      });
+    }
+
+    function deleteFlight(flightId) {
+      if (confirm("Are you sure you want to delete this complaint type?")) {
+        fetch(`${URL}/flights/${flightId}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": getAuthorization()
+          }
+        }).then(() => fetchAndRenderFlights());
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchAndRenderFlights();
+
+      let currentSortDirection = "asc";
+
+      function sortFlights(endpoint) {
+        if (currentSortDirection === "asc") {
+          currentSortDirection = "desc";
+        } else {
+          currentSortDirection = "asc";
+        }
+        fetch(
+          `${URL}/flights/${endpoint}?direction=${currentSortDirection}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: getAuthorization(),
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then((sortedFlights) => renderFlights(sortedFlights));
+      }
+
+      document
+        .getElementById("sortFlightNumberBtn")
+        .addEventListener("click", () => {
+          sortFlights("sortedByNumber");
+        });
+
+      document
+        .getElementById("sortAmountBtn")
+        .addEventListener("click", () => {
+          sortFlights("sortedByAmount");
+        });
+    });
+
+    // Feching Arrival Airport Dynamically
+    const arrivalCityUrl = `${URL}/flights/arrival-cities`;
+    const arrivalCitySelect = document.getElementById("arrivalCity");
+    const departureCitySelect = document.getElementById("departureCity");
+    fetch(arrivalCityUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: getAuthorization(),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network reponse was not ok");
+        }
+        return response.json();
+      })
+      .then((cities) => {
+        cities.forEach((city) => {
+          const arrivalOption = document.createElement("option");
+          arrivalOption.value = city.airportId;
+          arrivalOption.textContent = city.city;
+          arrivalCitySelect.appendChild(arrivalOption);
+
+          const departureOption = document.createElement("option");
+          departureOption.value = city.airportId;
+          departureOption.textContent = city.city;
+          departureCitySelect.appendChild(departureOption);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching Complaint Type:", error);
+      });
+
+    // Feching Aircraft Model Dynamically
+    const aircraftModelUrl = `${URL}/flights/aircraftModels`;
+    const aircraftModelSelect = document.getElementById("aircraftModel");
+    fetch(aircraftModelUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: getAuthorization(),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network reponse was not ok");
+        }
+        return response.json();
+      })
+      .then((models) => {
+        models.forEach((model) => {
+          const modelOption = document.createElement("option");
+          modelOption.value = model;
+          modelOption.textContent = model;
+          aircraftModelSelect.appendChild(modelOption);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching Complaint Type:", error);
+      });
+
+    // Feching Airline Admin Dynamically
+    const airlineAdminlUrl = `${URL}/airline-admin`;
+    const airlineAdminlSelect = document.getElementById("assignAdmin");
+    fetch(airlineAdminlUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: getAuthorization(),
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network reponse was not ok");
+        }
+        return response.json();
+      })
+      .then((admins) => {
+        admins.forEach((admin) => {
+          const adminOption = document.createElement("option");
+          adminOption.value = admin.airlineAdminId;
+          adminOption.textContent = admin.airlineAdminId + " - " + admin.airlineAdminName;
+          airlineAdminlSelect.appendChild(adminOption);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching Complaint Type:", error);
+      });
+
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!validateFlightNumber() && !validateAmount() && !validateAircraftModel() && !validateArrivalCity() && !validateDepartureCity() && !validateArrivalTime() && !validateDepartureTime() && !validateAssignAdmin() && !validateCapacity()) return;
+
+      const flight = {
+        flightNumber: flightNumber.value.trim(),
+        departureTime: departureTime.value,
+        arrivalTime: arrivalTime.value,
+        amount: parseFloat(amount.value),
+        aircraftModel: aircraftModel.value.trim(),
+        capacity: parseInt(capacity.value),
+        arrivalAirportId: parseInt(arrivalCityInp.value),
+        departureAirportId: parseInt(departureCityInp.value),
+        airlineAdmin: {
+          airlineAdminId: parseInt(assignAdmin.value)
+        }
+      };
+
+      if (editId) {
+        fetch(`${URL}/flights/${editId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getAuthorization(),
+          },
+          body: JSON.stringify(flight),
+        }).then(() => {
+          fetchAndRenderFlights();
+          form.reset();
+          editId = null;
+          submitBtn.textContent = "Add Flight";
+          clearValidation();
+        });
+      } else {
+        fetch(`${URL}/flights`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: getAuthorization(),
+          },
+          body: JSON.stringify(flight),
+        }).then(() => {
+          fetchAndRenderFlights();
+          form.reset();
+          clearValidation();
+        });
+      }
+    });
+
+    function clearValidation() {
+        flightNumber.classList.remove("is-valid", "is-invalid");
+        departureTime.classList.remove("is-valid", "is-invalid");
+        arrivalTime.classList.remove("is-valid", "is-invalid");
+        arrivalCityInp.classList.remove("is-valid", "is-invalid");
+        departureCityInp.classList.remove("is-valid", "is-invalid");
+        amount.classList.remove("is-valid", "is-invalid");
+        capacity.classList.remove("is-valid", "is-invalid");
+        assignAdmin.classList.remove("is-valid", "is-invalid");
+        aircraftModel.classList.remove("is-valid", "is-invalid");
+    }
+    fetchAndRenderFlights();
+    })();
+  </script>
+</body>
+
+</html>
