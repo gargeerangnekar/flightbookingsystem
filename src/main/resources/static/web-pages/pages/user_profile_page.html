@@ -1,0 +1,85 @@
+<!-- Profile Form -->
+<div id="main-content" class="container my-5">
+  <h4 class="mb-4">User Profile</h4>
+  <form class="row g-3" id="userProfileForm">
+    <div class="col-md-6">
+      <label class="form-label">Full Name</label>
+      <input type="text" class="form-control" id="name" />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Phone Number</label>
+      <input type="text" class="form-control" id="phoneNumber" />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Passport Number</label>
+      <input type="text" class="form-control" id="passportNumber" />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" disabled />
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Update Profile</button>
+    </div>
+  </form>
+</div>
+
+<!-- Scripts -->
+<script src="js/script.js"></script>
+<script>
+
+  document.getElementById("name").value = getName();
+  document.getElementById("email").value = getEmail();
+  document.getElementById("phoneNumber").value = getPhoneNumber();
+  document.getElementById("passportNumber").value = getPassportNumber();
+  
+  function updateUserProfile(e) {
+    e.preventDefault();
+    
+    const userId = getId();
+
+  if (!userId) {
+    alert("User not logged in!");
+    return;
+  }
+  
+  const updatedUser = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    phoneNumber: document.getElementById("phoneNumber").value,
+    passportNumber: document.getElementById("passportNumber").value
+  };
+
+  fetch(`${URL}/users/${userId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: getAuthorization(),
+    },
+    body: JSON.stringify(updatedUser),
+  })
+  .then((res) => {
+    if (!res.ok) {
+      throw new Error("Failed to update profile.");
+      }
+      return res.json();
+    })
+    .then((data) => {
+      alert("Profile updated successfully!");
+      setTimeout(() => {
+        window.location.href = "Flight_login.html";
+      }, 1500);
+    })
+    .catch((err) => {
+      console.error("Error updating profile:", err);
+      alert("Could not update profile.");
+    });
+  }
+  
+  
+    document.getElementById("userProfileForm").addEventListener("submit", updateUserProfile);
+</script>
