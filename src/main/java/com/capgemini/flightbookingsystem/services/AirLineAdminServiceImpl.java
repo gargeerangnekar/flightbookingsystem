@@ -38,8 +38,6 @@ public class AirLineAdminServiceImpl implements AirLineAdminService {
 
     @Override
     public AirLineAdmin createAdmin(AirLineAdmin admin) {
-    	String encodedPassword = passwordEncoder.encode(admin.getPassword());
-        admin.setPassword(encodedPassword);
         return airLineAdminRepository.save(admin);
     }
 

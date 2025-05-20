@@ -21,6 +21,7 @@ import com.capgemini.flightbookingsystem.dto.AirportFetchingDto;
 import com.capgemini.flightbookingsystem.dto.CityWithAirportIdDto;
 import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
 import com.capgemini.flightbookingsystem.entities.Flights;
+import com.capgemini.flightbookingsystem.exceptions.AirlineAdminNotFoundException;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
 import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
 import com.capgemini.flightbookingsystem.services.FlightService;
@@ -33,16 +34,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FlightRestController{
 	
-	
-	//Injecting service layer
 	FlightService flightService;
-	AirLineAdminRepository airLineAdminRepository;
 	
 
 	@Autowired
-	public FlightRestController(FlightService flightService, AirLineAdminRepository airLineAdminRepository) {
+	public FlightRestController(FlightService flightService) {
 		this.flightService = flightService;
-		this.airLineAdminRepository = airLineAdminRepository;
 	}
 	
 	@GetMapping
@@ -65,21 +62,6 @@ public class FlightRestController{
 	public ResponseEntity<Flights> createFlight(@Valid @RequestBody Flights flight, BindingResult result){
 	    log.info("Creating new flight with data: {}", flight);
 
-	    Integer adminId = null;
-	    if (flight.getAirlineAdmin() != null) {
-	        adminId = flight.getAirlineAdmin().getAirlineAdminId();
-	    }
-
-	    if (adminId == null) {
-	        log.warn("AirlineAdmin ID not provided in request");
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-	    }
-
-	    AirLineAdmin admin = airLineAdminRepository.findById(adminId)
-	            .orElseThrow(() -> new FlightNotFoundException("AirlineAdmin not found with"));
-
-	    flight.setAirlineAdmin(admin);
-
 	    Flights newFlight = flightService.createNewFlight(flight);
 	    log.debug("Flight created successfully with ID: {}", newFlight.getFlightId());
 
@@ -96,7 +78,7 @@ public class FlightRestController{
 	}
 	
 	@PatchMapping("/{flightId}")
-	public ResponseEntity<Flights> patchFlight(@PathVariable Integer flightId ,@Valid @RequestBody Flights flight){
+	public ResponseEntity<Flights> patchFlight(@PathVariable Integer flightId , @RequestBody Flights flight){
 		log.info("Updating flight with ID: {} using data: {}", flightId, flight);
 		Flights updatedFlight = flightService.patchFlightById(flightId, flight);
 		log.debug("User with ID {} updated successfully to: {}", flightId, updatedFlight);

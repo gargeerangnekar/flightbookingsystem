@@ -5,15 +5,23 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.management.relation.InvalidRelationIdException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.capgemini.flightbookingsystem.dto.AirportFetchingDto;
 import com.capgemini.flightbookingsystem.dto.CityWithAirportIdDto;
+import com.capgemini.flightbookingsystem.entities.AirLineAdmin;
 import com.capgemini.flightbookingsystem.entities.Airport;
 import com.capgemini.flightbookingsystem.entities.Flights;
+import com.capgemini.flightbookingsystem.exceptions.AirlineAdminNotFoundException;
 import com.capgemini.flightbookingsystem.exceptions.FlightNotFoundException;
+import com.capgemini.flightbookingsystem.exceptions.InvalidRequestException;
+import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
 import com.capgemini.flightbookingsystem.repositories.AirportRepository;
 import com.capgemini.flightbookingsystem.repositories.BookingRepository;
 import com.capgemini.flightbookingsystem.repositories.FlightRepository;
@@ -25,20 +33,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FlightServiceImplementation implements FlightService {
 
-	// Injecting repository
 	FlightRepository flightRepository;
-	BookingRepository bookingRepository;
 	AirportRepository airportRepository;
+	AirLineAdminRepository airLineAdminRepository;
 
 	private static final String FLIGHT_NOT_FOUND_PREFIX = "Flight with Id ";
 	private static final String ID_NOT_FOUND = "unknown";
 
 	@Autowired
-	public FlightServiceImplementation(FlightRepository flightRepository, BookingRepository bookingRepository,
-			AirportRepository airportRepository) {
+	public FlightServiceImplementation(FlightRepository flightRepository,
+			AirportRepository airportRepository, AirLineAdminRepository airLineAdminRepository) {
 		this.flightRepository = flightRepository;
-		this.bookingRepository = bookingRepository;
 		this.airportRepository = airportRepository;
+		this.airLineAdminRepository = airLineAdminRepository;
 	}
 
 	@Override
@@ -60,13 +67,27 @@ public class FlightServiceImplementation implements FlightService {
 
 	@Override
 	public Flights createNewFlight(@Valid Flights flight) {
+		Integer adminId = null;
+	    if (flight.getAirlineAdmin() != null) {
+	        adminId = flight.getAirlineAdmin().getAirlineAdminId();
+	    }
+
+	    if (adminId == null) {
+	        log.warn("AirlineAdmin ID not provided in request");
+	        throw new InvalidRequestException("Airline Admin Id is required");
+	    }
+
+	    AirLineAdmin admin = airLineAdminRepository.findById(adminId)
+	            .orElseThrow(() -> new AirlineAdminNotFoundException("AirlineAdmin not found"));
+
+	    flight.setAirlineAdmin(admin);
 		Flights newFlight = flightRepository.save(flight);
 		log.debug("Flight created successfully with ID: {}", newFlight.getFlightId());
 		return newFlight;
 	}
 
 	@Override
-	public Flights patchFlightById(Integer flightId, @Valid Flights flight) {
+	public Flights patchFlightById(Integer flightId, Flights flight) {
 		log.info("Updating flight with ID: {}", flightId);
 		Flights existingFlight = flightRepository.findById(flightId).orElseThrow(() -> {
 			log.warn("User not found for deletion with ID: {}", flightId);
@@ -181,8 +202,7 @@ public class FlightServiceImplementation implements FlightService {
 	                    .map(airport -> new CityWithAirportIdDto(id, airport.getCity()))
 	                    .orElse(null))
 	            .filter(Objects::nonNull)
-	            .distinct()
-	            .collect(Collectors.toList());
+	            .distinct().toList();
 	}
 
 	@Override
