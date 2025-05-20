@@ -74,6 +74,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleEmailNotFound(EmailNotFoundException ex, HttpServletRequest request) {
         return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.NOT_FOUND.value(), request.getRequestURI()), HttpStatus.NOT_FOUND);
     }
+    
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<Object> handleInvalidRequest(InvalidRequestException ex, HttpServletRequest request) {
+        return new ResponseEntity<>(buildErrorDetails(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), request.getRequestURI()), HttpStatus.BAD_REQUEST);
+    }
 
     // Catch-all for unhandled exceptions
     @ExceptionHandler(Exception.class)
