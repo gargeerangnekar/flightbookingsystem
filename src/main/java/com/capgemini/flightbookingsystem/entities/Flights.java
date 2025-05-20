@@ -81,13 +81,13 @@ public class Flights {
 	
 	
 	// 1. Flight to Booking - One flight can have multiple bookings
-	@OneToMany(mappedBy = "flights", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "flights", cascade = CascadeType.REMOVE)
 	@JsonManagedReference("flight-booking")
 	List<Booking> bookings = new ArrayList<>();
 	
 	
 	// 2. Airline Admin to Flight - One airline admin can handle multiple flights
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "airline_admin_id")
 	@JsonBackReference("airline")
 	AirLineAdmin airlineAdmin;
@@ -238,7 +238,4 @@ public class Flights {
 				+ ", capacity=" + capacity + ", arrivalAirportId=" + arrivalAirportId + ", departureAirportId="
 				+ departureAirportId + ", bookings=" + bookings + ", airlineAdmin=" + airlineAdmin + "]";
 	}
-
-	
-	
 }

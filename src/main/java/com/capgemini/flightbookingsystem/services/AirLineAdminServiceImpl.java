@@ -5,6 +5,7 @@ import com.capgemini.flightbookingsystem.exceptions.AirlineAdminNotFoundExceptio
 import com.capgemini.flightbookingsystem.repositories.AirLineAdminRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +37,6 @@ public class AirLineAdminServiceImpl implements AirLineAdminService {
 
     @Override
     public AirLineAdmin createAdmin(AirLineAdmin admin) {
-        // Add any extra validation or business logic here if needed
         return airLineAdminRepository.save(admin);
     }
 
