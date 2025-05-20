@@ -78,6 +78,26 @@ public class AirportController {
 		return ResponseEntity.ok(updatedAirport);
 
 	}
+	
+	@PatchMapping("/{id}")
+	public ResponseEntity<Airport> partialUpdateAirport(
+	        @Valid @PathVariable Integer id,
+	        @RequestBody Airport airportDetails,
+	        BindingResult result) {
+
+	    logger.info("Fetching airport for patch with ID: {}", id);
+
+	    if (result.hasErrors()) {
+	        logger.warn("Validation failed for Airport {}:", result.getAllErrors());
+	        throw new IllegalArgumentException("Cannot patch Airport");
+	    }
+
+	    airportDetails.setAirportId(id);
+	    Airport updatedAirport = airportService.updateAirport(airportDetails, id);
+	    logger.debug("Airport partially updated successfully: {}", updatedAirport);
+	    return ResponseEntity.ok(updatedAirport);
+	}
+
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteAirport(@PathVariable Integer id) {

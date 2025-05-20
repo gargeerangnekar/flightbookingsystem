@@ -1,0 +1,83 @@
+<!-- Profile Content -->
+<div id="main-content" class="flex-fill p-4">
+  <h4 class="mb-4">Airline Admin Profile</h4>
+  <form class="row g-3" id="adminProfileForm">
+    <div class="col-md-6">
+      <label class="form-label">Admin Name</label>
+      <input type="text" class="form-control" id="adminName" />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" id="airlineEmail" />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Contact Number</label>
+      <input type="text" class="form-control" id="contactNumber" />
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" disabled/>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Update Profile</button>
+    </div>
+  </form>
+</div>
+
+<script src="js/script.js"></script>
+<script>
+
+  document.getElementById("adminName").value = getName();
+  document.getElementById("airlineEmail").value = getEmail();
+  document.getElementById("contactNumber").value = getPhoneNumber();
+  // document.getElementById("password").value = data.password;
+
+function updateAdminProfile(e) {
+    e.preventDefault();
+
+    const adminId = getId();
+
+    if (!adminId) {
+      alert("Admin not logged in!");
+      return;
+    }
+
+    const updatedAdmin = {
+      airlineAdminName: document.getElementById("adminName").value,
+      airlineEmail: document.getElementById("airlineEmail").value,
+      contactNumber: document.getElementById("contactNumber").value
+    };
+
+    fetch(`${URL}/airline-admin/${adminId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: getAuthorization(),
+      },
+      body: JSON.stringify(updatedAdmin),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Update failed");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        alert("Admin profile updated successfully!");
+        
+        setTimeout(() => {
+          window.location.href = "Flight_login.html";
+        }, 1500);
+      })
+      .catch((err) => {
+        alert("Error updating admin profile.");
+        console.error(err);
+      });
+}
+ document
+    .getElementById("adminProfileForm")
+    .addEventListener("submit", updateAdminProfile);
+
+   
+</script>
+
