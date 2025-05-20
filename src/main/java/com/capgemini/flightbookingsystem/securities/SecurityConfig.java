@@ -61,7 +61,7 @@ public class SecurityConfig {
 	        .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))
 	        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/auth/signin", "/auth/register", "/auth/register-admin").permitAll()
+	            .requestMatchers("/auth/signin", "/auth/register", "/auth/register-admin", "/web-pages/**").permitAll()
 	            .requestMatchers("/**").hasAnyRole("USER", "ADMIN")
 	            .anyRequest().authenticated()
 	        )

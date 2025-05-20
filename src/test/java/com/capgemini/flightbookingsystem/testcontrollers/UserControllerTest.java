@@ -119,7 +119,7 @@ class UserControllerTest {
 
 	    when(userService.patchUser(1, patchUser)).thenReturn(patchUser);
 
-	    ResponseEntity<User> response = userController.patchUser(1, patchUser, bindingResult);
+	    ResponseEntity<User> response = userController.patchUser(1, patchUser);
 
 	    assertEquals(200, response.getStatusCode().value());
 	    assertEquals("Patched Name", response.getBody().getName());
