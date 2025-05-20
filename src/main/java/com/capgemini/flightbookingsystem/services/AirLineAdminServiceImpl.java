@@ -18,10 +18,11 @@ public class AirLineAdminServiceImpl implements AirLineAdminService {
     private static final String ADMIN_NOT_FOUND_MSG = "Admin not found with ID: ";
 
     private final AirLineAdminRepository airLineAdminRepository;
-
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public AirLineAdminServiceImpl(AirLineAdminRepository airLineAdminRepository) {
+    public AirLineAdminServiceImpl(AirLineAdminRepository airLineAdminRepository, PasswordEncoder passwordEncoder) {
         this.airLineAdminRepository = airLineAdminRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override

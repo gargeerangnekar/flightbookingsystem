@@ -1,0 +1,250 @@
+<body>
+  <div class="container form-container mt-5">
+    <form id="bookingFlightForm" class="p-4 rounded shadow bg-white">
+      <h4 class="text-center mb-4">Book a flight</h4>
+
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" id="username" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="bookingDate" class="form-label">Date</label>
+        <input type="date" id="bookingDate" class="form-control" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="departureCity" class="form-label">From</label>
+        <select id="departureCity" class="form-select" required>
+          <option value="">-- Select Departure City --</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="arrivalCity" class="form-label">To</label>
+        <select id="arrivalCity" class="form-select" required>
+          <option value="">-- Select Arrival City --</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="seatClass" class="form-label">Seat Class</label>
+        <select id="seatClass" class="form-select" required>
+          <option value="">-- Select Seat Class --</option>
+          <option value="Economy">Economy</option>
+          <option value="Business">Business</option>
+          <option value="First">First</option>
+        </select>
+      </div>
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Search Flights</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="container mt-4">
+    <table id="flightsTable" class="table table-bordered" style="display:none;">
+      <thead>
+        <tr>
+          <th>Flight ID</th>
+          <th>Departure Time</th>
+          <th>Arrival Time</th>
+          <th>Amount (₹)</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
+
+  <script src="js/script.js"></script>
+
+  <script>
+    document.getElementById("username").value = getName();
+
+    function loadCities() {
+      fetch(`${URL}/airports`, {
+        method: "GET",
+        headers: {
+          Authorization: getAuthorization(),
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          const departureSelect = document.getElementById("departureCity");
+          const arrivalSelect = document.getElementById("arrivalCity");
+
+          departureSelect.innerHTML = '<option value="">-- Select Departure City --</option>';
+          arrivalSelect.innerHTML = '<option value="">-- Select Arrival City --</option>';
+
+          data.forEach((airport) => {
+            const depOption = document.createElement("option");
+            depOption.value = airport.airportId;
+            depOption.textContent = airport.city;
+            departureSelect.appendChild(depOption);
+
+            const arrOption = document.createElement("option");
+            arrOption.value = airport.airportId;
+            arrOption.textContent = airport.city;
+            arrivalSelect.appendChild(arrOption);
+          });
+
+          departureSelect.addEventListener("change", () => {
+            const selectedDeparture = departureSelect.value;
+            for (let i = 0; i < arrivalSelect.options.length; i++) {
+              const option = arrivalSelect.options[i];
+              if (option.value === selectedDeparture && option.value !== "") {
+                option.style.display = "none";
+              } else {
+                option.style.display = "block";
+              }
+            }
+          });
+          arrivalSelect.addEventListener("change", () => {
+            const selectedArrival = arrivalSelect.value;
+            for (let i = 0; i < departureSelect.options.length; i++) {
+              const option = departureSelect.options[i];
+              if (option.value === selectedArrival && option.value !== "") {
+                option.style.display = "none";
+              } else {
+                option.style.display = "block";
+              }
+            }
+          });
+        })
+        .catch((err) => console.error("Error loading airports:", err));
+    }
+    function generateSeatNumber() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let seat = "";
+      for (let i = 0; i < 3; i++) {
+        seat += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return seat;
+    }
+    document.getElementById("bookingFlightForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const departureCity = document.getElementById("departureCity").value;
+      const arrivalCity = document.getElementById("arrivalCity").value;
+      const bookingDate = document.getElementById("bookingDate").value;
+
+      if (!departureCity || !arrivalCity || !bookingDate) {
+        alert("Please fill all required fields!");
+        return;
+      }
+
+      fetch(`${URL}/bookings/search?fromCity=${departureCity}&toCity=${arrivalCity}&departureDate=${bookingDate}`, {
+        method: "GET",
+        headers: {
+          Authorization: getAuthorization(),
+        },
+      })
+        .then((res) => res.json())
+        .then((flights) => {
+          if (!flights || flights.length === 0) {
+            alert("No matching flights found!");
+            clearFlightsTable();
+            return;
+          }
+          populateFlightsTable(flights);
+        })
+        .catch((err) => {
+          console.error("Flight search failed:", err);
+          alert("Error occurred while searching for flights.");
+          clearFlightsTable();
+        });
+    });
+
+    function populateFlightsTable(flights) {
+      const table = document.getElementById("flightsTable");
+      const tbody = table.querySelector("tbody");
+
+      tbody.innerHTML = "";
+
+      flights.forEach((flight) => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+      <td>${flight.flightId}</td>
+      <td>${flight.departureTime}</td>
+      <td>${flight.arrivalTime}</td>
+      <td>₹${flight.amount}</td>
+      <td><button class="btn btn-sm btn-success">Book</button></td>
+    `;
+
+        tr.querySelector("button").addEventListener("click", () => {
+          bookFlight(flight);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      table.style.display = "table";
+    }
+
+    function clearFlightsTable() {
+      const table = document.getElementById("flightsTable");
+      const tbody = table.querySelector("tbody");
+      tbody.innerHTML = "";
+      table.style.display = "none";
+    }
+    function getIndianTimeISO() {
+      const now = new Date();
+      const indianOffset = 5.5 * 60;
+      const localOffset = now.getTimezoneOffset();
+      const istTime = new Date(now.getTime() + (indianOffset + localOffset) * 60000);
+      return istTime.toISOString().replace("Z", "");
+    }
+    function bookFlight(flight) {
+      const seatClass = document.getElementById("seatClass").value;
+      if (!seatClass) {
+        alert("Please select a seat class before booking.");
+        return;
+      }
+      const seatNumber = generateSeatNumber();
+      const userId = getId();
+      const flightId = flight.flightId;
+
+      const bookingData = {
+        seatNumber: seatNumber,
+        seatClass: seatClass,
+        bookingTime: getIndianTimeISO(),
+        amount: flight.amount,
+        users: {
+          userId
+        },
+        flights: {
+          flightId
+        }
+      }
+
+      fetch(`${URL}/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: getAuthorization(),
+        },
+        body: JSON.stringify(bookingData),
+      })
+        .then((res) => {
+          if (res.ok) return res.json();
+          else throw new Error("Booking failed");
+        })
+        .then((data) => {
+          alert(`Booking successful! Booking ID: ${data.bookingId}`);
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Error booking flight. Try again.");
+        });
+    }
+
+
+    loadCities();
+  </script>
+</body>

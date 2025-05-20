@@ -49,5 +49,16 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
 	 @Query("SELECT b FROM Booking b JOIN FETCH b.users JOIN FETCH b.flights WHERE b.bookingId = :id")
 	 Booking getBookingWithUserAndFlight(@Param("id") Integer id);
 	 
+	 @Query("SELECT new com.capgemini.flightbookingsystem.dto.BookingHistoryDto( " +
+		       "u.name, f.flightNumber, f.arrivalTime, " + 
+		       "b.seatNumber, b.bookingTime, " +
+		       "dep.airportName, arr.airportName, f.amount) " +
+		       "FROM Booking b " +
+		       "JOIN b.users u " +
+		       "JOIN b.flights f " +
+		       "JOIN Airport dep ON f.departureAirportId = dep.airportId " +
+		       "JOIN Airport arr ON f.arrivalAirportId = arr.airportId")
+		List<BookingHistoryDto> getAllBookingHistory();
+
 
 }
