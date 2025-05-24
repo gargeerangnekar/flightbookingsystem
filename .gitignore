@@ -86,3 +86,4 @@ target-site/
 # === Local development config ===
 *.launch
 *.code-workspace
+application.properties 
